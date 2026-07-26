@@ -28,7 +28,7 @@ export const EasyPagination = () => {
             <TitlePost
                 icon="walk"
                 description="Adaptation Easy Pagination for React and Next.js."
-                date="07/24/2026"
+                date="07/27/2026"
             >
                 Easy Pagination
             </TitlePost>
@@ -131,37 +131,37 @@ export const EasyPagination = () => {
                     },
                     {
                         version: "1.0.15",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "fixed bugs",
                         description: "Fixed some bugs",
                     },
                     {
                         version: "1.0.16",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",
                     },
                     {
                         version: "1.0.17",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",
                     },
                     {
                         version: "1.0.18",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",
                     },
                     {
                         version: "1.0.19",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",
                     },
                     {
                         version: "1.0.20",
-                        date: "07/24/2026",
+                        date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",
                     },
