@@ -1,5 +1,5 @@
 import { PrimaryLayout } from "@/layouts/primary/PrimaryLayout";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import "scroll-to-future/style.css";
 import "./css/globals.css";
@@ -26,6 +26,18 @@ export const metadata: Metadata = {
     title: "Utility Lab",
     description: "Your space for frontend development",
     icons: "/mana.svg",
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "black-translucent",
+    },
+};
+
+export const viewport: Viewport = {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+    themeColor: "#7356d1",
+    colorScheme: "dark",
 };
 
 export default function RootLayout({
