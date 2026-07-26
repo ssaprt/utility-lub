@@ -129,6 +129,42 @@ export const EasyPagination = () => {
                         title: "Improvements",
                         description: "Code changes that do not affect behavior",
                     },
+                    {
+                        version: "1.0.15",
+                        date: "07/24/2026",
+                        title: "fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.0.16",
+                        date: "07/24/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.0.17",
+                        date: "07/24/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.0.18",
+                        date: "07/24/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.0.19",
+                        date: "07/24/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.0.20",
+                        date: "07/24/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
                 ].reverse()}
             />
             <Install packageName="@ssaprt/easy-pagination" />
