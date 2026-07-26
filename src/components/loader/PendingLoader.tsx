@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import { useLinkStatus } from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import {
+    useAppContextActions,
+    useAppContextValues,
+} from "@/context/appContext";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { Loader } from "../animationIcons/Loader/Loader";
 
 const OVERLAY_IN_DURATION = 100;
@@ -16,6 +21,11 @@ type LoaderPhase = "idle" | "active" | "loaderOut" | "overlayOut";
 
 export const PendingLoader = () => {
     const { pending } = useLinkStatus();
+    const { menu } = useAppContextValues();
+    const { menu: isMenu } = useAppContextActions();
+    const { setOpenMenu } = isMenu;
+    const { openMenu } = menu;
+    const isDesktop = useBreakpoint("lg");
 
     const loaderRef = useRef<HTMLDivElement>(null);
     const cycleStartedAtRef = useRef(0);
@@ -59,6 +69,8 @@ export const PendingLoader = () => {
             return;
         }
 
+        if (phase === "overlayOut" && !isDesktop) setOpenMenu(false);
+
         const loaderElement = loaderRef.current;
         const container = document.querySelector("#main");
 
@@ -90,7 +102,7 @@ export const PendingLoader = () => {
             window.removeEventListener("resize", update);
             window.removeEventListener("scroll", update, true);
         };
-    }, [phase]);
+    }, [phase, isDesktop, setOpenMenu]);
 
     if (phase === "idle") {
         return null;
