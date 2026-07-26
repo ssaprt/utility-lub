@@ -111,6 +111,13 @@ export const ScrollToFuture = () => {
                         description:
                             "Fixed positioning on viewport resize: the scrollbar now correctly appears when the viewport is resized",
                     },
+                    {
+                        version: "1.0.12",
+                        date: "07/26/2026",
+                        title: "Fixed bugs",
+                        description:
+                            "Fixed animations: the scrollbar now correctly appears when the viewport is resized",
+                    },
                 ].reverse()}
             />
 
