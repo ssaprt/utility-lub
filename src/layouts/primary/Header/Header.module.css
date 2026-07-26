@@ -1,0 +1,16 @@
+.header {
+    overflow: visible;
+    z-index: 1000;
+    transition: box-shadow 0.15s ease;
+}
+
+.scrolled {
+    transition: box-shadow 0.65s ease;
+}
+
+.left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}

@@ -1,0 +1,162 @@
+//TODO imports =============================================================
+"use client";
+import { useDetectedScrollMain } from "@/hooks/AppContext/useDetectedScrollMain";
+
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type Dispatch,
+    type ReactNode,
+    type SetStateAction,
+} from "react";
+//TODO imports =============================================================
+
+//? types ===============================================================
+interface AppContextActionsType {
+    header: {
+        setIconHeader: Dispatch<SetStateAction<ReactNode>>;
+        setTitleHeader: Dispatch<SetStateAction<string>>;
+        setHrefHeader: Dispatch<SetStateAction<string>>;
+        setBoxForAnimations: Dispatch<SetStateAction<HTMLDivElement | null>>;
+    };
+    menu: {
+        setOpenMenu: Dispatch<SetStateAction<boolean>>;
+        setWidthMenu: Dispatch<SetStateAction<number>>;
+    };
+}
+
+type AppContextType = {
+    header?: {
+        iconHeader?: React.ReactNode;
+        titleHeader?: string;
+        hrefHeader?: string;
+        boxForAnimations?: HTMLDivElement | null;
+        isScrolled: boolean;
+    };
+    menu: {
+        openMenu: boolean;
+        widthMenu: number;
+    };
+};
+
+const AppContextValues = createContext<AppContextType | null>(null);
+const AppContextActions = createContext<AppContextActionsType | null>(null);
+//? types ===============================================================
+
+//! provider ==========================================================================
+export const AppContextProvider = ({
+    children,
+}: {
+    children: React.ReactNode;
+}) => {
+    //* header context =============================================
+    const [iconHeader, setIconHeader] = useState<ReactNode>(null);
+    const [titleHeader, setTitleHeader] = useState("");
+    const [hrefHeader, setHrefHeader] = useState("");
+    const [boxForAnimations, setBoxForAnimations] =
+        useState<HTMLDivElement | null>(null);
+    const isScrolled = useDetectedScrollMain();
+    //* header context =============================================
+
+    //* menu context =============================================
+    const [openMenu, setOpenMenu] = useState(false);
+    const [widthMenu, setWidthMenu] = useState(0);
+    //* menu context =============================================
+
+    //* context ====================================================
+    const values = useMemo<AppContextType>(
+        () => ({
+            header: {
+                iconHeader,
+                titleHeader,
+                hrefHeader,
+                boxForAnimations,
+                isScrolled,
+            },
+            menu: {
+                openMenu,
+                widthMenu,
+            },
+        }),
+        [
+            iconHeader,
+            titleHeader,
+            hrefHeader,
+            boxForAnimations,
+            isScrolled,
+            openMenu,
+            widthMenu,
+        ],
+    );
+    //* context ====================================================
+
+    //* actions ====================================================
+    const actions = useMemo<AppContextActionsType>(
+        () => ({
+            header: {
+                setIconHeader,
+                setTitleHeader,
+                setHrefHeader,
+                setBoxForAnimations,
+            },
+            menu: {
+                setOpenMenu,
+                setWidthMenu,
+            },
+        }),
+        [],
+    );
+    //* actions ====================================================
+
+    useEffect(() => {
+        const media = window.matchMedia("(min-width: 1024px)");
+
+        const handleChange = () => {
+            setOpenMenu(media.matches);
+        };
+
+        handleChange();
+
+        media.addEventListener("change", handleChange);
+
+        return () => {
+            media.removeEventListener("change", handleChange);
+        };
+    }, []);
+
+    return (
+        <AppContextValues.Provider value={values}>
+            <AppContextActions.Provider value={actions}>
+                {children}
+            </AppContextActions.Provider>
+        </AppContextValues.Provider>
+    );
+};
+//! provider ==========================================================================
+
+//! hooks ========================================================================
+export const useAppContextValues = (): AppContextType => {
+    const context = useContext(AppContextValues);
+
+    if (context === null) {
+        throw new Error("useAppContext must be used within AppContextProvider");
+    }
+
+    return context;
+};
+
+export const useAppContextActions = (): AppContextActionsType => {
+    const context = useContext(AppContextActions);
+
+    if (context === null) {
+        throw new Error(
+            "useAppContextActions must be used within AppContextProvider",
+        );
+    }
+
+    return context;
+};
+//! hooks ========================================================================

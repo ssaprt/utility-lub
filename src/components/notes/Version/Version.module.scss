@@ -1,0 +1,45 @@
+.overlay {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding-left: 8px;
+
+    .version {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding-left: 9px;
+        padding-bottom: 9px;
+
+        &.dot::before {
+          content: "\2022";
+          position: absolute;
+          line-height: .5;
+          left: -2px;
+          top: 2px;
+        }
+
+        &.line::after {
+          content: "";
+          position: absolute;
+          width: 1px;
+          height: 100%;
+          border-left: 1px dashed var(--foreground);
+          left: 2px;
+          top: 6px;
+         
+        }
+    }
+
+    .versionHeader {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 4px;
+
+    }
+}
+

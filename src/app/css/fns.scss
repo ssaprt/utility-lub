@@ -1,0 +1,5 @@
+@use "sass:color";
+
+@function foreground-with-opacity($opacity) {
+    @return color.change(#fea5d5, $alpha: $opacity);
+}

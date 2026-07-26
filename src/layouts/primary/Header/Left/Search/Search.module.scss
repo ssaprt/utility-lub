@@ -1,0 +1,154 @@
+@use "@css/fns" as fn;
+
+.search-box {
+    position: relative;
+    width: min-content
+}
+
+
+
+
+.search-box__input {
+    border-radius: 24px;
+    
+    background: fn.foreground-with-opacity(0.15);
+    box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.25);
+    padding: 4px;
+    padding-left: 12px;
+    padding-right: 32px;
+    
+    &::placeholder {
+        color: var(--foreground);
+        opacity: 0.8;
+        font-size: 12px;
+    }
+
+    &:is(:focus, :-webkit-autofill) {
+
+        box-shadow: inset 0 0 15px fn.foreground-with-opacity(0.1), 
+                    -1px 1px 3px 0px rgba(0, 0, 0, 0.25);
+        outline: none;
+    }
+
+    &:-webkit-autofill {
+        -webkit-text-fill-color: var(--foreground);
+        caret-color: var(--foreground);
+
+        box-shadow: inset 0 0 15px fn.foreground-with-opacity(0.2), 
+                    -1px 1px 3px 0px rgba(0, 0, 0, 0.25);
+
+        transition: background-color 9999s ease-out;
+    }
+}
+
+
+
+
+
+.search-box {
+    position: relative;
+
+    &__clear {
+        position: relative;
+
+        right: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 20px;
+        height: 20px;
+        padding: 0;
+       
+        border: 0;
+        opacity: 0;
+        background: transparent;
+
+        cursor: pointer;
+        pointer-events: none;
+        border-radius: 50%;
+        background: fn.foreground-with-opacity(0.45);
+
+
+
+        svg {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    &__clear.visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    &__results {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        z-index: 1000;
+
+        width: 420px;
+        max-width: 90vw;
+        max-height: 420px;
+        overflow-y: auto;
+
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        background: var(--background, #111);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    &__list {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 6px;
+
+        list-style: none;
+    }
+
+    &__item {
+        border-radius: 10px;
+
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        a {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            padding: 10px 12px;
+
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+
+    &__title {
+        font-weight: 600;
+    }
+
+    &__excerpt {
+        display: -webkit-box;
+        overflow: hidden;
+
+        opacity: 0.7;
+
+        font-size: 13px;
+
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+
+    &__message {
+        padding: 16px;
+
+        text-align: center;
+        opacity: 0.7;
+    }
+}
