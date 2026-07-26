@@ -1,6 +1,10 @@
 allowBuilds:
+  '@parcel/watcher': set this to true or false
   sharp: false
   unrs-resolver: false
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
+minimumReleaseAgeExclude:
+  - scroll-to-future@1.0.10
+  - use-image-preview@1.0.3

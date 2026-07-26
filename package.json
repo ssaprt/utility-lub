@@ -13,6 +13,7 @@
         "@ssaprt/easy-pagination": "^1.0.14",
         "@tabler/icons-react": "^3.44.0",
         "@tabler/icons-sprite": "^3.45.0",
+        "framer-motion": "^12.42.2",
         "mobx": "^6.16.1",
         "mobx-react-lite": "^4.1.1",
         "motion": "^12.42.2",

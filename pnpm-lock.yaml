@@ -17,6 +17,9 @@ importers:
       '@tabler/icons-sprite':
         specifier: ^3.45.0
         version: 3.45.0
+      framer-motion:
+        specifier: ^12.42.2
+        version: 12.42.2(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       mobx:
         specifier: ^6.16.1
         version: 6.16.1
