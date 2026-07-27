@@ -1,0 +1,225 @@
+/* src/css/arrow.css */
+.easy-pagination-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+  width: var(--arrow-w);
+  height: var(--arrow-h);
+  color: var(--arrow-color);
+  fill: var(--arrow-fill);
+  stroke: var(--arrow-stroke);
+  border-radius: var(--arrow-border-radius);
+  background: var(--arrow-background);
+  transition: var(--arrow-transition);
+  flex-shrink: 0;
+}
+@media (hover: hover) and (pointer: fine) {
+  .easy-pagination-arrow:hover,
+  .easy-pagination-arrow--hovered {
+    color: var(--hover-arrow-color);
+    fill: var(--hover-arrow-fill);
+    stroke: var(--hover-arrow-stroke);
+    background: var(--hover-arrow-background);
+    transform: var(--hover-arrow-transform);
+    transition: var(--hover-arrow-transition);
+  }
+}
+.easy-pagination-arrow:active {
+  color: var(--active-arrow-color);
+  fill: var(--active-arrow-fill);
+  stroke: var(--active-arrow-stroke);
+  background: var(--active-arrow-background);
+  transform: var(--active-arrow-transform);
+  transition: var(--active-arrow-transition);
+}
+.easy-pagination-arrow--disabled {
+  pointer-events: none;
+}
+.easy-pagination-arrow--disabled,
+.easy-pagination-arrow--disabled > *:first-child {
+  color: var(--disabled-arrow-color);
+  fill: var(--disabled-arrow-fill);
+  stroke: var(--disabled-arrow-stroke);
+  background: var(--disabled-arrow-background);
+  opacity: 0.5;
+}
+.easy-pagination-arrow__icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* src/css/navigation.css */
+.easy-pagination-navigation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  padding: 4px;
+}
+.easy-pagination-navigation--horizontal {
+  flex-direction: row;
+  width: 100%;
+}
+.easy-pagination-navigation--vertical {
+  flex-direction: column;
+  height: 100%;
+}
+
+/* src/css/track.css */
+.easy-pagination-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 2px;
+  gap: 2px;
+}
+.easy-pagination-track--horizontal {
+  flex-direction: row;
+  min-width: 0;
+}
+.easy-pagination-track--vertical {
+  flex-direction: column;
+  min-height: 0;
+}
+.easy-pagination-track__ellipsis {
+  cursor: default;
+  color: var(--spread-color);
+  fill: var(--spread-color);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--item-w);
+  height: var(--item-h);
+  min-width: 30px;
+  min-height: 30px;
+  padding: 2px;
+}
+.easy-pagination-track--vertical .easy-pagination-track__ellipsis {
+  transform: rotate(90deg);
+}
+
+/* src/css/trackItem.css */
+.easy-pagination-item {
+  cursor: pointer;
+  color: var(--item-color);
+  fill: var(--item-fill);
+  stroke: var(--item-stroke);
+  background: var(--item-background);
+  transition: var(--item-transition);
+  border-radius: var(--item-border-radius);
+  width: var(--item-w);
+  height: var(--item-h);
+  padding: 2px 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  font-family:
+    "Courier New",
+    Courier,
+    monospace;
+  min-width: 34px;
+  min-height: 34px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .easy-pagination-item:hover,
+  .easy-pagination-item--hovered {
+    color: var(--hover-item-color);
+    fill: var(--hover-item-fill);
+    stroke: var(--hover-item-stroke);
+    background: var(--hover-item-background);
+    transition: var(--hover-item-transition);
+    border-radius: var(--hover-item-border-radius);
+  }
+}
+.easy-pagination-item:active {
+  color: var(--hover-item-color);
+  fill: var(--hover-item-fill);
+  stroke: var(--hover-item-stroke);
+  background: var(--hover-item-background);
+  transition: var(--hover-item-transition);
+  border-radius: var(--hover-item-border-radius);
+}
+.easy-pagination-item--active {
+  color: var(--active-item-color);
+  fill: var(--active-item-fill);
+  stroke: var(--active-item-stroke);
+  background: var(--active-item-background);
+  transition: var(--active-item-transition);
+  border-radius: var(--active-item-border-radius);
+}
+
+/* src/css/trackButton.css */
+.easy-pagination-track-button {
+  position: absolute;
+  display: block;
+  outline: var(--button-border);
+  border-radius: var(--button-border-radius);
+  cursor: default;
+  background: var(--button-background, transparent);
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change:
+    left,
+    top,
+    width,
+    height,
+    transform;
+  transition:
+    left var(--track-animation-time) ease,
+    top var(--track-animation-time) ease,
+    width var(--track-animation-time) ease,
+    height var(--track-animation-time) ease;
+}
+.easy-pagination-track-button--next {
+  animation: easy-pagination-next var(--track-animation-time) ease;
+}
+@keyframes easy-pagination-next {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, 0, 0) scale(1.2);
+    box-shadow: var(--shadow) 5px 0 var(--active-shadow-color, var(--shadow-color));
+    outline: var(--active-button-border, var(--button-border));
+    background: var(--active-button-background, var(--button-background));
+    border-radius: var( --active-button-border-radius, var(--button-border-radius) );
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    box-shadow: var(--shadow) 5px -5px var(--shadow-color);
+    outline: var(--button-border);
+    background: var(--button-background);
+    border-radius: var(--button-border-radius);
+  }
+}
+
+/* src/css/main.css */
+.easy-pagination-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.easy-pagination-main--horizontal {
+  flex-direction: column;
+}
+.easy-pagination-main--vertical {
+  flex-direction: row;
+}
+.easy-pagination-main__content {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+/* src/css/index.css */
+/*# sourceMappingURL=index.css.map */
