@@ -68,7 +68,9 @@ export const ScrollBarSettings = () => {
     const [mode, setMode] = useState<Mode>("vertical");
 
     const [boundaryOffset, setBoundaryOffset] = useState(4);
-
+    const [positionMode, setPositionMode] = useState<"before" | "after">(
+        "after",
+    );
     const [widthTrack, setWidthTrack] = useState(8);
 
     const config: ScrollToFutureConfig = {
@@ -78,7 +80,7 @@ export const ScrollBarSettings = () => {
         scrollBar: {
             widthTrack: `${widthTrack}px`,
 
-            positionMode: "after",
+            positionMode: positionMode,
             superimposition,
             mode,
             heightTrack: `${heightScrollBar}%`,
@@ -150,6 +152,37 @@ export const ScrollBarSettings = () => {
                             initial={false}
                             animate={{
                                 scale: item === mode ? 1.1 : 1,
+                            }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 700,
+                                damping: 12,
+                            }}
+                        >
+                            {item}
+                        </motion.button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+                <span>Position Mode</span>
+
+                <div className="flex flex-row flex-wrap gap-2">
+                    {["before", "after"].map((item) => (
+                        <motion.button
+                            type="button"
+                            key={item}
+                            className={`
+                                ${buttonClassName}
+                                ${item === positionMode ? "bg-pink-300/30" : ""}
+                            `}
+                            onClick={() => {
+                                setPositionMode(item as "before" | "after");
+                            }}
+                            initial={false}
+                            animate={{
+                                scale: item === positionMode ? 1.1 : 1,
                             }}
                             transition={{
                                 type: "spring",

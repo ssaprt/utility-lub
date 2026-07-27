@@ -29,7 +29,7 @@ export const ScrollToFuture = () => {
             <TitlePost
                 icon="ufo"
                 description="Scrollbar supporting both X and Y axes. Position settings for the start and end of the block. Custom positioning options (above or after the element). 20+ built-in themes"
-                date="07/26/2026"
+                date="07/27/2026"
             >
                 scroll-to-future
             </TitlePost>
@@ -122,6 +122,19 @@ export const ScrollToFuture = () => {
                         title: "Fixed bugs",
                         description:
                             "Fixed animations: the scrollbar now correctly appears when the viewport is resized",
+                    },
+                    {
+                        version: "1.0.13",
+                        date: "07/26/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed fatal error when resize viewport",
+                    },
+                    {
+                        version: "1.0.14",
+                        date: "07/26/2026",
+                        title: "architectural overhaul",
+                        description:
+                            "The scrollbar container rendering mode has been fundamentally reworked",
                     },
                 ].reverse()}
             />

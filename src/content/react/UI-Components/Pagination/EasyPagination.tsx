@@ -160,7 +160,19 @@ export const EasyPagination = () => {
                         description: "Fixed some bugs",
                     },
                     {
-                        version: "1.0.20",
+                        version: "1.1.20",
+                        date: "07/27/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.1.21",
+                        date: "07/27/2026",
+                        title: "Fixed bugs",
+                        description: "Fixed some bugs",
+                    },
+                    {
+                        version: "1.1.22",
                         date: "07/27/2026",
                         title: "Fixed bugs",
                         description: "Fixed some bugs",

@@ -22,7 +22,7 @@
         "react-dom": "19.2.4",
         "react-syntax-highlighter": "^16.1.1",
         "sass": "^1.101.3",
-        "scroll-to-future": "^1.0.13",
+        "scroll-to-future": "file:.yalc/scroll-to-future",
         "use-image-preview": "^1.0.3"
     },
     "devDependencies": {
