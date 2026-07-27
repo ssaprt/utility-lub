@@ -159,51 +159,41 @@
 .easy-pagination-track-button {
   position: absolute;
   display: block;
-  border-radius: var(--button-border-radius);
   outline: var(--button-border);
+  border-radius: var(--button-border-radius);
   cursor: default;
   background: var(--button-background, transparent);
+  transform: translate3d(0, 0, 0) scale(1);
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change:
+    left,
+    top,
+    width,
+    height,
+    transform;
   transition:
     left var(--track-animation-time) ease,
     top var(--track-animation-time) ease,
     width var(--track-animation-time) ease,
     height var(--track-animation-time) ease;
 }
-.easy-pagination-track-button::after {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  outline: inherit;
-  background: inherit;
-  opacity: 0;
-  transform: scale(1);
-  transform-origin: center;
-  content: "";
-  pointer-events: none;
+.easy-pagination-track-button--next {
+  animation: easy-pagination-next var(--track-animation-time) ease;
 }
-.easy-pagination-track-button.easy-pagination-track-button--next::after {
-  animation: easy-pagination-track-next var(--track-animation-time) ease;
-}
-@keyframes easy-pagination-track-next {
+@keyframes easy-pagination-next {
   0% {
-    opacity: 1;
-    transform: scale(1);
-    box-shadow: none;
-    outline: var(--button-border);
-    background: var(--button-background);
-    border-radius: var(--button-border-radius);
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.2);
+    transform: translate3d(0, 0, 0) scale(1.2);
     box-shadow: var(--shadow) 5px 0 var(--active-shadow-color, var(--shadow-color));
     outline: var(--active-button-border, var(--button-border));
     background: var(--active-button-background, var(--button-background));
     border-radius: var( --active-button-border-radius, var(--button-border-radius) );
   }
   100% {
-    opacity: 1;
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
     box-shadow: var(--shadow) 5px -5px var(--shadow-color);
     outline: var(--button-border);
     background: var(--button-background);
