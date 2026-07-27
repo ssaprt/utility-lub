@@ -757,23 +757,6 @@ var TrackButton = (0, import_mobx_react_lite3.observer)(() => {
     shadowDirectionColor,
     shadowDirectionBlur
   } = button || {};
-  const [isTrackReady, setIsTrackReady] = (0, import_react6.useState)(false);
-  const hasPosition = Object.keys(positionTrack).length > 0;
-  (0, import_react6.useLayoutEffect)(() => {
-    if (!hasPosition || isTrackReady) {
-      return;
-    }
-    let secondFrame = 0;
-    const firstFrame = requestAnimationFrame(() => {
-      secondFrame = requestAnimationFrame(() => {
-        setIsTrackReady(true);
-      });
-    });
-    return () => {
-      cancelAnimationFrame(firstFrame);
-      cancelAnimationFrame(secondFrame);
-    };
-  }, [hasPosition, isTrackReady]);
   const styleShadow = (0, import_react6.useMemo)(() => {
     return shadowDirectionVariable(positionShadow, shadowDirectionSize);
   }, [positionShadow, shadowDirectionSize]);
@@ -806,17 +789,17 @@ var TrackButton = (0, import_mobx_react_lite3.observer)(() => {
   return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
     "div",
     {
-      className: `easy-pagination-track-button ${startAnim ? "easy-pagination-track-button--next" : ""} ${className || ""}`.trim(),
+      className: `easy-pagination-track-button ${startAnim && "easy-pagination-track-button--next"} ${className || ""}`.trim(),
       style: {
         ...style,
         ...positionTrack,
         ...sizeTrack,
-        transition: !isTrackReady || isReordering ? "none" : void 0,
+        transition: isReordering ? "none" : void 0,
         pointerEvents: startAnim ? "none" : "auto",
         "--shadow": styleShadow,
         "--track-animation-time": store.animationDurationCss,
         "--active-shadow-color": button?.active?.shadowDirectionColor,
-        display: hasPosition ? "block" : "none",
+        display: Object.keys(positionTrack).length ? "block" : "none",
         ...shadowVariables,
         ...defaultVariables,
         ...activeVariables
