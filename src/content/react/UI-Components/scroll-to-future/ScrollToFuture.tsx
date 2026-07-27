@@ -131,7 +131,7 @@ export const ScrollToFuture = () => {
                     },
                     {
                         version: "1.0.14",
-                        date: "07/26/2026",
+                        date: "07/27/2026",
                         title: "architectural overhaul",
                         description:
                             "The scrollbar container rendering mode has been fundamentally reworked",
