@@ -496,11 +496,11 @@ var usePaginationContext = () => {
 
 // src/components/Main/Main.tsx
 import { observer as observer7 } from "mobx-react-lite";
-import { useLayoutEffect as useLayoutEffect3 } from "react";
+import { useLayoutEffect as useLayoutEffect4 } from "react";
 
 // src/components/Navigation/Navigation.tsx
 import { observer as observer6 } from "mobx-react-lite";
-import { useLayoutEffect as useLayoutEffect2, useRef as useRef4 } from "react";
+import { useLayoutEffect as useLayoutEffect3, useRef as useRef4 } from "react";
 
 // src/components/Arrow/Arrow.tsx
 import { observer as observer2 } from "mobx-react-lite";
@@ -710,7 +710,7 @@ import { useMemo as useMemo5 } from "react";
 
 // src/components/TrackButton/TrackButton.tsx
 import { observer as observer3 } from "mobx-react-lite";
-import { useMemo as useMemo3 } from "react";
+import { useLayoutEffect, useMemo as useMemo3, useState } from "react";
 import { jsx as jsx3 } from "react/jsx-runtime";
 var TrackButton = observer3(() => {
   const { store, props } = usePaginationContext();
@@ -730,6 +730,23 @@ var TrackButton = observer3(() => {
     shadowDirectionColor,
     shadowDirectionBlur
   } = button || {};
+  const [isTrackReady, setIsTrackReady] = useState(false);
+  const hasPosition = Object.keys(positionTrack).length > 0;
+  useLayoutEffect(() => {
+    if (!hasPosition || isTrackReady) {
+      return;
+    }
+    let secondFrame = 0;
+    const firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        setIsTrackReady(true);
+      });
+    });
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, [hasPosition, isTrackReady]);
   const styleShadow = useMemo3(() => {
     return shadowDirectionVariable(positionShadow, shadowDirectionSize);
   }, [positionShadow, shadowDirectionSize]);
@@ -762,17 +779,17 @@ var TrackButton = observer3(() => {
   return /* @__PURE__ */ jsx3(
     "div",
     {
-      className: `easy-pagination-track-button ${startAnim && "easy-pagination-track-button--next"} ${className || ""}`.trim(),
+      className: `easy-pagination-track-button ${startAnim ? "easy-pagination-track-button--next" : ""} ${className || ""}`.trim(),
       style: {
         ...style,
         ...positionTrack,
         ...sizeTrack,
-        transition: isReordering ? "none" : void 0,
+        transition: !isTrackReady || isReordering ? "none" : void 0,
         pointerEvents: startAnim ? "none" : "auto",
         "--shadow": styleShadow,
         "--track-animation-time": store.animationDurationCss,
         "--active-shadow-color": button?.active?.shadowDirectionColor,
-        display: Object.keys(positionTrack).length ? "block" : "none",
+        display: hasPosition ? "block" : "none",
         ...shadowVariables,
         ...defaultVariables,
         ...activeVariables
@@ -786,7 +803,7 @@ import { observer as observer4 } from "mobx-react-lite";
 import {
   useCallback,
   useEffect as useEffect3,
-  useLayoutEffect,
+  useLayoutEffect as useLayoutEffect2,
   useMemo as useMemo4,
   useRef as useRef3
 } from "react";
@@ -851,7 +868,7 @@ var TrackItem = observer4(
       },
       [pageNumber, store]
     );
-    useLayoutEffect(() => {
+    useLayoutEffect2(() => {
       if (!button.current || !isActive) return;
       const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = button.current;
       setPosition(offsetLeft, offsetTop);
@@ -973,7 +990,7 @@ var Navigation = observer6(() => {
   const arrowEndRef = useRef4(null);
   const hasLeft = arrowStart === void 0 || arrowStart?.use === void 0 || arrowStart.use !== false;
   const hasRight = arrowEnd === void 0 || arrowEnd?.use === void 0 || arrowEnd.use !== false;
-  useLayoutEffect2(() => {
+  useLayoutEffect3(() => {
     if (!hasLeft) {
       store.setVisibleArrow("Start", 0);
       return;
@@ -987,7 +1004,7 @@ var Navigation = observer6(() => {
     resizeObserver.observe(el);
     return () => resizeObserver.disconnect();
   }, [store, hasLeft, mode]);
-  useLayoutEffect2(() => {
+  useLayoutEffect3(() => {
     if (!hasRight) {
       store.setVisibleArrow("End", 0);
       return;
@@ -1023,7 +1040,7 @@ var Main = observer7(({ children }) => {
   const { mode, navigation, theme } = props;
   const { style, className } = theme?.main || {};
   const { navigationRef } = actions;
-  useLayoutEffect3(() => {
+  useLayoutEffect4(() => {
     if (!navigationRef.current) return;
     const observer9 = new ResizeObserver(([entry]) => {
       store.setNavigationSize(
@@ -1048,7 +1065,7 @@ var Main = observer7(({ children }) => {
 });
 
 // src/components/Pagination/Pagination.tsx
-import { useState } from "react";
+import { useState as useState2 } from "react";
 
 // src/pressets/blue-theme.ts
 var blueTheme = {
@@ -2240,8 +2257,8 @@ var Pagination = observer8(
       animationSpeed: props.animationSpeed,
       indexing: props.indexing
     });
-    const [currentHoveredItem, setCurrentHoveredItem] = useState(null);
-    const [currentHoveredArrow, setCurrentHoveredArrow] = useState(null);
+    const [currentHoveredItem, setCurrentHoveredItem] = useState2(null);
+    const [currentHoveredArrow, setCurrentHoveredArrow] = useState2(null);
     const actions = usePaginationActions(store);
     const theme = props.selectTheme;
     const propsPart = props;
@@ -2279,10 +2296,10 @@ var useList = () => {
 
 // src/hooks/useProgress.tsx
 import { reaction as reaction2 } from "mobx";
-import { useEffect as useEffect4, useState as useState2 } from "react";
+import { useEffect as useEffect4, useState as useState3 } from "react";
 var useProgress = () => {
   const { store } = usePaginationContext();
-  const [state, setState] = useState2({
+  const [state, setState] = useState3({
     start: store.startAnim,
     progress: store.progress,
     end: !store.startAnim

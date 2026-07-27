@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "@ssaprt/easy-pagination": {
-      "signature": "ade117d8438a11f82d3ed7bbbdaefa15",
+      "signature": "8019b4bf7ae95ff2f143015d27567174",
       "file": true,
       "replaced": "^1.1.20"
     }
