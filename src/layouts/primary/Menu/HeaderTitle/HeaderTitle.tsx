@@ -29,7 +29,7 @@ export const HeaderTitle = () => {
                 }}
             >
                 <Image src="/mana.svg" alt="logo" width={30} height={30} />
-                <h4 className="uppercase font-bold !tracking-[1.5px] text-pink-300/80">
+                <h4 className="uppercase font-bold !tracking-[1.5px] text-[rgba(251,132,255,1)]">
                     Utility Lab
                 </h4>
             </AppLink>
@@ -58,7 +58,7 @@ export const HeaderTitle = () => {
             }}
         >
             <Image src="/mana.svg" alt="logo" width={30} height={30} />
-            <h4 className="uppercase font-bold !tracking-[1.5px] text-pink-300/80">
+            <h4 className="uppercase font-bold !tracking-[1.5px] text-[rgba(251,132,255,1)]">
                 Utility Lab
             </h4>
         </AppLink>

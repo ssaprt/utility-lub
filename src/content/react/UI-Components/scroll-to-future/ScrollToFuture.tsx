@@ -15,7 +15,12 @@ export const ScrollToFuture = () => {
     const { setIconHeader, setTitleHeader } = header || {};
 
     useEffect(() => {
-        setIconHeader(<TablerIcon name="ufo" />);
+        setIconHeader(
+            <TablerIcon
+                className="w-8 h-8 text-[rgba(251,132,255,1)]"
+                name="ufo"
+            />,
+        );
         setTitleHeader("scroll-to-future");
     }, [setIconHeader, setTitleHeader]);
 

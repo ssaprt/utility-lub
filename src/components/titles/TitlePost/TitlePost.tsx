@@ -28,7 +28,7 @@ export const TitlePost = ({
                 <div className="flex flex-row gap-1 items-center">
                     <TablerIcon
                         name={icon}
-                        className="h-8 w-8 shrink-0 text-pink-300"
+                        className="h-7 w-7 shrink-0 text-pink-300"
                     />
 
                     <span className="sr-only" data-pagefind-meta="icon">

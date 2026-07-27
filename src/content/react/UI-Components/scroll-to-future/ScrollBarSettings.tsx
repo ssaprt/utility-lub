@@ -77,6 +77,7 @@ export const ScrollBarSettings = () => {
 
         scrollBar: {
             widthTrack: `${widthTrack}px`,
+
             positionMode: "after",
             superimposition,
             mode,

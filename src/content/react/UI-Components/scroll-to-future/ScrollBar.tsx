@@ -39,6 +39,7 @@ export const ScrollBar = ({
     scrollBar,
     thumb,
     selectTheme,
+    nativeOnMobile,
 }: ScrollToFutureConfig) => {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -100,6 +101,7 @@ export const ScrollBar = ({
                 selectTheme={selectTheme}
                 scrollBar={scrollBar}
                 thumb={thumb}
+                nativeOnMobile={nativeOnMobile}
             />
 
             <div
