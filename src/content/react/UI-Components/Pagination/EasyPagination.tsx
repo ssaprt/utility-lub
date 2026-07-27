@@ -1,6 +1,5 @@
 "use client";
 import { Version } from "@/components/notes/Version/Version";
-import { TablerIcon } from "@/components/titles/TitlePost/TablerIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
 import "@ssaprt/easy-pagination/style.css";
@@ -10,6 +9,7 @@ import { DotSettings } from "./components/HowUse/DotSettings";
 import { Example } from "./components/HowUse/Example";
 
 import { HowUse } from "@/components/HowUse/HowUse";
+import Image from "next/image";
 import { Indexing } from "./components/HowUse/Indexing";
 import { YourTheme } from "./components/HowUse/YourTheme";
 import { Theme } from "./components/Theme/Theme";
@@ -19,14 +19,30 @@ export const EasyPagination = () => {
     const { setIconHeader, setTitleHeader } = header || {};
 
     useEffect(() => {
-        setIconHeader(<TablerIcon name="walk" />);
+        setIconHeader(
+            <Image
+                className="w-8 h-8"
+                src="/easy-pagination.svg"
+                alt="easy-pagination"
+                width={0}
+                height={0}
+            />,
+        );
         setTitleHeader("Easy Pagination");
     }, [setIconHeader, setTitleHeader]);
 
     return (
         <div className="flex flex-col w-full h-auto gap-8 z-2">
             <TitlePost
-                icon="walk"
+                icon={
+                    <Image
+                        className="w-8 h-8"
+                        src="/easy-pagination.svg"
+                        alt="easy-pagination"
+                        width={0}
+                        height={0}
+                    />
+                }
                 description="Adaptation Easy Pagination for React and Next.js."
                 date="07/27/2026"
             >

@@ -2,9 +2,9 @@
 import { HowUse } from "@/components/HowUse/HowUse";
 import { Install } from "@/components/Install/Install";
 import { Version } from "@/components/notes/Version/Version";
-import { TablerIcon } from "@/components/titles/TitlePost/TablerIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
+import Image from "next/image";
 import { useEffect } from "react";
 import { Example } from "./Example";
 import { MixTheme } from "./MixTheme";
@@ -16,9 +16,12 @@ export const ScrollToFuture = () => {
 
     useEffect(() => {
         setIconHeader(
-            <TablerIcon
-                className="w-8 h-8 text-[rgba(251,132,255,1)]"
-                name="ufo"
+            <Image
+                className="w-8 h-8"
+                src="/scroll-to-future.svg"
+                alt="scroll-to-future"
+                width={40}
+                height={40}
             />,
         );
         setTitleHeader("scroll-to-future");
@@ -27,7 +30,15 @@ export const ScrollToFuture = () => {
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon="ufo"
+                icon={
+                    <Image
+                        className="w-8 h-8"
+                        src="/scroll-to-future.svg"
+                        alt="scroll-to-future"
+                        width={0}
+                        height={0}
+                    />
+                }
                 description="Scrollbar supporting both X and Y axes. Position settings for the start and end of the block. Custom positioning options (above or after the element). 20+ built-in themes"
                 date="07/27/2026"
             >

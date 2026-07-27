@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { TablerIcon } from "./TablerIcon";
 
 type TitlePostProps = {
-    icon: string;
+    icon: string | React.ReactNode;
     description: string;
     children: ReactNode;
     date: string;
@@ -26,10 +26,14 @@ export const TitlePost = ({
             >
                 <Loader visible mode="space" />
                 <div className="flex flex-row gap-1 items-center">
-                    <TablerIcon
-                        name={icon}
-                        className="h-7 w-7 shrink-0 text-pink-300"
-                    />
+                    {typeof icon === "string" ? (
+                        <TablerIcon
+                            name={icon}
+                            className="h-7 w-7 shrink-0 text-pink-300"
+                        />
+                    ) : (
+                        icon
+                    )}
 
                     <span className="sr-only" data-pagefind-meta="icon">
                         {icon}
@@ -39,7 +43,10 @@ export const TitlePost = ({
                         {description}
                     </span>
 
-                    <h3 className="text-lg" data-pagefind-meta="title">
+                    <h3
+                        className="text-lg text-pink-300"
+                        data-pagefind-meta="title"
+                    >
                         {children}
                     </h3>
                 </div>

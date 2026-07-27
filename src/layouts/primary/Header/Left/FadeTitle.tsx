@@ -41,7 +41,7 @@ export const FadeTitle = () => {
             aria-hidden={!isScrolled}
         >
             {iconHeader}
-            <span className="text-[rgba(251,132,255,1)]">{titleHeader}</span>
+            <span className="text-pink-300">{titleHeader}</span>
         </motion.div>
     );
 };

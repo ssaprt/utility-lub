@@ -25,6 +25,7 @@ interface AppContextActionsType {
     menu: {
         setOpenMenu: Dispatch<SetStateAction<boolean>>;
         setWidthMenu: Dispatch<SetStateAction<number>>;
+        setEndAnimation: Dispatch<SetStateAction<boolean>>;
     };
 }
 
@@ -39,6 +40,7 @@ type AppContextType = {
     menu: {
         openMenu: boolean;
         widthMenu: number;
+        endAnimation: boolean;
     };
 };
 
@@ -64,6 +66,7 @@ export const AppContextProvider = ({
     //* menu context =============================================
     const [openMenu, setOpenMenu] = useState(false);
     const [widthMenu, setWidthMenu] = useState(0);
+    const [endAnimation, setEndAnimation] = useState(false);
     //* menu context =============================================
 
     //* context ====================================================
@@ -79,6 +82,7 @@ export const AppContextProvider = ({
             menu: {
                 openMenu,
                 widthMenu,
+                endAnimation,
             },
         }),
         [
@@ -89,6 +93,7 @@ export const AppContextProvider = ({
             isScrolled,
             openMenu,
             widthMenu,
+            endAnimation,
         ],
     );
     //* context ====================================================
@@ -105,6 +110,7 @@ export const AppContextProvider = ({
             menu: {
                 setOpenMenu,
                 setWidthMenu,
+                setEndAnimation,
             },
         }),
         [],

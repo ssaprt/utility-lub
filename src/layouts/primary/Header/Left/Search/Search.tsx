@@ -8,6 +8,7 @@ import { IconCalendarPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
+import Image from "next/image";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
 
@@ -223,17 +224,38 @@ export const Search = () => {
                                     >
                                         <div className="flex flex-row items-center justify-between gap-2">
                                             <div className="flex min-w-0 flex-row items-center gap-1">
-                                                {result.meta?.icon && (
-                                                    <TablerIcon
-                                                        name={result.meta.icon}
-                                                        className="
+                                                {result.meta?.icon &&
+                                                    ([
+                                                        ".svg",
+                                                        ".png",
+                                                        ".webp",
+                                                        ".jpg",
+                                                        ".jpeg",
+                                                    ].includes(
+                                                        result.meta?.icon,
+                                                    ) ? (
+                                                        <Image
+                                                            src={
+                                                                result.meta.icon
+                                                            }
+                                                            alt={"icon"}
+                                                            width={0}
+                                                            height={0}
+                                                            className="h-6 w-6 shrink-0"
+                                                        />
+                                                    ) : (
+                                                        <TablerIcon
+                                                            name={
+                                                                result.meta.icon
+                                                            }
+                                                            className="
                                                                     h-6
                                                                     w-6
                                                                     shrink-0
                                                                     stroke-pink-300
                                                                 "
-                                                    />
-                                                )}
+                                                        />
+                                                    ))}
 
                                                 <span
                                                     className={`

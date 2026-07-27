@@ -4,6 +4,11 @@ import { motion } from "framer-motion";
 import { useLinkStatus } from "next/link";
 import { useEffect, useRef, useState } from "react";
 
+import {
+    useAppContextActions,
+    useAppContextValues,
+} from "@/context/appContext";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { Loader } from "../animationIcons/Loader/Loader";
 
 const OVERLAY_IN_DURATION = 100;
@@ -20,10 +25,18 @@ export const PendingLoader = () => {
     const loaderRef = useRef<HTMLDivElement>(null);
     const cycleStartedAtRef = useRef(0);
 
+    const isDesktop = useBreakpoint("lg");
+
+    const { menu } = useAppContextValues();
+    const { openMenu } = menu;
+
+    const { menu: menuActions } = useAppContextActions();
+    const { setOpenMenu } = menuActions;
+
     const [phase, setPhase] = useState<LoaderPhase>("idle");
 
     useEffect(() => {
-        if (!pending) {
+        if (!pending || phase !== "idle") {
             return;
         }
 
@@ -31,7 +44,12 @@ export const PendingLoader = () => {
 
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setPhase("active");
-    }, [pending]);
+        if (!isDesktop) {
+            if (openMenu) {
+                setOpenMenu(false);
+            }
+        }
+    }, [pending, phase, openMenu, isDesktop, setOpenMenu]);
 
     useEffect(() => {
         if (pending || phase !== "active") {
@@ -95,6 +113,7 @@ export const PendingLoader = () => {
     if (phase === "idle") {
         return null;
     }
+
     const overlayVisible = phase === "active" || phase === "loaderOut";
 
     const loaderVisible = phase === "active";
@@ -115,16 +134,16 @@ export const PendingLoader = () => {
                 }
             }}
             className="
-            pointer-events-none
-            fixed
-            !z-[9999999]
-            flex
-            items-center
-            justify-center
-            overflow-hidden
-            bg-[linear-gradient(283deg,rgba(115,86,209,1)_0%,rgba(134,84,179,1)_35%,rgba(82,56,128,1)_74%,rgba(112,38,133,1)_100%)]
-            will-change-[opacity]
-        "
+                pointer-events-none
+                fixed
+                !z-[9999999]
+                flex
+                items-center
+                justify-center
+                overflow-hidden
+                bg-[linear-gradient(283deg,rgba(115,86,209,1)_0%,rgba(134,84,179,1)_35%,rgba(82,56,128,1)_74%,rgba(112,38,133,1)_100%)]
+                will-change-[opacity]
+            "
         >
             <Loader
                 visible={loaderVisible}

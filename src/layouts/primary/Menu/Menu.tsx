@@ -1,4 +1,7 @@
-import { useAppContextValues } from "@/context/appContext";
+import {
+    useAppContextActions,
+    useAppContextValues,
+} from "@/context/appContext";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { ScrollToFuture } from "scroll-to-future";
@@ -11,6 +14,8 @@ import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
 
 export const Menu = () => {
     const contentRef = useRef<HTMLDivElement>(null);
+    const { menu } = useAppContextActions();
+    const { setEndAnimation } = menu;
 
     const { menu: values } = useAppContextValues();
     const { openMenu } = values;
@@ -36,6 +41,7 @@ export const Menu = () => {
                                     duration: 0.3,
                                 },
                             }}
+                            onAnimationEnd={() => setEndAnimation(true)}
                         >
                             <HeaderTitle />
                         </motion.div>
