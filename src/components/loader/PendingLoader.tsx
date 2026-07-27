@@ -22,7 +22,6 @@ type LoaderPhase = "idle" | "active" | "loaderOut" | "overlayOut";
 export const PendingLoader = () => {
     const { pending } = useLinkStatus();
 
-    const loaderRef = useRef<HTMLDivElement>(null);
     const cycleStartedAtRef = useRef(0);
 
     const isDesktop = useBreakpoint("lg");
@@ -41,13 +40,11 @@ export const PendingLoader = () => {
         }
 
         cycleStartedAtRef.current = performance.now();
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        //eslint-disable-next-line
         setPhase("active");
-        if (!isDesktop) {
-            if (openMenu) {
-                setOpenMenu(false);
-            }
+
+        if (!isDesktop && openMenu) {
+            setOpenMenu(false);
         }
     }, [pending, phase, openMenu, isDesktop, setOpenMenu]);
 
@@ -72,44 +69,6 @@ export const PendingLoader = () => {
         };
     }, [pending, phase]);
 
-    useEffect(() => {
-        if (phase === "idle") {
-            return;
-        }
-
-        const loaderElement = loaderRef.current;
-        const container = document.querySelector("#main");
-
-        if (!loaderElement || !container) {
-            return;
-        }
-
-        const update = () => {
-            const rect = container.getBoundingClientRect();
-
-            loaderElement.style.left = `${rect.left}px`;
-            loaderElement.style.top = `${rect.top}px`;
-            loaderElement.style.width = `${rect.width}px`;
-            loaderElement.style.height = `${rect.height}px`;
-        };
-
-        update();
-
-        const resizeObserver = new ResizeObserver(update);
-
-        resizeObserver.observe(container);
-
-        window.addEventListener("resize", update);
-        window.addEventListener("scroll", update, true);
-
-        return () => {
-            resizeObserver.disconnect();
-
-            window.removeEventListener("resize", update);
-            window.removeEventListener("scroll", update, true);
-        };
-    }, [phase]);
-
     if (phase === "idle") {
         return null;
     }
@@ -120,7 +79,6 @@ export const PendingLoader = () => {
 
     return (
         <motion.div
-            ref={loaderRef}
             initial={false}
             animate={{
                 opacity: overlayVisible ? 1 : 0,
@@ -135,7 +93,8 @@ export const PendingLoader = () => {
             }}
             className="
                 pointer-events-none
-                fixed
+                absolute
+                inset-0
                 !z-[9999999]
                 flex
                 items-center

@@ -11,9 +11,8 @@ export const AppLink = ({ children, ...props }: AppLinkProps) => {
     const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
-        const target = document.querySelector<HTMLElement>("body");
-
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+        const target = document.querySelector<HTMLElement>("#main");
+        //eslint-disable-next-line
         setPortalTarget(target);
     }, []);
 
