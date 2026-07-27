@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
     devIndicators: false,
     trailingSlash: true,
 
+    allowedDevOrigins: ["192.168.100.4", "192.168.100.4:3000"],
+
     typescript: {
         ignoreBuildErrors: true,
     },

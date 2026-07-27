@@ -3,14 +3,14 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev --hostname 0.0.0.0",
         "clean": "rimraf .next out",
         "build": "next build && pagefind --site out",
         "preview": "serve out",
         "lint": "eslint"
     },
     "dependencies": {
-        "@ssaprt/easy-pagination": "file:.yalc/@ssaprt/easy-pagination",
+        "@ssaprt/easy-pagination": "^1.1.21",
         "@tabler/icons-react": "^3.44.0",
         "@tabler/icons-sprite": "^3.45.0",
         "framer-motion": "^12.42.2",
