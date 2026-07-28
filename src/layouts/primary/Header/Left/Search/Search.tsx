@@ -307,7 +307,15 @@ export const Search = () => {
             {/* Desktop */}
             <div className="relative hidden lg:block">
                 <div className="relative flex flex-row items-center justify-between">
-                    <Input value={value} onChange={handleChange} />
+                    <Input
+                        type="search"
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="none"
+                        spellCheck={false}
+                        value={value}
+                        onChange={handleChange}
+                    />
 
                     {renderClearButton()}
                 </div>
