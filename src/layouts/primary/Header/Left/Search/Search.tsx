@@ -237,9 +237,7 @@ export const Search = () => {
                                                         result.meta.icon,
                                                     ) ? (
                                                         <Image
-                                                            src={
-                                                                result.meta.icon
-                                                            }
+                                                            src={`/${result.meta.icon}`}
                                                             alt=""
                                                             width={24}
                                                             height={24}
