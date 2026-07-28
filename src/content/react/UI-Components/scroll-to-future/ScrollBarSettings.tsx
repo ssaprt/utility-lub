@@ -68,10 +68,11 @@ export const ScrollBarSettings = () => {
     const [mode, setMode] = useState<Mode>("vertical");
 
     const [boundaryOffset, setBoundaryOffset] = useState(4);
+    const [boundaryOffset2, setBoundaryOffset2] = useState([2, 4]);
     const [positionMode, setPositionMode] = useState<"before" | "after">(
         "after",
     );
-    const [widthTrack, setWidthTrack] = useState(8);
+    const [widthTrack, setWidthTrack] = useState(12);
 
     const config: ScrollToFutureConfig = {
         selectTheme: selectedTheme,
@@ -84,7 +85,10 @@ export const ScrollBarSettings = () => {
             superimposition,
             mode,
             heightTrack: `${heightScrollBar}%`,
-            boundaryOffset: `${boundaryOffset}px`,
+            boundaryOffset:
+                boundaryOffset !== -1
+                    ? `${boundaryOffset}px`
+                    : `${boundaryOffset2[0]}px ${boundaryOffset2[1]}px`,
         },
     };
 
@@ -207,15 +211,53 @@ export const ScrollBarSettings = () => {
                 />
             </div>
 
-            <div className="flex flex-col gap-1">
-                <span>Boundary Offset: {boundaryOffset}px</span>
+            <div className="p-2 bg-black/10">
+                <div className="flex flex-col gap-1">
+                    <span>
+                        Boundary Offset on both sides: {boundaryOffset}px
+                    </span>
+                    <Range
+                        value={boundaryOffset}
+                        onChange={(value) => {
+                            setBoundaryOffset(value);
+                            setBoundaryOffset2([-1, -1]);
+                        }}
+                        min={0}
+                        max={100}
+                    />
+                </div>
 
-                <Range
-                    value={boundaryOffset}
-                    onChange={setBoundaryOffset}
-                    min={1}
-                    max={100}
-                />
+                <span className="block text-center p-2 w-full my-4">OR</span>
+
+                <div className="flex flex-col gap-1">
+                    <span>Boundary Offset start: {boundaryOffset2[0]}px</span>
+                    <Range
+                        value={boundaryOffset2[0]}
+                        onChange={(value) => {
+                            setBoundaryOffset(-1);
+                            setBoundaryOffset2((prev) => [
+                                value,
+                                prev[1] === -1 ? 0 : prev[1],
+                            ]);
+                        }}
+                        min={0}
+                        max={100}
+                    />
+
+                    <span>Boundary Offset end: {boundaryOffset2[1]}px</span>
+                    <Range
+                        value={boundaryOffset2[1]}
+                        onChange={(value) => {
+                            setBoundaryOffset(-1);
+                            setBoundaryOffset2((prev) => [
+                                prev[0] === -1 ? 0 : prev[0],
+                                value,
+                            ]);
+                        }}
+                        min={0}
+                        max={100}
+                    />
+                </div>
             </div>
 
             <div className="flex flex-col gap-1">

@@ -52,15 +52,13 @@
 
 @media (max-width: 1023px) {
     .menu {
-        --menu-width: calc(100vw + 8px);
-        transition:
-            width 0.75s ease,
-            margin-left 0.75s ease;
+        --menu-width: 100vw;
+
         margin-left: 0;
     }
 
     .menu.open {
-        width: var(--menu-width);
+        margin-left: 0px;
     }
 
     .panel {

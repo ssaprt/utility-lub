@@ -32,7 +32,7 @@ export const ScrollToFuture = () => {
             <TitlePost
                 icon={
                     <Image
-                        className="w-8 h-8"
+                        className="w-7 h-7"
                         src="/scroll-to-future.svg"
                         alt="scroll-to-future"
                         width={0}

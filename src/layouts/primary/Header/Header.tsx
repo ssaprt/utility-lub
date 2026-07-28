@@ -11,7 +11,7 @@ export const Header = () => {
     return (
         <header
             id="main-header"
-            className={`${styles.header} ${isScrolled && styles.scrolled} flex flex-row w-full justify-between px-2 py-2 h-[60px] relative backdrop-blur-[12px]`}
+            className={`${styles.header} ${isScrolled && styles.scrolled} flex flex-row w-full justify-between px-2 py-2 h-[60px] relative`}
         >
             <Left />
             <Right />

@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useLinkStatus } from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import {
@@ -20,14 +19,12 @@ const OVERLAY_OUT_DURATION = 300;
 type LoaderPhase = "idle" | "active" | "loaderOut" | "overlayOut";
 
 export const PendingLoader = () => {
-    const { pending } = useLinkStatus();
-
     const cycleStartedAtRef = useRef(0);
 
     const isDesktop = useBreakpoint("lg");
 
     const { menu } = useAppContextValues();
-    const { openMenu } = menu;
+    const { openMenu, pending } = menu;
 
     const { menu: menuActions } = useAppContextActions();
     const { setOpenMenu } = menuActions;

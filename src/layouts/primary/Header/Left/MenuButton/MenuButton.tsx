@@ -2,14 +2,14 @@ import {
     useAppContextActions,
     useAppContextValues,
 } from "@/context/appContext";
-import { useMemo } from "react";
+import { CSSProperties, useMemo } from "react";
 import styles from "./MenuButton.module.css";
 
 export const MenuButton = () => {
     const { menu: menuValues } = useAppContextValues();
     const { menu: menuActions } = useAppContextActions();
 
-    const { openMenu } = menuValues;
+    const { openMenu, noneAnimationMenu } = menuValues;
     const { setOpenMenu } = menuActions;
 
     const createDotes = useMemo(() => {
@@ -45,13 +45,18 @@ export const MenuButton = () => {
             onClick={() => setOpenMenu((prev) => !prev)}
             className={`${styles.overlay} ${openMenu ? styles.active : ""} 
             absolute 
-            ${openMenu ? "-left-[70px]" : "left-[10px]"} 
+            ${openMenu ? "-left-[50px]" : "left-[10px]"} 
             top-1/2 -translate-y-1/2
 
             lg:top-auto
             lg:translate-y-0
             lg:relative
             lg:left-auto`}
+            style={
+                {
+                    "--none-trans": noneAnimationMenu && "none",
+                } as CSSProperties
+            }
         >
             <svg className={styles.svg} viewBox="0 0 40 40">
                 {createDotes}

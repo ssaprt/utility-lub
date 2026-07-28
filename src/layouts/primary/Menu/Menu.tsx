@@ -1,7 +1,4 @@
-import {
-    useAppContextActions,
-    useAppContextValues,
-} from "@/context/appContext";
+import { useAppContextValues } from "@/context/appContext";
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { ScrollToFuture } from "scroll-to-future";
@@ -14,11 +11,8 @@ import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
 
 export const Menu = () => {
     const contentRef = useRef<HTMLDivElement>(null);
-    const { menu } = useAppContextActions();
-    const { setEndAnimation } = menu;
-
-    const { menu: values } = useAppContextValues();
-    const { openMenu } = values;
+    const { menu } = useAppContextValues();
+    const { noneAnimationMenu, openMenu } = menu;
     const isDesktop = useBreakpoint("lg");
 
     return (
@@ -27,6 +21,11 @@ export const Menu = () => {
                 ${styles.menu}
                 ${openMenu ? styles.open : ""}
             `}
+            style={{
+                transition: noneAnimationMenu
+                    ? "none"
+                    : "width 0.35s ease, margin-left 0.35s ease-out",
+            }}
         >
             <div className={styles.panel}>
                 {!isDesktop ? (
@@ -41,7 +40,6 @@ export const Menu = () => {
                                     duration: 0.3,
                                 },
                             }}
-                            onAnimationEnd={() => setEndAnimation(true)}
                         >
                             <HeaderTitle />
                         </motion.div>

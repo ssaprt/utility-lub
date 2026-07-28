@@ -1,6 +1,7 @@
 //TODO imports =============================================================
 "use client";
 import { useDetectedScrollMain } from "@/hooks/AppContext/useDetectedScrollMain";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 
 import {
     createContext,
@@ -25,7 +26,8 @@ interface AppContextActionsType {
     menu: {
         setOpenMenu: Dispatch<SetStateAction<boolean>>;
         setWidthMenu: Dispatch<SetStateAction<number>>;
-        setEndAnimation: Dispatch<SetStateAction<boolean>>;
+        setPending: Dispatch<SetStateAction<boolean>>;
+        setNoneAnimationMenu: Dispatch<SetStateAction<boolean>>;
     };
 }
 
@@ -40,7 +42,8 @@ type AppContextType = {
     menu: {
         openMenu: boolean;
         widthMenu: number;
-        endAnimation: boolean;
+        noneAnimationMenu: boolean;
+        pending: boolean;
     };
 };
 
@@ -66,8 +69,13 @@ export const AppContextProvider = ({
     //* menu context =============================================
     const [openMenu, setOpenMenu] = useState(false);
     const [widthMenu, setWidthMenu] = useState(0);
-    const [endAnimation, setEndAnimation] = useState(false);
+    const [noneAnimationMenu, setNoneAnimationMenu] = useState(false);
     //* menu context =============================================
+
+    //*general context =============================================
+    const isDesktop = useBreakpoint("lg");
+    const [pending, setPending] = useState(false);
+    //*general context =============================================
 
     //* context ====================================================
     const values = useMemo<AppContextType>(
@@ -82,7 +90,8 @@ export const AppContextProvider = ({
             menu: {
                 openMenu,
                 widthMenu,
-                endAnimation,
+                noneAnimationMenu,
+                pending,
             },
         }),
         [
@@ -93,7 +102,8 @@ export const AppContextProvider = ({
             isScrolled,
             openMenu,
             widthMenu,
-            endAnimation,
+            noneAnimationMenu,
+            pending,
         ],
     );
     //* context ====================================================
@@ -110,7 +120,8 @@ export const AppContextProvider = ({
             menu: {
                 setOpenMenu,
                 setWidthMenu,
-                setEndAnimation,
+                setNoneAnimationMenu,
+                setPending,
             },
         }),
         [],
@@ -132,6 +143,24 @@ export const AppContextProvider = ({
             media.removeEventListener("change", handleChange);
         };
     }, []);
+
+    useEffect(() => {
+        if (isDesktop) {
+            //eslint-disable-next-line
+            setNoneAnimationMenu(true);
+            return;
+        }
+
+        if (pending && openMenu) {
+            setNoneAnimationMenu(true);
+            setOpenMenu(false);
+            return;
+        }
+
+        if (!pending) {
+            setNoneAnimationMenu(false);
+        }
+    }, [isDesktop, openMenu, pending]);
 
     return (
         <AppContextValues.Provider value={values}>

@@ -1,7 +1,8 @@
 "use client";
 
 import { PendingLoader } from "@/components/loader/PendingLoader";
-import Link from "next/link";
+import { useAppContextActions } from "@/context/appContext";
+import Link, { useLinkStatus } from "next/link";
 import { useEffect, useState, type ComponentProps } from "react";
 import { createPortal } from "react-dom";
 
@@ -19,10 +20,22 @@ export const AppLink = ({ children, ...props }: AppLinkProps) => {
     return (
         <Link prefetch={false} {...props}>
             {children}
-
+            <PendingDetect />
             {portalTarget
                 ? createPortal(<PendingLoader />, portalTarget)
                 : null}
         </Link>
     );
+};
+
+const PendingDetect = () => {
+    const { pending } = useLinkStatus();
+    const { menu } = useAppContextActions();
+    const { setPending } = menu;
+
+    useEffect(() => {
+        setPending(pending);
+    }, [pending, setPending]);
+
+    return null;
 };
