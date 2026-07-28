@@ -12,6 +12,14 @@ import Image from "next/image";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
 
+const isImageSource = (value: string) => {
+    return (
+        value.startsWith("data:image/") ||
+        value.startsWith("blob:") ||
+        /\.(svg|png|webp|jpe?g)(?:[?#].*)?$/i.test(value)
+    );
+};
+
 export const Search = () => {
     const {
         setValue,
@@ -225,23 +233,17 @@ export const Search = () => {
                                         <div className="flex flex-row items-center justify-between gap-2">
                                             <div className="flex min-w-0 flex-row items-center gap-1">
                                                 {result.meta?.icon &&
-                                                    ([
-                                                        ".svg",
-                                                        ".png",
-                                                        ".webp",
-                                                        ".jpg",
-                                                        ".jpeg",
-                                                    ].includes(
-                                                        result.meta?.icon,
+                                                    (isImageSource(
+                                                        result.meta.icon,
                                                     ) ? (
                                                         <Image
                                                             src={
                                                                 result.meta.icon
                                                             }
-                                                            alt={"icon"}
+                                                            alt=""
                                                             width={24}
                                                             height={24}
-                                                            className="h-6 w-6 shrink-0"
+                                                            className="h-6 w-6 shrink-0 object-contain"
                                                         />
                                                     ) : (
                                                         <TablerIcon
@@ -249,11 +251,11 @@ export const Search = () => {
                                                                 result.meta.icon
                                                             }
                                                             className="
-                                                                    h-6
-                                                                    w-6
-                                                                    shrink-0
-                                                                    stroke-pink-300
-                                                                "
+                h-6
+                w-6
+                shrink-0
+                stroke-pink-300
+            "
                                                         />
                                                     ))}
 
