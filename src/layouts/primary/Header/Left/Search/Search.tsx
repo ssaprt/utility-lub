@@ -239,8 +239,8 @@ export const Search = () => {
                                                                 result.meta.icon
                                                             }
                                                             alt={"icon"}
-                                                            width={0}
-                                                            height={0}
+                                                            width={24}
+                                                            height={24}
                                                             className="h-6 w-6 shrink-0"
                                                         />
                                                     ) : (
