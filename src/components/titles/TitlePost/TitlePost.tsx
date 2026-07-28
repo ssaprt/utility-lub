@@ -1,14 +1,23 @@
 import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { TablerIcon } from "./TablerIcon";
 
 type TitlePostProps = {
-    icon: string | React.ReactNode;
+    icon: string;
     description: string;
     children: ReactNode;
     date: string;
+};
+
+const isImageSource = (value: string) => {
+    return (
+        value.startsWith("data:image/") ||
+        value.startsWith("blob:") ||
+        /\.(svg|png|webp|jpe?g)(?:[?#].*)?$/i.test(value)
+    );
 };
 
 export const TitlePost = ({
@@ -26,13 +35,19 @@ export const TitlePost = ({
             >
                 <Loader visible mode="space" />
                 <div className="flex flex-row gap-1 items-center">
-                    {typeof icon === "string" ? (
+                    {isImageSource(icon) ? (
+                        <Image
+                            className="w-7 h-7"
+                            src={`/${icon}`}
+                            alt={`${icon}`}
+                            width={0}
+                            height={0}
+                        />
+                    ) : (
                         <TablerIcon
                             name={icon}
                             className="h-7 w-7 shrink-0 text-pink-300"
                         />
-                    ) : (
-                        icon
                     )}
 
                     <span className="sr-only" data-pagefind-meta="icon">

@@ -30,15 +30,7 @@ export const ScrollToFuture = () => {
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon={
-                    <Image
-                        className="w-7 h-7"
-                        src="/scroll-to-future.svg"
-                        alt="scroll-to-future"
-                        width={0}
-                        height={0}
-                    />
-                }
+                icon="scroll-to-future.svg"
                 description="Scrollbar supporting both X and Y axes. Position settings for the start and end of the block. Custom positioning options (above or after the element). 20+ built-in themes"
                 date="07/27/2026"
             >
