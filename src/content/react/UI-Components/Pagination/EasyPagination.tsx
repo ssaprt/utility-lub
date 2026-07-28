@@ -34,15 +34,7 @@ export const EasyPagination = () => {
     return (
         <div className="flex flex-col w-full h-auto gap-8 z-2">
             <TitlePost
-                icon={
-                    <Image
-                        className="w-8 h-8"
-                        src="/easy-pagination.svg"
-                        alt="easy-pagination"
-                        width={0}
-                        height={0}
-                    />
-                }
+                icon="easy-pagination.svg"
                 description="Adaptation Easy Pagination for React and Next.js."
                 date="07/27/2026"
             >
