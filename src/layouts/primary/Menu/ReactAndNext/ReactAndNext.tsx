@@ -50,6 +50,11 @@ export const ReactAndNext = () => {
                         title: "ScrollBar",
                         href: "/react/UI-Components/scroll-to-future",
                     },
+                    {
+                        type: "link",
+                        title: "Tooltip",
+                        href: "/react/UI-Components/tooltip",
+                    },
                 ]}
             />
         </>

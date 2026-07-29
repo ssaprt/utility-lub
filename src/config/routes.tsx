@@ -1,6 +1,7 @@
 import { UseImagePreview } from "@/content/react/hooks/media/useImagePreview/UseImagePreview";
 import { EasyPagination } from "@/content/react/UI-Components/Pagination/EasyPagination";
 import { ScrollToFuture } from "@/content/react/UI-Components/scroll-to-future/ScrollToFuture";
+import { Tooltip } from "@/content/react/UI-Components/Tooltip/Tooltip";
 import type { ComponentType } from "react";
 
 export interface AppRoute {
@@ -24,5 +25,10 @@ export const routes = [
         title: "scroll-to-future",
         path: ["react", "UI-Components", "scroll-to-future"],
         Component: ScrollToFuture,
+    },
+    {
+        title: "Tooltip",
+        path: ["react", "UI-Components", "tooltip"],
+        Component: Tooltip,
     },
 ] as const satisfies readonly AppRoute[];

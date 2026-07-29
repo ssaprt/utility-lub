@@ -1,39 +1,8 @@
 import { ScrollToFuture, type ScrollToFutureConfig } from "scroll-to-future";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef } from "react";
 
 import styles from "./ScrollBar.module.scss";
-
-const BLOCKS_COUNT = 30;
-
-type BlockStyle = CSSProperties & {
-    "--pink-opacity": number;
-};
-
-const randomBySeed = (seed: number): number => {
-    let value = seed | 0;
-
-    value = Math.imul(value ^ (value >>> 16), 0x21f0aaad);
-
-    value = Math.imul(value ^ (value >>> 15), 0x735a2d97);
-
-    value ^= value >>> 15;
-
-    return (value >>> 0) / 4294967296;
-};
-
-const blocks = Array.from({ length: BLOCKS_COUNT }, (_, index) => {
-    const random = randomBySeed(index + 1);
-
-    const style: BlockStyle = {
-        "--pink-opacity": Number((0.2 + random * 0.8).toFixed(2)),
-    };
-
-    return {
-        id: index,
-        style,
-    };
-});
 
 export const ScrollBar = ({
     scrollBar,

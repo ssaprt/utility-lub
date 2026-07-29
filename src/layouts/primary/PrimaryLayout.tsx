@@ -4,6 +4,8 @@ import { Hr } from "@/components/hr/Hr/Hr";
 import { AppContextProvider } from "@/context/appContext";
 
 import { MountLoader } from "@/components/loader/MountLoader";
+import { TooltipProvider } from "tooltip";
+import "tooltip/style.css";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
 import { Menu } from "./Menu/Menu";
@@ -11,16 +13,17 @@ import { Menu } from "./Menu/Menu";
 export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <AppContextProvider>
-            <MountLoader />
-            <Menu data-pagefind-ignore />
+            <TooltipProvider defaultRenderPosition="left">
+                <MountLoader />
+                <Menu data-pagefind-ignore />
 
-            <div className="hidden h-full shrink-0 lg:block">
-                <Hr mode="vertical" />
-            </div>
+                <div className="hidden h-full shrink-0 lg:block">
+                    <Hr mode="vertical" />
+                </div>
 
-            <div
-                id="primary_layout"
-                className="
+                <div
+                    id="primary_layout"
+                    className="
                     relative
                     z-[1001]
                     flex
@@ -36,15 +39,16 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
                     lg:basis-0
                     lg:shrink
                 "
-            >
-                <Header data-pagefind-ignore />
+                >
+                    <Header data-pagefind-ignore />
 
-                <div className="shrink-0">
-                    <Hr mode="horizontal" />
+                    <div className="shrink-0">
+                        <Hr mode="horizontal" />
+                    </div>
+
+                    <Main>{children}</Main>
                 </div>
-
-                <Main>{children}</Main>
-            </div>
+            </TooltipProvider>
         </AppContextProvider>
     );
 };

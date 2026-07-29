@@ -24,6 +24,7 @@
         "react-syntax-highlighter": "^16.1.1",
         "sass": "^1.101.3",
         "scroll-to-future": "file:.yalc/scroll-to-future",
+        "tooltip": "file:.yalc/tooltip",
         "use-image-preview": "^1.0.3"
     },
     "devDependencies": {

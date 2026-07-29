@@ -103,7 +103,7 @@ export const PendingLoader = () => {
         >
             <Loader
                 visible={loaderVisible}
-                mode="space"
+                mode="wave"
                 onTransitionEnd={() => {
                     if (phase === "loaderOut") {
                         setPhase("overlayOut");
