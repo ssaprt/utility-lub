@@ -19,9 +19,9 @@
     box-sizing: border-box;
 }
 
-.pending {
+/* .pending {
     overflow-y: hidden;
-}
+} */
 
 .main > * {
     width: 100%;

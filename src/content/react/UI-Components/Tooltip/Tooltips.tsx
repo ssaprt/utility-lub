@@ -1,9 +1,10 @@
-import { CopyButton } from "@/components/button/CopyButton/CopyButton";
+import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Range } from "@/components/input/range/Range";
+import { TooltipAnimationType, TooltipPlacement } from "@ssaprt/tooltip";
 import { IconTooltip } from "@tabler/icons-react";
 import { ReactNode, useState } from "react";
 import { ScrollToFuture } from "scroll-to-future";
-import { TooltipAnimationType, TooltipPlacement } from "tooltip";
 import { emojis } from "../Pagination/data/list";
 import { TooltipElement } from "./TooltipElement";
 
@@ -89,6 +90,7 @@ const Example = () => {
                 ))}
             </div>
             <ScrollToFuture
+                nativeOnMobile={false}
                 scrollBar={{
                     widthTrack: "8px",
                     boundaryOffset: "4px 0px",
@@ -109,7 +111,7 @@ export const Tooltips = () => {
     const [positionRenderMode, setPositionRenderMode] =
         useState<TooltipPlacement>("top");
     const [showExample, setShowExample] = useState<ReactNode | string>(
-        "example",
+        <Example />,
     );
     const [interactive, setInteractive] = useState(false);
     const [hideDelay, setHideDelay] = useState(0);
@@ -118,130 +120,96 @@ export const Tooltips = () => {
 
     return (
         <div className="flex flex-col gap-2">
-            <span className="text-[var(--font-sm)]">Position</span>
-            <div className="flex flex-row flex-wrap gap-2">
+            <TitleWithItemsBlock title="Position">
                 {positions.map((pos) => (
-                    <CopyButton
-                        className={`${pos === positionRenderMode && "bg-pink-500/40"}`}
-                        currentValue={animationHide}
+                    <GeneralButton
+                        active={pos === positionRenderMode}
                         key={pos}
-                        copy={false}
-                        returnValue={() => setPositionRenderMode(pos)}
-                    >
-                        {pos}
-                    </CopyButton>
+                        textButton={pos}
+                        handleAction={() => setPositionRenderMode(pos)}
+                    />
                 ))}
-            </div>
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Example content or text
-            </span>
-            <div className="flex flex-row flex-wrap gap-2">
-                <CopyButton
-                    className={`${showExample !== "example text" && "bg-pink-500/40"}`}
-                    currentValue={animationHide}
-                    copy={false}
-                    returnValue={() => setShowExample(<Example />)}
-                >
-                    Example Component
-                </CopyButton>
-                <CopyButton
-                    className={`${showExample === "example text" && "bg-pink-500/40"}`}
-                    currentValue={animationHide}
-                    copy={false}
-                    returnValue={() => setShowExample("example text")}
-                >
-                    text
-                </CopyButton>
-            </div>
+            <TitleWithItemsBlock title="Example content or text">
+                <GeneralButton
+                    active={showExample !== "example text"}
+                    textButton="Example Component"
+                    handleAction={() => setShowExample(<Example />)}
+                />
+                <GeneralButton
+                    active={showExample === "example text"}
+                    textButton="Text"
+                    handleAction={() => setShowExample("example text")}
+                />
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">Select AnimationShow</span>
-            <div className="flex flex-row flex-wrap gap-2">
+            <TitleWithItemsBlock title="Select AnimationShow">
                 {animations.map((animation) => (
-                    <CopyButton
-                        currentValue={animationShow}
+                    <GeneralButton
                         key={animation}
-                        copy={false}
-                        returnValue={() => setAnimationShow(animation)}
-                    >
-                        {animation}
-                    </CopyButton>
+                        active={animationShow === animation}
+                        textButton={animation}
+                        handleAction={() => setAnimationShow(animation)}
+                    />
                 ))}
-            </div>
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">Select AnimationHide</span>
-            <div className="flex flex-row flex-wrap gap-2">
+            <TitleWithItemsBlock title="Select AnimationHide">
                 {animations.map((animation) => (
-                    <CopyButton
-                        currentValue={animationHide}
+                    <GeneralButton
                         key={animation}
-                        copy={false}
-                        returnValue={() => setAnimationHide(animation)}
-                    >
-                        {animation}
-                    </CopyButton>
+                        active={animationHide === animation}
+                        textButton={animation}
+                        handleAction={() => setAnimationHide(animation)}
+                    />
                 ))}
-            </div>
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Animation speed {speed}(ms)
-            </span>
-            <Range
-                min={0}
-                step={10}
-                max={1000}
-                value={speed}
-                onChange={(val) => setSpeed(val)}
-            />
+            <TitleWithItemsBlock title={`Animation speed ${speed}(ms)`}>
+                <Range
+                    min={0}
+                    step={10}
+                    max={1000}
+                    value={speed}
+                    onChange={(val) => setSpeed(val)}
+                />
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Hide delay {hideDelay}(ms)
-            </span>
-            <Range
-                min={0}
-                step={10}
-                max={1000}
-                value={hideDelay}
-                onChange={(val) => setHideDelay(val)}
-            />
+            <TitleWithItemsBlock title={`Hide delay ${hideDelay}(ms)`}>
+                <Range
+                    min={0}
+                    step={10}
+                    max={1000}
+                    value={hideDelay}
+                    onChange={(val) => setHideDelay(val)}
+                />
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Rounded corners {borderRadius}px
-            </span>
-            <Range
-                min={0}
-                step={10}
-                max={100}
-                value={borderRadius}
-                onChange={(val) => setBorderRadius(val)}
-            />
+            <TitleWithItemsBlock title={`Rounded corners ${borderRadius}px`}>
+                <Range
+                    min={0}
+                    step={10}
+                    max={100}
+                    value={borderRadius}
+                    onChange={(val) => setBorderRadius(val)}
+                />
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Interactive (save hover)
-            </span>
-            <div className="flex flex-row flex-wrap gap-2">
-                <CopyButton
-                    className={`${interactive === true && "bg-pink-500/40"}`}
-                    currentValue={interactive}
-                    copy={false}
-                    returnValue={() => setInteractive(true)}
-                >
-                    Save hover
-                </CopyButton>
-                <CopyButton
-                    className={`${interactive === false && "bg-pink-500/40"}`}
-                    currentValue={interactive}
-                    copy={false}
-                    returnValue={() => setInteractive(false)}
-                >
-                    Hide on blur
-                </CopyButton>
-            </div>
+            <TitleWithItemsBlock title="Interactive (save hover)">
+                <GeneralButton
+                    active={interactive}
+                    textButton="Save hover"
+                    handleAction={() => setInteractive(true)}
+                />
+                <GeneralButton
+                    active={!interactive}
+                    textButton="Hide on blur"
+                    handleAction={() => setInteractive(false)}
+                />
+            </TitleWithItemsBlock>
 
-            <span className="text-[var(--font-sm)]">
-                Select Theme - copy to clipboard
-            </span>
-            <div className="flex flex-row flex-wrap gap-2">
+            <TitleWithItemsBlock title="Click on the desired topic. The settings above apply to each topic">
                 {themes.map((theme) => {
                     return (
                         <TooltipElement
@@ -258,7 +226,7 @@ export const Tooltips = () => {
                         />
                     );
                 })}
-            </div>
+            </TitleWithItemsBlock>
         </div>
     );
 };

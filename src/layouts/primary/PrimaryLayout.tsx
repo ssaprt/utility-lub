@@ -4,8 +4,8 @@ import { Hr } from "@/components/hr/Hr/Hr";
 import { AppContextProvider } from "@/context/appContext";
 
 import { MountLoader } from "@/components/loader/MountLoader";
-import { TooltipProvider } from "tooltip";
-import "tooltip/style.css";
+import { TooltipProvider } from "@ssaprt/tooltip";
+import "@ssaprt/tooltip/style.css";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
 import { Menu } from "./Menu/Menu";

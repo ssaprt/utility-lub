@@ -1,10 +1,10 @@
-import { CopyButton } from "@/components/button/CopyButton/CopyButton";
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import {
     PresetsThemeType,
     Tooltip,
     TooltipAnimationType,
     TooltipPlacement,
-} from "tooltip";
+} from "@ssaprt/tooltip";
 
 export const TooltipElement = ({
     animationShow,
@@ -27,6 +27,45 @@ export const TooltipElement = ({
     speed: `${number}ms`;
     borderRadius: string;
 }) => {
+    const code = `import { TooltipProvider } from '@ssaprt/tooltip';
+import "@ssaprt/tooltip/style.css";
+import { Tooltip } from '@ssaprt/tooltip';
+
+export const App = () => {
+    return (
+        <TooltipProvider // provider not required
+            defaultRenderPosition="top"
+            selectTheme="dark"
+            animations={{ show: "zoom", hide: "fade" }}
+            interactive={true}
+        >
+            <YourLayout />
+        </TooltipProvider>
+    )
+}
+
+const YourLayout = () => {
+    <Tooltip
+        animation={{ // animation props optional
+            show: ${animationShow},
+            hide: ${animationHide},
+            speed: ${speed},
+        }}
+        position="${positionRenderMode}" // top | right | bottom | left optional
+        hideDelay={${hideDelay}} // optional
+        interactive={${interactive}} // optional
+        content="any html code || <Component /> || Saved successfully"
+        selectTheme="${selectTheme}" // optional
+        customTheme={{ // optional
+            body: {
+                style: {
+                    borderRadius: ${borderRadius},
+                },
+            }
+        }}
+    }}
+}
+`;
     return (
         <Tooltip
             animation={{
@@ -50,9 +89,10 @@ export const TooltipElement = ({
             }}
         >
             <div>
-                <CopyButton textToCopy={selectTheme as string}>
-                    {selectTheme}
-                </CopyButton>
+                <GeneralButton
+                    textButton={selectTheme}
+                    copy={{ copyItem: code }}
+                />
             </div>
         </Tooltip>
     );

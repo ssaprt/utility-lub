@@ -1,10 +1,11 @@
 "use client";
 
 import { Range } from "@/components/input/range/Range";
-import { motion } from "framer-motion";
 import { useState } from "react";
 import type { ScrollToFutureConfig } from "scroll-to-future";
 
+import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Output } from "./Output";
 import { ScrollBar } from "./ScrollBar";
 
@@ -103,208 +104,117 @@ export const ScrollBarSettings = () => {
                 gap-4
             "
         >
-            <div className="flex flex-col gap-1">
-                <span>Superimposition</span>
+            <TitleWithItemsBlock title="Superimposition">
+                {superimpositions.map((item) => (
+                    <GeneralButton
+                        textButton={item}
+                        active={item === superimposition}
+                        key={item}
+                        handleAction={() => setSuperimposition(item)}
+                    />
+                ))}
+            </TitleWithItemsBlock>
 
-                <div className="flex flex-row flex-wrap gap-2">
-                    {superimpositions.map((item) => (
-                        <motion.button
-                            type="button"
-                            key={item}
-                            className={`
-                                ${buttonClassName}
-                                ${
-                                    item === superimposition
-                                        ? "bg-pink-300/30"
-                                        : ""
-                                }
-                            `}
-                            onClick={() => {
-                                setSuperimposition(item);
-                            }}
-                            initial={false}
-                            animate={{
-                                scale: item === superimposition ? 1.1 : 1,
-                            }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 700,
-                                damping: 12,
-                            }}
-                        >
-                            {item}
-                        </motion.button>
-                    ))}
-                </div>
-            </div>
+            <TitleWithItemsBlock title="Mode">
+                {modes.map((item) => (
+                    <GeneralButton
+                        textButton={item}
+                        active={item === mode}
+                        key={item}
+                        handleAction={() => setMode(item)}
+                    />
+                ))}
+            </TitleWithItemsBlock>
 
-            <div className="flex flex-col gap-1">
-                <span>Mode</span>
+            <TitleWithItemsBlock title="Position mode">
+                {["before", "after"].map((item) => (
+                    <GeneralButton
+                        textButton={item}
+                        active={item === positionMode}
+                        key={item}
+                        handleAction={() => {
+                            setPositionMode(item as "before" | "after");
+                        }}
+                    />
+                ))}
+            </TitleWithItemsBlock>
 
-                <div className="flex flex-row flex-wrap gap-2">
-                    {modes.map((item) => (
-                        <motion.button
-                            type="button"
-                            key={item}
-                            className={`
-                                ${buttonClassName}
-                                ${item === mode ? "bg-pink-300/30" : ""}
-                            `}
-                            onClick={() => {
-                                setMode(item);
-                            }}
-                            initial={false}
-                            animate={{
-                                scale: item === mode ? 1.1 : 1,
-                            }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 700,
-                                damping: 12,
-                            }}
-                        >
-                            {item}
-                        </motion.button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-1">
-                <span>Position Mode</span>
-
-                <div className="flex flex-row flex-wrap gap-2">
-                    {["before", "after"].map((item) => (
-                        <motion.button
-                            type="button"
-                            key={item}
-                            className={`
-                                ${buttonClassName}
-                                ${item === positionMode ? "bg-pink-300/30" : ""}
-                            `}
-                            onClick={() => {
-                                setPositionMode(item as "before" | "after");
-                            }}
-                            initial={false}
-                            animate={{
-                                scale: item === positionMode ? 1.1 : 1,
-                            }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 700,
-                                damping: 12,
-                            }}
-                        >
-                            {item}
-                        </motion.button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="flex flex-col gap-1">
-                <span>Height ScrollBar: {heightScrollBar}%</span>
-
+            <TitleWithItemsBlock
+                title={`Height ScrollBar: ${heightScrollBar}%`}
+            >
                 <Range
                     value={heightScrollBar}
                     onChange={setHeightScrollBar}
                     min={0}
                     max={100}
                 />
-            </div>
+            </TitleWithItemsBlock>
 
-            <div className="p-2 bg-black/10">
-                <div className="flex flex-col gap-1">
-                    <span>
-                        Boundary Offset on both sides: {boundaryOffset}px
-                    </span>
-                    <Range
-                        value={boundaryOffset}
-                        onChange={(value) => {
-                            setBoundaryOffset(value);
-                            setBoundaryOffset2([-1, -1]);
-                        }}
-                        min={0}
-                        max={100}
-                    />
-                </div>
+            <TitleWithItemsBlock title={`Boundary Offset: ${boundaryOffset}px`}>
+                <Range
+                    value={boundaryOffset}
+                    onChange={(value) => {
+                        setBoundaryOffset(value);
+                        setBoundaryOffset2([-1, -1]);
+                    }}
+                    min={0}
+                    max={100}
+                />
 
                 <span className="block text-center p-2 w-full my-4">OR</span>
 
-                <div className="flex flex-col gap-1">
-                    <span>Boundary Offset start: {boundaryOffset2[0]}px</span>
-                    <Range
-                        value={boundaryOffset2[0]}
-                        onChange={(value) => {
-                            setBoundaryOffset(-1);
-                            setBoundaryOffset2((prev) => [
-                                value,
-                                prev[1] === -1 ? 0 : prev[1],
-                            ]);
-                        }}
-                        min={0}
-                        max={100}
-                    />
+                <span className="text-[12px]">
+                    Boundary Offset start: {boundaryOffset2[0]}px
+                </span>
+                <Range
+                    value={boundaryOffset2[0]}
+                    onChange={(value) => {
+                        setBoundaryOffset(-1);
+                        setBoundaryOffset2((prev) => [
+                            value,
+                            prev[1] === -1 ? 0 : prev[1],
+                        ]);
+                    }}
+                    min={0}
+                    max={100}
+                />
 
-                    <span>Boundary Offset end: {boundaryOffset2[1]}px</span>
-                    <Range
-                        value={boundaryOffset2[1]}
-                        onChange={(value) => {
-                            setBoundaryOffset(-1);
-                            setBoundaryOffset2((prev) => [
-                                prev[0] === -1 ? 0 : prev[0],
-                                value,
-                            ]);
-                        }}
-                        min={0}
-                        max={100}
-                    />
-                </div>
-            </div>
+                <span className="text-[12px]">
+                    Boundary Offset end: {boundaryOffset2[1]}px
+                </span>
+                <Range
+                    value={boundaryOffset2[1]}
+                    onChange={(value) => {
+                        setBoundaryOffset(-1);
+                        setBoundaryOffset2((prev) => [
+                            prev[0] === -1 ? 0 : prev[0],
+                            value,
+                        ]);
+                    }}
+                    min={0}
+                    max={100}
+                />
+            </TitleWithItemsBlock>
 
-            <div className="flex flex-col gap-1">
-                <span>Width Track: {widthTrack}px</span>
-
+            <TitleWithItemsBlock title={`Width Track: ${widthTrack}px`}>
                 <Range
                     value={widthTrack}
                     onChange={setWidthTrack}
                     min={1}
                     max={100}
                 />
-            </div>
+            </TitleWithItemsBlock>
 
-            <div className="flex flex-col gap-1">
-                <span>Select Theme</span>
-
-                <div className="flex flex-row flex-wrap gap-2">
-                    {themes.map((item) => (
-                        <motion.button
-                            type="button"
-                            key={item}
-                            className={`
-                                ${buttonClassName}
-                                ${
-                                    item === selectedTheme
-                                        ? "bg-pink-300/30"
-                                        : ""
-                                }
-                            `}
-                            onClick={() => {
-                                setSelectedTheme(item);
-                            }}
-                            initial={false}
-                            animate={{
-                                scale: item === selectedTheme ? 1.1 : 1,
-                            }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 700,
-                                damping: 12,
-                            }}
-                        >
-                            {item}
-                        </motion.button>
-                    ))}
-                </div>
-            </div>
+            <TitleWithItemsBlock title="Select Theme">
+                {themes.map((item) => (
+                    <GeneralButton
+                        textButton={item}
+                        active={item === selectedTheme}
+                        key={item}
+                        handleAction={() => setSelectedTheme(item)}
+                    />
+                ))}
+            </TitleWithItemsBlock>
 
             <ScrollBar {...config} />
 
