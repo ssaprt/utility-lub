@@ -6,26 +6,24 @@ import { AppContextProvider } from "@/context/appContext";
 import { MountLoader } from "@/components/loader/MountLoader";
 import { TooltipProvider } from "@ssaprt/tooltip";
 import "@ssaprt/tooltip/style.css";
-import { ThemeProvider } from "next-themes";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
 import { Menu } from "./Menu/Menu";
 
 export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <AppContextProvider>
-                <TooltipProvider defaultRenderPosition="left">
-                    <MountLoader />
-                    <Menu data-pagefind-ignore />
+        <AppContextProvider>
+            <TooltipProvider defaultRenderPosition="left">
+                <MountLoader />
+                <Menu data-pagefind-ignore />
 
-                    <div className="hidden h-full shrink-0 lg:block">
-                        <Hr mode="vertical" />
-                    </div>
+                <div className="hidden h-full shrink-0 lg:block">
+                    <Hr mode="vertical" />
+                </div>
 
-                    <div
-                        id="primary_layout"
-                        className="
+                <div
+                    id="primary_layout"
+                    className="
                     relative
                     z-[1001]
                     flex
@@ -41,17 +39,16 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
                     lg:basis-0
                     lg:shrink
                 "
-                    >
-                        <Header data-pagefind-ignore />
+                >
+                    <Header data-pagefind-ignore />
 
-                        <div className="shrink-0">
-                            <Hr mode="horizontal" />
-                        </div>
-
-                        <Main>{children}</Main>
+                    <div className="shrink-0">
+                        <Hr mode="horizontal" />
                     </div>
-                </TooltipProvider>
-            </AppContextProvider>
-        </ThemeProvider>
+
+                    <Main>{children}</Main>
+                </div>
+            </TooltipProvider>
+        </AppContextProvider>
     );
 };
