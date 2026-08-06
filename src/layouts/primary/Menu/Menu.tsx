@@ -7,6 +7,7 @@ import { Hr } from "@/components/hr/Hr/Hr";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { HeaderTitle } from "./HeaderTitle/HeaderTitle";
 import styles from "./Menu.module.css";
+import { OpenData } from "./ReactAndNext/OpenData/OpenData";
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
 
 export const Menu = () => {
@@ -44,7 +45,7 @@ export const Menu = () => {
                             <HeaderTitle />
                         </motion.div>
 
-                        <Hr mode="horizontal" />
+                        <Hr mode="horizontal" size={2} />
                     </>
                 ) : (
                     <HeaderTitle />
@@ -87,6 +88,7 @@ export const Menu = () => {
                         {/*<div className="my-2 h-px shrink-0 border-b-1 border-pink-300/10" />
 
                        <CSSGenerator /> */}
+                        <OpenData />
                     </div>
                 </div>
             </div>

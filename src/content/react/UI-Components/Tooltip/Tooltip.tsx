@@ -75,10 +75,17 @@ export const Tooltip = () => {
                         description:
                             "Fixed an issue occurring when hovering over an interactive tooltip; adjacent tooltips are no longer affected",
                     },
+                    {
+                        version: "1.0.5",
+                        date: "07/30/2026",
+                        title: "Optimization",
+                        description: "Optimization animations some themes",
+                    },
                 ].reverse()}
             />
 
             <Install packageName="@ssaprt/tooltip" />
+
             <HowUse>
                 <Example />
                 <LocalConfiguration />

@@ -3,7 +3,7 @@ export const TitleWithItemsBlock = ({
     children,
 }: {
     title: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }) => {
     return (
         <div
@@ -18,6 +18,8 @@ export const TitleWithItemsBlock = ({
                 shadow-xl 
                 border 
                 border-pink-300/60 
+                relative 
+                overflow-hidden
                 "
         >
             <span className="!text-[12px]">{title}</span>

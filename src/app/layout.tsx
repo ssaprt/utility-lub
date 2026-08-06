@@ -1,6 +1,7 @@
 import { PrimaryLayout } from "@/layouts/primary/PrimaryLayout";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
+import Script from "next/script";
 import "scroll-to-future/style.css";
 import "./css/globals.css";
 
@@ -49,6 +50,7 @@ export default function RootLayout({
 }>) {
     return (
         <html
+            suppressHydrationWarning
             lang="ru"
             className={`
                 ${manrope.variable}
@@ -58,8 +60,13 @@ export default function RootLayout({
                 antialiased
             `}
         >
-            <body>
+            <body className="selection:bg-black/80">
                 <PrimaryLayout>{children}</PrimaryLayout>
+
+                <Script
+                    src="https://web3forms.com/client/script.js"
+                    strategy="afterInteractive"
+                />
             </body>
         </html>
     );

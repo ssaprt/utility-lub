@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
     --background-color: #8654b3;
     --background: linear-gradient(
@@ -31,6 +33,12 @@
     --radius-lg: clamp(1rem, 0.8rem + 0.5vw, 1.5rem);
 
     --foreground: oklab(82.363% 0.11665 -0.02808);
+}
+
+.dark {
+    --foreground: oklab(82.363% 0.11665 -0.02808);
+    --background-color: #000000;
+    --background: #000000;
 }
 
 @theme inline {

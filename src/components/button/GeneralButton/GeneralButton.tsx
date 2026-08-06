@@ -1,10 +1,21 @@
+"use client";
+
 import { IconCopy, IconCopyCheckFilled } from "@tabler/icons-react";
 import { motion, useAnimation } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 
 interface GeneralButtonProps {
     textButton: string;
     active?: boolean;
+    className?: string;
+    download?: {
+        path: string;
+        fileName: string;
+    };
+    icon?: React.ReactElement<{
+        className?: string;
+    }>;
+    type?: "button" | "submit" | "reset";
     copy?: {
         copyItem: string;
     };
@@ -13,22 +24,30 @@ interface GeneralButtonProps {
 
 export const GeneralButton = ({
     textButton,
+    className,
     active,
+    download,
+    type = "button",
     copy,
+    icon,
     handleAction,
 }: GeneralButtonProps) => {
     const controls = useAnimation();
+
     const [copied, setCopied] = useState(false);
+
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const handleClick = async () => {
         if (copy) {
             await navigator.clipboard.writeText(copy.copyItem);
+
             setCopied(true);
 
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
             }
+
             timeoutRef.current = setTimeout(() => {
                 setCopied(false);
             }, 1500);
@@ -44,6 +63,20 @@ export const GeneralButton = ({
             });
         }
 
+        if (download) {
+            const normalizedPath = download.path.replace(/^\/+/, "");
+
+            const element = document.createElement("a");
+
+            element.href = `/${normalizedPath}`;
+            element.download = download.fileName;
+            element.style.display = "none";
+
+            document.body.appendChild(element);
+            element.click();
+            element.remove();
+        }
+
         handleAction?.();
     };
 
@@ -57,23 +90,26 @@ export const GeneralButton = ({
 
     return (
         <motion.button
-            type="button"
+            type={type}
             key={textButton}
-            className={`flex 
-                flex-row 
-                gap-2 
-                items-center 
-                px-2 
-                py-1 
-                rounded-[6px] 
-                ${active ? "bg-black/40 pointer-events-none" : ""} 
+            className={`
+                ${className} 
+                flex
+                flex-row
+                items-center
+                gap-2
+                rounded-[6px]
                 border-2
-                border-pink-300/80 
-                shadow-md 
-
-                hover:bg-black/25
+                border-pink-300/80
+                px-2
+                py-1
+                shadow-md
                 hover:cursor-pointer
-                hover:shadow-xl
+                hover:bg-black/25
+                select-none
+                hover:shadow-md
+                hover:shadow-black/60
+                ${active ? "pointer-events-none bg-black/40 shadow-md shadow-black/60" : ""}
             `}
             initial={false}
             animate={
@@ -95,13 +131,21 @@ export const GeneralButton = ({
             }
             onClick={handleClick}
         >
+            {icon &&
+                cloneElement(icon, {
+                    className: icon.props.className || "h-4 w-4",
+                })}
+
             <span className="text-[12px]">{textButton}</span>
+
             {copy &&
                 (copied ? (
-                    <IconCopyCheckFilled className="w-4 h-4" />
+                    <IconCopyCheckFilled className="h-4 w-4" />
                 ) : (
-                    <IconCopy className="w-4 h-4" />
+                    <IconCopy className="h-4 w-4" />
                 ))}
         </motion.button>
     );
 };
+
+GeneralButton.displayName = "GeneralButton";

@@ -19,9 +19,7 @@ export const HeaderTitle = () => {
             pt-[16px] 
             pb-[6px]
             cursor-pointer
-            max-w-full
-            w-full
-            mb-1"
+            mb-[4px]"
                 style={{
                     flex: "0 0 auto",
                     width: "max-content",
@@ -29,11 +27,11 @@ export const HeaderTitle = () => {
                 }}
             >
                 <Image src="/mana.svg" alt="logo" width={30} height={30} />
-                <h4 className="uppercase font-bold !tracking-[1.5px] text-pink-300">
+                <h4 className="!tracking-[1.25px] text-pink-300">
                     Utility Lab
                 </h4>
             </AppLink>
-            <Hr mode="horizontal" />
+            <Hr mode="horizontal" size={1} />
         </div>
     ) : (
         <AppLink
@@ -58,9 +56,7 @@ export const HeaderTitle = () => {
             }}
         >
             <Image src="/mana.svg" alt="logo" width={30} height={30} />
-            <h4 className="uppercase font-bold !tracking-[1.5px] text-pink-300">
-                Utility Lab
-            </h4>
+            <h4 className="!tracking-[1.5px] text-pink-300">Utility Lab</h4>
         </AppLink>
     );
 };

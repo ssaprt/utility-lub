@@ -1,3 +1,4 @@
+import { FeedBack } from "@/components/feed-back/FeedBack";
 import { useAppContextValues } from "@/context/appContext";
 import clsx from "clsx";
 import React from "react";
@@ -15,6 +16,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
         >
             <Scroll />
             {children}
+            <FeedBack subject="Form Feedback" />
         </main>
     );
 };

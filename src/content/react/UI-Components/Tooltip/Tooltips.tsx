@@ -3,7 +3,7 @@ import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Range } from "@/components/input/range/Range";
 import { TooltipAnimationType, TooltipPlacement } from "@ssaprt/tooltip";
 import { IconTooltip } from "@tabler/icons-react";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { ScrollToFuture } from "scroll-to-future";
 import { emojis } from "../Pagination/data/list";
 import { TooltipElement } from "./TooltipElement";
@@ -105,14 +105,12 @@ const Example = () => {
 
 export const Tooltips = () => {
     const [animationShow, setAnimationShow] =
-        useState<TooltipAnimationType>("zoom");
+        useState<TooltipAnimationType>("flip");
     const [animationHide, setAnimationHide] =
-        useState<TooltipAnimationType>("blur");
+        useState<TooltipAnimationType>("bounce");
     const [positionRenderMode, setPositionRenderMode] =
         useState<TooltipPlacement>("top");
-    const [showExample, setShowExample] = useState<ReactNode | string>(
-        <Example />,
-    );
+
     const [interactive, setInteractive] = useState(false);
     const [hideDelay, setHideDelay] = useState(0);
     const [speed, setSpeed] = useState(300);
@@ -129,19 +127,6 @@ export const Tooltips = () => {
                         handleAction={() => setPositionRenderMode(pos)}
                     />
                 ))}
-            </TitleWithItemsBlock>
-
-            <TitleWithItemsBlock title="Example content or text">
-                <GeneralButton
-                    active={showExample !== "example text"}
-                    textButton="Example Component"
-                    handleAction={() => setShowExample(<Example />)}
-                />
-                <GeneralButton
-                    active={showExample === "example text"}
-                    textButton="Text"
-                    handleAction={() => setShowExample("example text")}
-                />
             </TitleWithItemsBlock>
 
             <TitleWithItemsBlock title="Select AnimationShow">
@@ -189,7 +174,7 @@ export const Tooltips = () => {
             <TitleWithItemsBlock title={`Rounded corners ${borderRadius}px`}>
                 <Range
                     min={0}
-                    step={10}
+                    step={1}
                     max={100}
                     value={borderRadius}
                     onChange={(val) => setBorderRadius(val)}
@@ -217,7 +202,7 @@ export const Tooltips = () => {
                             animationShow={animationShow}
                             animationHide={animationHide}
                             positionRenderMode={positionRenderMode}
-                            showExample={showExample}
+                            showExample={<Example />}
                             interactive={interactive}
                             hideDelay={hideDelay}
                             selectTheme={theme}

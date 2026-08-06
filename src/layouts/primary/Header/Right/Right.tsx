@@ -5,6 +5,7 @@ export const Right = () => {
     return (
         <div className="flex flex-row items-center gap-2 pr-2">
             <Search />
+
             <a
                 href="https://github.com/ssaprt"
                 target="_blank"
