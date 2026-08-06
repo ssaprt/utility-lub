@@ -110,13 +110,9 @@ const parseSubmitResponse = (
     };
 };
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 
-if (!apiUrl) {
-    throw new Error("NEXT_PUBLIC_API_URL is not defined");
-}
-
-const defaultMailerUrl = `${apiUrl.replace(/\/$/, "")}/mailer`;
+const defaultMailerUrl = apiUrl ? `${apiUrl}/mailer` : "";
 
 export default function ContactForm({
     children,
@@ -131,7 +127,6 @@ export default function ContactForm({
     const formRef = useRef<HTMLFormElement>(null);
 
     const [overlayState, setOverlayState] = useState<OverlayState>("idle");
-
     const [code, setCode] = useState<ControllerCode | null>(null);
     const [message, setMessage] = useState("");
     const [formVersion, setFormVersion] = useState(0);
@@ -202,6 +197,10 @@ export default function ContactForm({
         setOverlayState("loading");
 
         try {
+            if (!url) {
+                throw new Error("NEXT_PUBLIC_API_URL is not defined");
+            }
+
             const response = await fetch(url, {
                 method,
                 headers: requestHeaders,
@@ -286,21 +285,21 @@ export default function ContactForm({
                     {overlayState === "result" && code !== null && (
                         <div
                             className="
-                                    relative
-                                    z-10
-                                    flex
-                                    max-w-[90%]
-                                    flex-col
-                                    items-center
-                                    gap-4
-                                "
+                                relative
+                                z-10
+                                flex
+                                max-w-[90%]
+                                flex-col
+                                items-center
+                                gap-4
+                            "
                         >
                             <ControllerMessages code={code} message={message} />
 
                             <GeneralButton
                                 type="button"
                                 textButton="Close"
-                                className=" py-2 px-3 !border-1 !border-black/10 bg-black/30 shadow-md shadow-black/40 rounded-[4px]"
+                                className="py-2 px-3 !border-1 !border-black/10 bg-black/30 shadow-md shadow-black/40 rounded-[4px]"
                                 handleAction={closeOverlay}
                             />
                         </div>
