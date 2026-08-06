@@ -110,11 +110,19 @@ const parseSubmitResponse = (
     };
 };
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+if (!apiUrl) {
+    throw new Error("NEXT_PUBLIC_API_URL is not defined");
+}
+
+const defaultMailerUrl = `${apiUrl.replace(/\/$/, "")}/mailer`;
+
 export default function ContactForm({
     children,
     title,
     headers,
-    url = `${process.env.PUBLIC_API_URL}/mailer`,
+    url = defaultMailerUrl,
     method = "POST",
     fileFieldName,
     preserveFieldsWithFile = ["name", "from"],
