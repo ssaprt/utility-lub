@@ -1,4 +1,5 @@
 import { PrimaryLayout } from "@/layouts/primary/PrimaryLayout";
+import "@ssaprt/popup/style.css";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
 import Script from "next/script";

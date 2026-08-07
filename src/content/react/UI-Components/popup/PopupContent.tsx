@@ -6,10 +6,13 @@ import { useAppContextActions } from "@/context/appContext";
 import Image from "next/image";
 import { useEffect } from "react";
 import { Example } from "./Example";
-import { MixTheme } from "./MixTheme";
-import { ScrollBarSettings } from "./ScrollBarSettings";
+import { FullExample } from "./FullExample";
+import { ImportantInfo } from "./ImportantInfo";
+import { PerPhaseAnimation } from "./PerPhaseAnimation";
+import { Popups } from "./Popups";
+import { SelectAnimation } from "./SelectAnimation";
 
-export const ScrollToFuture = () => {
+export const PopupContent = () => {
     const { header } = useAppContextActions();
     const { setIconHeader, setTitleHeader } = header || {};
 
@@ -17,32 +20,36 @@ export const ScrollToFuture = () => {
         setIconHeader(
             <Image
                 className="w-8 h-8"
-                src="/scroll-to-future.svg"
-                alt="scroll-to-future"
+                src="/popup.svg"
+                alt="popup.svg"
                 width={40}
                 height={40}
             />,
         );
-        setTitleHeader("scroll-to-future");
+        setTitleHeader("Popup with timer hide");
     }, [setIconHeader, setTitleHeader]);
 
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon="scroll-to-future.svg"
-                description="Scrollbar supporting both X and Y axes. Position settings for the start and end of the block. Custom positioning options (above or after the element). 20+ built-in themes"
-                packageName="scroll-to-future"
+                icon="popup.svg"
+                description="Popup for React and Next.js."
+                packageName="@ssaprt/popup"
             >
-                scroll-to-future
+                Popup with timer hide
             </TitlePost>
 
-            <Install packageName="scroll-to-future" />
+            <Install packageName="@ssaprt/popup" />
+
             <HowUse>
+                <ImportantInfo />
                 <Example />
-                <MixTheme />
+                <SelectAnimation />
+                <PerPhaseAnimation />
+                <FullExample />
             </HowUse>
 
-            <ScrollBarSettings />
+            <Popups />
         </div>
     );
 };

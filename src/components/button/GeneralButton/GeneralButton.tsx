@@ -22,6 +22,54 @@ interface GeneralButtonProps {
     handleAction?: () => void;
 }
 
+interface AnimationZ {
+    press: number;
+    pop: number;
+}
+
+const PERSPECTIVE = 600;
+
+const PRESS_DISTANCE = 3;
+const POP_DISTANCE = 2;
+
+const MIN_PRESS_Z = -35;
+const MAX_PRESS_Z = -4;
+
+const MIN_POP_Z = 3;
+const MAX_POP_Z = 24;
+
+const getZForPixelChange = (
+    size: number,
+    pixels: number,
+    perspective: number,
+): number => {
+    if (size <= 0) {
+        return 0;
+    }
+
+    const targetSize = Math.max(1, size + pixels * 2);
+
+    const scale = targetSize / size;
+
+    return perspective * (1 - 1 / scale);
+};
+
+const getAnimationZ = (width: number): AnimationZ => {
+    const calculatedPress = getZForPixelChange(
+        width,
+        -PRESS_DISTANCE,
+        PERSPECTIVE,
+    );
+
+    const calculatedPop = getZForPixelChange(width, POP_DISTANCE, PERSPECTIVE);
+
+    return {
+        press: Math.max(MIN_PRESS_Z, Math.min(MAX_PRESS_Z, calculatedPress)),
+
+        pop: Math.max(MIN_POP_Z, Math.min(MAX_POP_Z, calculatedPop)),
+    };
+};
+
 export const GeneralButton = ({
     textButton,
     className,
@@ -35,6 +83,13 @@ export const GeneralButton = ({
     const controls = useAnimation();
 
     const [copied, setCopied] = useState(false);
+
+    const [animationZ, setAnimationZ] = useState<AnimationZ>({
+        press: -12,
+        pop: 8,
+    });
+
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -54,8 +109,9 @@ export const GeneralButton = ({
         }
 
         if (active === undefined) {
-            controls.start({
-                scale: [1, 0.85, 1.05, 1],
+            await controls.start({
+                z: [0, animationZ.press, animationZ.pop, 0],
+
                 transition: {
                     duration: 0.25,
                     times: [0, 0.25, 0.9, 1],
@@ -73,12 +129,38 @@ export const GeneralButton = ({
             element.style.display = "none";
 
             document.body.appendChild(element);
+
             element.click();
+
             element.remove();
         }
 
         handleAction?.();
     };
+
+    useEffect(() => {
+        const element = buttonRef.current;
+
+        if (!element) {
+            return;
+        }
+
+        const updateAnimationZ = () => {
+            const { width } = element.getBoundingClientRect();
+
+            setAnimationZ(getAnimationZ(width));
+        };
+
+        updateAnimationZ();
+
+        const resizeObserver = new ResizeObserver(updateAnimationZ);
+
+        resizeObserver.observe(element);
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, []);
 
     useEffect(() => {
         return () => {
@@ -90,10 +172,11 @@ export const GeneralButton = ({
 
     return (
         <motion.button
+            ref={buttonRef}
             type={type}
             key={textButton}
             className={`
-                ${className} 
+                ${className ?? ""}
                 flex
                 flex-row
                 items-center
@@ -109,22 +192,34 @@ export const GeneralButton = ({
                 select-none
                 hover:shadow-md
                 hover:shadow-black/60
-                ${active ? "pointer-events-none bg-black/40 shadow-md shadow-black/60" : ""}
+                ${
+                    active
+                        ? "pointer-events-none bg-black/40 shadow-md shadow-black/60"
+                        : ""
+                }
             `}
             initial={false}
+            style={{
+                transformPerspective: PERSPECTIVE,
+                transformStyle: "preserve-3d",
+            }}
             animate={
                 active !== undefined
-                    ? {
-                          scale: active ? [1, 0.92, 1.05, 1] : 1,
-                      }
+                    ? active
+                        ? {
+                              z: [0, animationZ.press, animationZ.pop, 0],
+                          }
+                        : {
+                              z: 0,
+                          }
                     : controls
             }
             transition={
                 active !== undefined
                     ? {
-                          scale: {
+                          z: {
                               duration: 0.25,
-                              times: [0, 0.45, 0.9, 1],
+                              times: [0, 0.25, 0.9, 1],
                           },
                       }
                     : undefined

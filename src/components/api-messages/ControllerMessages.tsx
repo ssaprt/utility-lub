@@ -11,20 +11,23 @@ export const collectionMessageComponents = {
 export const ControllerMessages = ({
     code,
     message,
+    ready,
 }: {
     code: keyof typeof collectionMessageComponents;
     message: string;
+    ready: (ready: boolean) => void;
 }) => {
     return (
-        <div className="flex flex-row gap-2 items-center select-none py-2 px-3 border-1 border-pink-300/30 shadow-md shadow-black/40 rounded-[4px]">
+        <div className="flex flex-col gap-4 items-center select-none py-2 px-3">
             <Image
+                onLoad={() => ready(true)}
                 width={20}
                 height={20}
-                className="w-8 h-8"
+                className="w-14 h-14"
                 src={`/message/${collectionMessageComponents[code]}.svg`}
                 alt={message}
             />
-            <span className="text-sm">
+            <span className="text-sm text-center">
                 {code === 429
                     ? "Too many requests. Please try again 1 minute later"
                     : message}

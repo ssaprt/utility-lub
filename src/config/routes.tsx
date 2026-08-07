@@ -1,6 +1,7 @@
 import { TableOfRussianCities } from "@/content/OpenData/SqlTables/TableOfRussianCities/TableOfRussianCities";
 import { UseImagePreview } from "@/content/react/hooks/media/useImagePreview/UseImagePreview";
 import { EasyPagination } from "@/content/react/UI-Components/Pagination/EasyPagination";
+import { PopupContent } from "@/content/react/UI-Components/popup/PopupContent";
 import { ScrollToFuture } from "@/content/react/UI-Components/scroll-to-future/ScrollToFuture";
 import { Tooltip } from "@/content/react/UI-Components/Tooltip/Tooltip";
 import type { ComponentType } from "react";
@@ -36,5 +37,10 @@ export const routes = [
         title: "TableOfRussianCities",
         path: ["open-data", "table-of-russian-cities"],
         Component: TableOfRussianCities,
+    },
+    {
+        title: "Popup width timer hide",
+        path: ["react", "UI-Components", "custom-popup-with-timer-hide"],
+        Component: PopupContent,
     },
 ] as const satisfies readonly AppRoute[];

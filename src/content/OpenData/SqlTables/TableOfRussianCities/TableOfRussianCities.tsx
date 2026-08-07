@@ -1,7 +1,6 @@
 "use client";
 import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
-import { Version } from "@/components/notes/Version/Version";
 
 import { CustomPopup } from "@/components/CustomPopup/CustomPopup";
 import ContactForm from "@/components/contactForm/ContactForm";
@@ -44,6 +43,7 @@ export const TableOfRussianCities = () => {
     const [open, setOpen] = useState(false);
     const nextFormId = useRef(1);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [refPopup, setRefPopup] = useState<HTMLDivElement | null>(null);
 
     const [items, setItems] = useState<FormCity[]>([
         {
@@ -83,12 +83,6 @@ export const TableOfRussianCities = () => {
             <TitlePost
                 icon="map.svg"
                 description="Table of Russian Cities with Crimea"
-                date="07/30/2026"
-            >
-                Table of Russian Cities
-            </TitlePost>
-
-            <Version
                 recordings={[
                     {
                         version: "1.0.0",
@@ -97,7 +91,9 @@ export const TableOfRussianCities = () => {
                         description: "Created table",
                     },
                 ]}
-            />
+            >
+                Table of Russian Cities
+            </TitlePost>
 
             <TitleWithItemsBlock title="Download:">
                 <GeneralButton
@@ -124,6 +120,7 @@ export const TableOfRussianCities = () => {
                     handleAction={() => setOpen(true)}
                 />
                 <CustomPopup
+                    ref={(node) => setRefPopup(node)}
                     body={{
                         className: "items-start",
                     }}
@@ -147,6 +144,8 @@ export const TableOfRussianCities = () => {
                     }}
                 >
                     <ContactForm
+                        open={open}
+                        popupRef={refPopup!}
                         title="Russian Cities Form"
                         fileFieldName="file"
                         preserveFieldsWithFile={["name", "from"]}

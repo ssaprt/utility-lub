@@ -55,6 +55,11 @@ export const ReactAndNext = () => {
                         title: "Tooltip",
                         href: "/react/UI-Components/tooltip",
                     },
+                    {
+                        type: "link",
+                        title: "Popup with timer hide",
+                        href: "/react/UI-Components/custom-popup-with-timer-hide",
+                    },
                 ]}
             />
         </>

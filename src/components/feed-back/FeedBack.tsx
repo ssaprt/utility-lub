@@ -10,6 +10,7 @@ import { TextAreaWithScrollBar } from "../textarea/TextAreaWithScrollBar";
 
 export const FeedBack = ({ subject }: { subject: string }) => {
     const [open, setOpen] = useState(false);
+    const [refPopup, setRefPopup] = useState<HTMLDivElement | null>(null);
 
     return (
         <div className="my-2 mt-10">
@@ -27,6 +28,7 @@ export const FeedBack = ({ subject }: { subject: string }) => {
                 </div>
 
                 <CustomPopup
+                    ref={(node) => setRefPopup(node)}
                     headerTitle={subject + " Utility Lab"}
                     body={{
                         className: "items-start",
@@ -38,6 +40,8 @@ export const FeedBack = ({ subject }: { subject: string }) => {
                 >
                     <div className="w-[300px] max-w-[90vw]">
                         <ContactForm
+                            open={open}
+                            popupRef={refPopup!}
                             title={subject}
                             onClear={() => setOpen(false)}
                         >

@@ -10,7 +10,8 @@ export const TitleWithItemsBlock = ({
             className="
                 flex 
                 flex-col 
-                gap-1 
+                gap-2 
+                items-start
                 bg-black/10 
                 px-4 
                 py-3 
@@ -22,8 +23,12 @@ export const TitleWithItemsBlock = ({
                 overflow-hidden
                 "
         >
-            <span className="!text-[12px]">{title}</span>
-            <div className="flex flex-row flex-wrap gap-2">{children}</div>
+            <span className="!text-[12px] py-[2px] px-[10px] bg-purple-100/10 rounded-[24px] select-none">
+                {title}
+            </span>
+            <div className="flex flex-row flex-wrap w-full gap-2">
+                {children}
+            </div>
         </div>
     );
 };

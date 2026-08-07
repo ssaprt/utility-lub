@@ -1,7 +1,14 @@
 "use client";
 
 import { IconMailFast } from "@tabler/icons-react";
-import { type FormEvent, type ReactNode, useRef, useState } from "react";
+import {
+    type FormEvent,
+    type ReactNode,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
+import { createPortal } from "react-dom";
 import { Loader } from "../animationIcons/Loader/Loader";
 import {
     collectionMessageComponents,
@@ -10,6 +17,7 @@ import {
 import { GeneralButton } from "../button/GeneralButton/GeneralButton";
 
 interface ContactFormProps {
+    open: boolean;
     children?: ReactNode;
     title?: string;
     headers?: Record<string, string>;
@@ -18,6 +26,7 @@ interface ContactFormProps {
     fileFieldName?: string;
     preserveFieldsWithFile?: string[];
     onClear?: () => void;
+    popupRef: HTMLDivElement;
 }
 
 interface SubmitResponse {
@@ -115,6 +124,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 const defaultMailerUrl = apiUrl ? `${apiUrl}/mailer` : "";
 
 export default function ContactForm({
+    open,
     children,
     title,
     headers,
@@ -123,6 +133,7 @@ export default function ContactForm({
     fileFieldName,
     preserveFieldsWithFile = ["name", "from"],
     onClear,
+    popupRef,
 }: ContactFormProps) {
     const formRef = useRef<HTMLFormElement>(null);
 
@@ -130,19 +141,25 @@ export default function ContactForm({
     const [code, setCode] = useState<ControllerCode | null>(null);
     const [message, setMessage] = useState("");
     const [formVersion, setFormVersion] = useState(0);
+    const [ready, setReady] = useState(false);
 
     const isSubmitting = overlayState === "loading";
     const overlayVisible = overlayState !== "idle";
 
     const closeOverlay = () => {
-        formRef.current?.reset();
         onClear?.();
+    };
 
+    useEffect(() => {
+        if (!open) return;
+        //eslint-disable-next-line
         setOverlayState("idle");
+        formRef.current?.reset();
         setCode(null);
         setMessage("");
         setFormVersion((current) => current + 1);
-    };
+        setReady(false);
+    }, [open]);
 
     const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -195,6 +212,7 @@ export default function ContactForm({
         setCode(null);
         setMessage("");
         setOverlayState("loading");
+        setReady(false);
 
         try {
             if (!url) {
@@ -232,6 +250,7 @@ export default function ContactForm({
 
             setCode(normalizeControllerCode(status));
             setMessage(result.message);
+
             setOverlayState("result");
         } catch (error: unknown) {
             const errorMessage =
@@ -264,9 +283,10 @@ export default function ContactForm({
                 p-2
             "
         >
-            {overlayVisible && (
-                <div
-                    className="
+            {overlayVisible &&
+                createPortal(
+                    <div
+                        className="
                         absolute
                         inset-0
                         z-[55]
@@ -277,35 +297,47 @@ export default function ContactForm({
                         overflow-hidden
                         [background:var(--background)]
                     "
-                >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <Loader visible mode="wave" />
-                    </div>
-
-                    {overlayState === "result" && code !== null && (
-                        <div
-                            className="
-                                relative
-                                z-10
-                                flex
-                                max-w-[90%]
-                                flex-col
-                                items-center
-                                gap-4
-                            "
-                        >
-                            <ControllerMessages code={code} message={message} />
-
-                            <GeneralButton
-                                type="button"
-                                textButton="Close"
-                                className="py-2 px-3 !border-1 !border-black/10 bg-black/30 shadow-md shadow-black/40 rounded-[4px]"
-                                handleAction={closeOverlay}
+                    >
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Loader
+                                visible={
+                                    overlayState === "loading" ||
+                                    (overlayState === "result" && !ready)
+                                }
+                                mode="wave"
                             />
                         </div>
-                    )}
-                </div>
-            )}
+
+                        {overlayState === "result" && code !== null && (
+                            <div
+                                className={`
+            relative
+            z-10
+            flex
+            max-w-[90%]
+            flex-col
+            items-center
+            gap-4
+            ${ready ? "visible" : "invisible"}
+        `}
+                            >
+                                <ControllerMessages
+                                    ready={setReady}
+                                    code={code}
+                                    message={message}
+                                />
+
+                                <GeneralButton
+                                    type="button"
+                                    textButton="Close"
+                                    className="py-2 px-4 !border-1 !border-black/10 bg-black/5 shadow-md shadow-black/40 rounded-[4px]"
+                                    handleAction={closeOverlay}
+                                />
+                            </div>
+                        )}
+                    </div>,
+                    popupRef,
+                )}
 
             {children}
 
