@@ -20,7 +20,7 @@ export const ImportantInfo = () => {
         >
             <Documentation
                 titleEnd="App"
-                code={`import "@ssaprt/popup/style.css";
+                code={`import "popup-from-future/style.css";
                     
 const App = () => { ... }`}
             />

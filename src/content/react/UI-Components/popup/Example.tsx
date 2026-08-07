@@ -21,8 +21,8 @@ export const Example = () => {
             <Documentation
                 titleEnd="App"
                 code={`import { useState } from "react";
-import { Popup } from "@ssaprt/popup";
-import "@ssaprt/popup/style.css";
+import { Popup } from "popup-from-future";
+import "popup-from-future/style.css";
 
 export const App = () => {
     const [isOpen, setIsOpen] = useState(false);

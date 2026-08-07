@@ -30,8 +30,8 @@ import {
 import {
     Popup,
     type PopupCloseTimerComponentProps,
-} from "@ssaprt/popup";
-import "@ssaprt/popup/style.css";
+} from "popup-from-future";
+import "popup-from-future/style.css";
 
 export const PopupFullExample = () => {
     const [isOpen, setIsOpen] = useState(false);

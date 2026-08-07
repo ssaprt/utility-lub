@@ -60,8 +60,8 @@ export const Output = (props: any) => {
     const code = `"use client";
 
 import { useState } from "react";
-import { Popup } from "@ssaprt/popup";
-import "@ssaprt/popup/style.css";
+import { Popup } from "popup-from-future";
+import "popup-from-future/style.css";
 
 const App = () => {
     const [isOpen, setIsOpen] = useState(false);
