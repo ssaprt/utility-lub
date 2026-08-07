@@ -34,12 +34,12 @@ export const PopupContent = () => {
             <TitlePost
                 icon="popup.svg"
                 description="Popup for React and Next.js."
-                packageName="@ssaprt/popup"
+                packageName="popup-from-future"
             >
                 Popup with timer hide
             </TitlePost>
 
-            <Install packageName="@ssaprt/popup" />
+            <Install packageName="popup-from-future" />
 
             <HowUse>
                 <ImportantInfo />
