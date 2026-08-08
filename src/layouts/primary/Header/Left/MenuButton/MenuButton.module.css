@@ -93,7 +93,7 @@
 
 .svg * {
     stroke: transparent;
-    fill: var(--foreground);
+    fill: var(--app-foreground);
     transition: var(
         --none-trans,
         transform 0.15s ease-out,
