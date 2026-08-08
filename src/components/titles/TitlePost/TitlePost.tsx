@@ -1,17 +1,17 @@
 import { Loader } from "@/components/animationIcons/Loader/Loader";
+import { DataLoader } from "@/components/data-loader/DataLoader";
 import { Recording, Version } from "@/components/notes/Version/Version";
 import { getVersionPackages } from "@/lib/api/getVersionPackages";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
 import Image from "next/image";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { TablerIcon } from "./TablerIcon";
 
 type TitlePostProps = {
     icon: string;
     description: string;
     children: ReactNode;
-
     recordings?: Recording[];
     packageName?: string;
 };
@@ -31,10 +31,10 @@ export const TitlePost = ({
     recordings,
     packageName,
 }: TitlePostProps) => {
-    const [again, setAgain] = useState(false);
     const [recordingsList, setRecordingsList] = useState<Recording[]>(
         recordings || [],
     );
+
     const [lastUpdate, setLastUpdate] = useState(
         new Date().toLocaleDateString("en-US", {
             month: "2-digit",
@@ -43,35 +43,45 @@ export const TitlePost = ({
         }),
     );
 
-    useEffect(() => {
-        if (!packageName) return;
-        const fetchRecordings = async () => {
-            const result = await getVersionPackages(packageName);
-            if (result) {
-                setRecordingsList(result);
-                setLastUpdate(result[0].date);
-            }
-            setAgain(false);
-        };
+    const fetchRecordings = async () => {
+        const result = await getVersionPackages(packageName || "");
 
-        fetchRecordings();
-    }, [again, packageName]);
+        if (result) {
+            setRecordingsList(result);
+            setLastUpdate(result[0].date);
+            return true;
+        }
+
+        return false;
+    };
 
     return (
         <>
             <div className="flex flex-col gap-2">
                 <div
-                    className="relative flex flex-row items-center justify-between gap-2 bg-pink-500/5 rounded-[40px] pr-[var(--space-2)] 
-                        shadow-[0_0_2px_1px_rgba(251,132,255,0.45)] px-[var(--space-3)] py-[var(--space-2)]
-                        "
+                    className="
+                        relative
+                        flex
+                        flex-row
+                        items-center
+                        justify-between
+                        gap-2
+                        bg-pink-500/5
+                        rounded-[40px]
+                        pr-[var(--space-2)]
+                        shadow-[0_0_2px_1px_rgba(251,132,255,0.45)]
+                        px-[var(--space-3)]
+                        py-[var(--space-2)]
+                    "
                 >
                     <Loader visible mode="space" />
+
                     <div className="flex flex-row gap-1 items-center">
                         {isImageSource(icon) ? (
                             <Image
                                 className="w-7 h-7"
                                 src={`/${icon}`}
-                                alt={`${icon}`}
+                                alt={icon}
                                 width={0}
                                 height={0}
                             />
@@ -94,7 +104,7 @@ export const TitlePost = ({
                         </span>
 
                         <h3
-                            className="text-lg text-pink-300"
+                            className="text-md font-outfit text-pink-300"
                             data-pagefind-meta="title"
                         >
                             {children}
@@ -102,10 +112,20 @@ export const TitlePost = ({
                     </div>
 
                     <div
-                        className="flex flex-row items-center gap-1 bg-black/15 rounded-[24px] 
-                        shadow-[0_0_1px_1px_rgba(0,0,0,0.25)] px-[var(--space-3)] py-[var(--space-1)]"
+                        className="
+                            flex
+                            flex-row
+                            items-center
+                            gap-1
+                            bg-black/15
+                            rounded-[24px]
+                            shadow-[0_0_1px_1px_rgba(0,0,0,0.25)]
+                            px-[var(--space-3)]
+                            py-[var(--space-1)]
+                        "
                     >
                         <IconCalendarPlus className="w-6 h-6" />
+
                         <span
                             className="flex text-sm"
                             data-pagefind-meta="date"
@@ -114,13 +134,16 @@ export const TitlePost = ({
                         </span>
                     </div>
                 </div>
+
                 <span className="pl-4 w-full text-xs mt-2">{description}</span>
             </div>
-            <Version
-                again={again}
-                setAgain={setAgain}
-                recordings={recordingsList}
-            />
+
+            <DataLoader
+                responseFn={fetchRecordings}
+                errorText="Failed to load the version notes"
+            >
+                <Version recordings={recordingsList} />
+            </DataLoader>
         </>
     );
 };

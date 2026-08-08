@@ -11,12 +11,12 @@ export const FadeTitle = () => {
         <motion.div
             initial={false}
             animate={{
-                opacity: isScrolled ? 1 : 0,
-                x: isScrolled ? 0 : 8,
+                opacity: isScrolled && titleHeader?.length ? 1 : 0,
+                x: isScrolled && titleHeader?.length ? 0 : 8,
             }}
             transition={{
                 opacity: {
-                    duration: isScrolled ? 0.14 : 0.14,
+                    duration: isScrolled && titleHeader?.length ? 0.14 : 0.14,
                 },
                 x: {
                     type: "spring",
@@ -36,9 +36,10 @@ export const FadeTitle = () => {
               
             "
             style={{
-                pointerEvents: isScrolled ? "auto" : "none",
+                pointerEvents:
+                    isScrolled && titleHeader?.length ? "auto" : "none",
             }}
-            aria-hidden={!isScrolled}
+            aria-hidden={!isScrolled && !titleHeader?.length}
         >
             {iconHeader}
             <span className="text-pink-300">{titleHeader}</span>

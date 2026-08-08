@@ -1,7 +1,6 @@
 import { PrimaryLayout } from "@/layouts/primary/PrimaryLayout";
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Manrope } from "next/font/google";
-import Script from "next/script";
+import { Inter, JetBrains_Mono, Manrope, Outfit } from "next/font/google";
 import "popup-from-future/style.css";
 import "scroll-to-future/style.css";
 import "./css/globals.css";
@@ -21,6 +20,12 @@ const inter = Inter({
 const jetBrainsMono = JetBrains_Mono({
     subsets: ["latin"],
     variable: "--font-jetbrains-mono",
+    display: "swap",
+});
+
+const outfit = Outfit({
+    subsets: ["latin"],
+    variable: "--font-outfit",
     display: "swap",
 });
 
@@ -51,23 +56,18 @@ export default function RootLayout({
 }>) {
     return (
         <html
-            suppressHydrationWarning
-            lang="ru"
+            lang="en"
             className={`
                 ${manrope.variable}
                 ${inter.variable}
                 ${jetBrainsMono.variable}
+                ${outfit.variable}
                 h-full
                 antialiased
             `}
         >
             <body className="selection:bg-black/80">
                 <PrimaryLayout>{children}</PrimaryLayout>
-
-                <Script
-                    src="https://web3forms.com/client/script.js"
-                    strategy="afterInteractive"
-                />
             </body>
         </html>
     );

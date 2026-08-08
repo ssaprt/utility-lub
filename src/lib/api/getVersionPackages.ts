@@ -1,6 +1,6 @@
 import { Recording } from "@/components/notes/Version/Version";
+import { apiUrl } from "./config";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 const defaulVersionURL = apiUrl
     ? `${apiUrl}/changer-version-npm?packageName=`
     : "";

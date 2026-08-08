@@ -13,7 +13,7 @@ export const FeedBack = ({ subject }: { subject: string }) => {
     const [refPopup, setRefPopup] = useState<HTMLDivElement | null>(null);
 
     return (
-        <div className="my-2 mt-10">
+        <div className="my-2 mt-10 mt-auto">
             <TitleWithItemsBlock title="Feedback Form">
                 <Loader visible={true} mode="wave" />
 

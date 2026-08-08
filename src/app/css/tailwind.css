@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/** Blocks ------------------------------------------------------------------ */
+
+@utility row-stretch-* {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility row-start-* {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility row-center-* {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility row-end-* {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    gap: calc(var(--spacing) * --value(integer));
+}
+
+@utility col-stretch-* {
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility col-start-* {
+    display: flex;
+    flex-direction: column;
+
+    align-items: start;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility col-center-* {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    gap: calc(var(--spacing) * --value(integer));
+}
+@utility col-end-* {
+    display: flex;
+    flex-direction: column;
+
+    align-items: end;
+    gap: calc(var(--spacing) * --value(integer));
+}
+/** Blocks ------------------------------------------------------------------ */
+
+@keyframes data-loader-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@utility data-loader-fade-in {
+    animation: data-loader-fade-in 500ms ease-out forwards;
+}

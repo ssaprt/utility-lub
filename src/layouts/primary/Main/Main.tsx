@@ -1,4 +1,5 @@
 import { FeedBack } from "@/components/feed-back/FeedBack";
+import { PendingLoader } from "@/components/loader/PendingLoader";
 import { useAppContextValues } from "@/context/appContext";
 import clsx from "clsx";
 import React from "react";
@@ -14,8 +15,10 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
             className={clsx(styles.main, pending && styles.pending)}
             id="main"
         >
+            <PendingLoader />
             <Scroll />
             {children}
+            <div className="my-5"></div>
             <FeedBack subject="Form Feedback" />
         </main>
     );

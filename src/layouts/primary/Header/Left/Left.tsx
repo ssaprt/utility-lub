@@ -8,7 +8,7 @@ import { MenuButton } from "./MenuButton/MenuButton";
 
 export const Left = () => {
     const { header } = useAppContextValues() ?? {};
-    const { isScrolled } = header ?? {};
+    const { isScrolled, titleHeader } = header ?? {};
 
     return (
         <div className={styles.left}>
@@ -18,12 +18,13 @@ export const Left = () => {
                 <motion.div
                     initial={false}
                     animate={{
-                        opacity: isScrolled ? 0 : 1,
-                        x: isScrolled ? 0 : -8,
+                        opacity: isScrolled && titleHeader?.length ? 0 : 1,
+                        x: isScrolled && titleHeader?.length ? 0 : -8,
                     }}
                     transition={{
                         opacity: {
-                            duration: isScrolled ? 0.14 : 0.14,
+                            duration:
+                                isScrolled && titleHeader?.length ? 0.14 : 0.14,
                         },
                         x: {
                             type: "spring",

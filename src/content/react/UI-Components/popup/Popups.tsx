@@ -169,6 +169,7 @@ export const Popups = () => {
                 officiis, magni quibusdam maiores quas ad fugit autem! Ab dolore
                 facere in optio?
             </Popup>
+            <div className="mt-4"></div>
 
             <Output {...config} />
         </div>

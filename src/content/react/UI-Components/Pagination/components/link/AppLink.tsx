@@ -1,29 +1,16 @@
 "use client";
 
-import { PendingLoader } from "@/components/loader/PendingLoader";
 import { useAppContextActions } from "@/context/appContext";
 import Link, { useLinkStatus } from "next/link";
-import { useEffect, useState, type ComponentProps } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, type ComponentProps } from "react";
 
 type AppLinkProps = ComponentProps<typeof Link>;
 
 export const AppLink = ({ children, ...props }: AppLinkProps) => {
-    const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
-
-    useEffect(() => {
-        const target = document.querySelector<HTMLElement>("#main");
-        //eslint-disable-next-line
-        setPortalTarget(target);
-    }, []);
-
     return (
         <Link prefetch={false} {...props}>
             {children}
             <PendingDetect />
-            {portalTarget
-                ? createPortal(<PendingLoader />, portalTarget)
-                : null}
         </Link>
     );
 };
@@ -35,6 +22,10 @@ const PendingDetect = () => {
 
     useEffect(() => {
         setPending(pending);
+
+        return () => {
+            setPending(false);
+        };
     }, [pending, setPending]);
 
     return null;

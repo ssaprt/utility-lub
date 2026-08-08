@@ -176,7 +176,7 @@ export const TableOfRussianCities = () => {
                                 </TitleWithItemsBlock>
                             </div>
 
-                            <div className="flex flex-col gap-2 overflow-y-scroll  p-2 items-end">
+                            <div className="flex flex-col gap-2 overflow-y-scroll  p-2 items-end z-1">
                                 <ScrollToFuture />
                                 <GeneralButton
                                     textButton="Add New Item"

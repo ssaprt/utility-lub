@@ -1,10 +1,4 @@
-import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { TransitionDropDown } from "@/content/react/UI-Components/Pagination/components/dropDown/TransitionDropDown/TransitionDropDown";
-import {
-    IconDownload,
-    IconFileNeutral,
-    IconLoader2,
-} from "@tabler/icons-react";
 import styles from "./Version.module.scss";
 
 export type Recording = {
@@ -14,35 +8,8 @@ export type Recording = {
     description: string;
 };
 
-export const Version = ({
-    recordings,
-    again,
-    setAgain,
-}: {
-    recordings: Recording[];
-    again: boolean;
-    setAgain: (value: boolean) => void;
-}) => {
-    if (recordings.length === 0)
-        return (
-            <div className="flex flex-row gap-2 items-center">
-                <IconFileNeutral className="w-8 h-8" />
-                <span className="text-sm">
-                    Failed to load the version notes
-                </span>
-                <GeneralButton
-                    icon={
-                        again ? (
-                            <IconLoader2 className="animate-spin w-4 h-4" />
-                        ) : (
-                            <IconDownload className="w-4 h-4" />
-                        )
-                    }
-                    handleAction={() => setAgain(true)}
-                    textButton={again ? "Trying..." : "Try again"}
-                />
-            </div>
-        );
+export const Version = ({ recordings }: { recordings: Recording[] }) => {
+    if (recordings.length === 0) return null;
 
     return (
         <TransitionDropDown
