@@ -1,10 +1,10 @@
 import { useAppContextValues } from "@/context/appContext";
 import { motion } from "framer-motion";
 import { useRef } from "react";
-import { ScrollToFuture } from "scroll-to-future";
 
 import { Hr } from "@/components/hr/Hr/Hr";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
+import { Scroll } from "../Scroll";
 import { HeaderTitle } from "./HeaderTitle/HeaderTitle";
 import styles from "./Menu.module.css";
 import { OpenData } from "./ReactAndNext/OpenData/OpenData";
@@ -56,19 +56,7 @@ export const Menu = () => {
                     ref={contentRef}
                     className={`${styles.content} px-4 lg:px-2`}
                 >
-                    <ScrollToFuture
-                        target={contentRef}
-                        scrollBar={{
-                            mode: "vertical",
-                            widthTrack: "8px",
-                            superimposition: "over",
-                            heightTrack: "99%",
-                        }}
-                        thumb={{
-                            boundaryOffset: "2px 1.5px",
-                        }}
-                        selectTheme="primary"
-                    />
+                    <Scroll />
 
                     <div
                         className="

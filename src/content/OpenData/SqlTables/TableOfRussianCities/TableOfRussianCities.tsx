@@ -254,7 +254,7 @@ export const TableOfRussianCities = () => {
                                                             ([key, value]) => (
                                                                 <Input
                                                                     key={key}
-                                                                    size="sm"
+                                                                    size="md"
                                                                     required={
                                                                         !selectedFile
                                                                     }

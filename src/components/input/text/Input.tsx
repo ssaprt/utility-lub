@@ -149,7 +149,7 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                             ${styles.labelLeft}
                             ${
                                 active
-                                    ? `${styles.labelActive} bg-fg !text-black`
+                                    ? `${styles.labelActive} bg-fg !text-app`
                                     : `${styles.labelInactive} bg-transparent text-fg`
                             }
                         `}
@@ -177,7 +177,7 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                             ${styles.requiredRight}
                             ${
                                 active
-                                    ? `${styles.labelActive} bg-fg !text-black`
+                                    ? `${styles.labelActive} bg-fg !text-app`
                                     : `${styles.labelInactive} bg-transparent text-fg`
                             }
                         `}

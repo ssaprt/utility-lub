@@ -8,14 +8,14 @@
     --BoxShadowPrimaryContainerShow: 0px 1px 4px 1px rgba(0, 0, 0, 0.498);
 
     /* титульный блок */
-    --bgTitleBlock: rgb(40, 44, 52);
-    --bgTitleBlockShow: rgb(40, 44, 52);
+    --bgTitleBlock: var(--foreground);
+    --bgTitleBlockShow: var(--foreground);
     --BoxShadowTitleBlock: none;
     --BoxShadowTitleBlockShow: none;
-    --colorTitleBlock: var(--foreground);
-    --colorTitleBlockShow: var(--foreground);
-    --fillTitleBlockIcon: var(--foreground);
-    --fillTitleBlockIconShow: var(--foreground);
+    --colorTitleBlock: var(--background);
+    --colorTitleBlockShow: var(--background);
+    --fillTitleBlockIcon: var(--background);
+    --fillTitleBlockIconShow: var(--background);
 
     /* контент блок */
     --bgContentBlock: none;
@@ -67,7 +67,8 @@
 .active .titleBlock {
     transition:
         box-shadow var(--secondAnimationTime) ease-in,
-        background var(--primaryAnimationTime) ease-in;
+        background var(--primaryAnimationTime) ease-in, 
+        border-radius var(--primaryAnimationTime) ease-in;
     box-shadow: var(--BoxShadowTitleBlockShow);
     background: var(--bgTitleBlockShow);
 }

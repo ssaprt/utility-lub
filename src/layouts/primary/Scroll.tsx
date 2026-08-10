@@ -7,7 +7,7 @@ export const Scroll = () => {
     return (
         <ScrollToFuture
             scrollBar={{
-                widthTrack: "12px",
+                widthTrack: "10px",
                 positionMode: "after",
                 superimposition: "after",
                 heightTrack: "98%",
@@ -15,7 +15,25 @@ export const Scroll = () => {
             thumb={{
                 boundaryOffset: "2px 1.5px",
             }}
-            selectTheme={resolvedTheme === "dark" ? "graphite" : "violet"}
+            optionsTheme={{
+                scrollBar: {
+                    inactive: {
+                        className: "bg-fg/5!",
+                    },
+                    hover: {
+                        className: "bg-fg/15!",
+                    },
+                    active: { className: "bg-fg/25!" },
+                },
+                thumb: {
+                    inactive: {
+                        className: "bg-fg/50!",
+                    },
+                    hover: { className: "bg-fg/70!" },
+                    active: { className: "bg-fg/50!" },
+                },
+            }}
+            selectTheme="terminal"
         />
     );
 };

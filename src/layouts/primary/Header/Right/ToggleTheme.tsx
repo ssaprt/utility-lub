@@ -1,25 +1,97 @@
-import { useTheme } from "next-themes";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+"use client";
 
+import { useTheme } from "next-themes";
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+    useSyncExternalStore,
+} from "react";
+
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { Popup } from "popup-from-future";
+import { Theme } from "./Theme";
 
 const subscribe = () => {
     return () => {};
 };
 
+const themes = [
+    {
+        theme: "primary",
+        svgPath: "mana.svg",
+    },
+    {
+        theme: "light",
+        svgPath: "lights.svg",
+    },
+    {
+        theme: "dark",
+        svgPath: "dark.svg",
+    },
+    {
+        theme: "midnight",
+        svgPath: "fog.svg",
+    },
+    {
+        theme: "tree",
+        svgPath: "evergreen.svg",
+    },
+];
+
+const ELEVATOR_SIZE = 20;
+
+const THEME_STORAGE_KEY = "app-theme";
+
+interface CustomColors {
+    background: string;
+    foreground: string;
+}
+
+type StoredTheme =
+    | {
+          mode: "theme";
+          theme: string;
+      }
+    | {
+          mode: "custom";
+          background: string;
+          foreground: string;
+      };
+
+const applyCustomColors = ({ background, foreground }: CustomColors) => {
+    const root = document.documentElement;
+
+    root.style.setProperty("--background", background);
+
+    root.style.setProperty("--foreground", foreground);
+};
+
+const clearCustomColors = () => {
+    const root = document.documentElement;
+
+    root.style.removeProperty("--background");
+    root.style.removeProperty("--foreground");
+};
+
 export const ToggleTheme = () => {
     const { resolvedTheme, setTheme } = useTheme();
+
     const [open, setOpen] = useState(false);
-    const itemsContainerRef = useRef<HTMLDivElement | null>(null);
-    const [props, setProps] = useState({
-        size: {
-            height: 0,
-        },
-        position: {
-            top: 0,
-        },
+
+    const [positionReady, setPositionReady] = useState(false);
+
+    const [top, setTop] = useState(0);
+
+    const [customColors, setCustomColors] = useState<CustomColors>({
+        background: "#8654b3",
+        foreground: "#fbcde6",
     });
+
+    const itemsContainerRef = useRef<HTMLDivElement | null>(null);
 
     const mounted = useSyncExternalStore(
         subscribe,
@@ -27,53 +99,128 @@ export const ToggleTheme = () => {
         () => false,
     );
 
-    const handleThemeChange = (theme: string) => () => {
-        if (mounted) {
+    const handleThemeChange = useCallback(
+        (theme: string) => {
+            if (!mounted) return;
+
+            clearCustomColors();
+
+            const storedTheme: StoredTheme = {
+                mode: "theme",
+                theme,
+            };
+
+            localStorage.setItem(
+                THEME_STORAGE_KEY,
+                JSON.stringify(storedTheme),
+            );
+
             setTheme(theme);
-        }
-    };
+        },
+        [mounted, setTheme],
+    );
 
-    useEffect(() => {
-        const container = itemsContainerRef.current;
-        if (!container) return;
+    const handleCustomTheme = useCallback(() => {
+        if (!mounted) return;
 
-        const themeBlock = container.querySelector(
-            "div[data-select-theme=true]",
-        ) as HTMLDivElement;
+        applyCustomColors(customColors);
+
+        const storedTheme: StoredTheme = {
+            mode: "custom",
+            background: customColors.background,
+            foreground: customColors.foreground,
+        };
+
+        localStorage.setItem(THEME_STORAGE_KEY, JSON.stringify(storedTheme));
+
+        setTheme("custom");
+    }, [customColors, mounted, setTheme]);
+
+    const updatePosition = useCallback((container?: HTMLDivElement | null) => {
+        const target = container ?? itemsContainerRef.current;
+
+        if (!target) return;
+
+        const themeBlock = target.querySelector(
+            '[data-select-theme="true"]',
+        ) as HTMLDivElement | null;
+
         if (!themeBlock) return;
 
-        const height = themeBlock.clientHeight;
-        const topA = themeBlock.offsetTop;
-        const top = topA + height / 2 - 20 / 2;
+        const nextTop =
+            themeBlock.offsetTop +
+            themeBlock.offsetHeight / 2 -
+            ELEVATOR_SIZE / 2;
 
-        setProps({
-            size: {
-                height: themeBlock.clientHeight,
-            },
-            position: {
-                top: top,
-            },
-        });
-    }, [resolvedTheme]);
+        setTop(nextTop);
+        setPositionReady(true);
+    }, []);
 
-    if (!itemsContainerRef) return null;
+    const setItemsContainerRef = useCallback(
+        (node: HTMLDivElement | null) => {
+            itemsContainerRef.current = node;
+
+            if (!node) {
+                setPositionReady(false);
+                return;
+            }
+
+            updatePosition(node);
+        },
+        [updatePosition],
+    );
+
+    useLayoutEffect(() => {
+        if (!open) return;
+
+        updatePosition();
+    }, [open, resolvedTheme, updatePosition]);
+
+    useEffect(() => {
+        if (!mounted) return;
+
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+        if (!savedTheme) return;
+
+        try {
+            const parsed = JSON.parse(savedTheme) as StoredTheme;
+
+            if (parsed.mode === "custom") {
+                const colors: CustomColors = {
+                    background: parsed.background,
+                    foreground: parsed.foreground,
+                };
+                //eslint-disable-next-line
+                setCustomColors(colors);
+
+                applyCustomColors(colors);
+
+                setTheme("custom");
+
+                return;
+            }
+
+            clearCustomColors();
+
+            setTheme(parsed.theme);
+        } catch {
+            localStorage.removeItem(THEME_STORAGE_KEY);
+        }
+    }, [mounted, setTheme]);
 
     return (
         <div
             className="
-            row-center-0
-            justify-center
-            w-8 
-            h-8 
-            cursor-pointer
+                row-center-0
+                justify-center
+                w-8
+                h-8
+                cursor-pointer
             "
             onClick={() => setOpen(true)}
         >
-            <DynamicSvgIcon
-                name="palette.svg"
-                className="w-5 h-5 fill-fg"
-                onClick={() => setOpen(true)}
-            />
+            <DynamicSvgIcon name="palette.svg" className="w-5 h-5 fill-fg" />
 
             <Popup
                 isOpen={open}
@@ -85,9 +232,16 @@ export const ToggleTheme = () => {
                     content: (
                         <div className="row-center-1">
                             <DynamicSvgIcon
-                                className="absolute w-5 h-5 fill-app rotate-45!"
+                                className="
+                                    absolute
+                                    w-5
+                                    h-5
+                                    fill-app
+                                    rotate-45!
+                                "
                                 name="top-elevator.svg"
                             />
+
                             <span className="text-app ml-7">
                                 Theme settings
                             </span>
@@ -115,12 +269,14 @@ export const ToggleTheme = () => {
                             shadow-none!
                             text-fg!
                             col-start-0!
-                            `,
+                        `,
                     },
+
                     body: {
                         className:
                             "w-full h-full col-start-0! justify-start! mt-2 overflow-visible!",
                     },
+
                     header: {
                         className:
                             "text-[var(--background)]! text-sm font-bold!",
@@ -132,13 +288,12 @@ export const ToggleTheme = () => {
             >
                 <div className="row-stretch-2 w-full">
                     <div
-                        className={`
+                        className="
                             w-5
                             shrink-0
                             bg-app/0
                             rounded-[2px]
                             relative
-
 
                             before:absolute
                             before:top-[-8px]
@@ -146,97 +301,132 @@ export const ToggleTheme = () => {
                             before:w-[2px]
                             before:left-[calc(50%+1px)]
                             before:-translate-x-1/2
+                            before:h-[var(--before-height)]!
+                            before:border-l-1
+                            before:border-dashed
+                            before:border-app
                             before:transition-[height]
                             before:duration-300
                             before:ease-in-out
-                            before:h-[var(--before-top)]!
-                            before:flex
-                            before:border-l-1
-                            before:border-dashed
-                            before:border-app`}
+                        "
                         style={
                             {
-                                "--before-top": `${props.position.top + 8}px`,
+                                "--before-height": positionReady
+                                    ? `${top + 8}px`
+                                    : "0px",
                             } as React.CSSProperties
                         }
                     >
-                        <DynamicSvgIcon
-                            name="elevator.svg"
-                            className={`
-                                absolute!
-                                w-[20px]
-                                h-[20px]
-                                shrink-0!
-                                left-0
-                                fill-app
-                                transition-[top]
-                                duration-300
-                                ease-in-out
-                            `}
-                            style={{
-                                top: `${props.position.top}px`,
-                            }}
-                        />
+                        {positionReady && (
+                            <DynamicSvgIcon
+                                name="elevator.svg"
+                                className="
+                                    absolute!
+                                    w-[20px]
+                                    h-[20px]
+                                    shrink-0!
+                                    left-0
+                                    fill-app
+                                    transition-[top]
+                                    duration-300
+                                    ease-in-out
+                                "
+                                style={{
+                                    top: `${top}px`,
+                                }}
+                            />
+                        )}
                     </div>
 
                     <div
-                        className="col-stretch-1 w-full"
-                        ref={itemsContainerRef}
+                        ref={setItemsContainerRef}
+                        className="
+                            col-stretch-1
+                            relative
+                            w-full
+                        "
                     >
-                        <div
-                            data-select-theme={resolvedTheme === "light"}
-                            onClick={handleThemeChange("light")}
-                            className={`row-center-1 justify-end py-[6px] px-2 rounded-[2px] bg-app hover:cursor-pointer ${resolvedTheme === "light" ? "bg-app/80" : ""}`}
-                        >
-                            <span className="text-fg text-xs">Light</span>
-                            <DynamicSvgIcon
-                                name="lights.svg"
-                                className="w-5 h-5 fill-fg"
+                        {themes.map(({ theme, svgPath }) => (
+                            <Theme
+                                key={theme}
+                                theme={theme}
+                                svgPath={svgPath}
+                                handleChange={() => handleThemeChange(theme)}
                             />
-                        </div>
-                        <div
-                            data-select-theme={resolvedTheme === "dark"}
-                            onClick={handleThemeChange("dark")}
-                            className={`row-center-1 justify-end py-[6px] px-2 rounded-[2px] bg-app hover:cursor-pointer ${resolvedTheme === "dark" ? "bg-app/80" : ""}`}
-                        >
-                            <span className="text-fg text-xs">Dark</span>
-                            <DynamicSvgIcon
-                                name="dark.svg"
-                                className="w-5 h-5 fill-fg"
-                            />
-                        </div>
-                        <div
-                            data-select-theme={resolvedTheme === "midnight"}
-                            onClick={handleThemeChange("midnight")}
-                            className={`row-center-1 justify-end py-[6px] px-2 rounded-[2px] bg-app hover:cursor-pointer ${resolvedTheme === "midnight" ? "bg-app/80" : ""}`}
-                        >
-                            <span className="text-fg text-xs">Midnight</span>
-                            <DynamicSvgIcon
-                                name="fog.svg"
-                                className="w-5 h-5 fill-fg"
-                            />
-                        </div>
-                        <div
-                            data-select-theme={resolvedTheme === "tree"}
-                            onClick={handleThemeChange("tree")}
-                            className={`row-center-1 justify-end py-[6px] px-2 rounded-[2px] bg-app hover:cursor-pointer ${resolvedTheme === "tree" ? "bg-app/80" : ""}`}
-                        >
-                            <span className="text-fg text-xs">Tree</span>
-                            <DynamicSvgIcon
-                                name="evergreen.svg"
-                                className="w-5 h-5 fill-fg"
-                            />
-                        </div>
+                        ))}
 
                         <div
-                            data-select-theme={resolvedTheme === "alter"}
-                            onClick={handleThemeChange("alter")}
-                            className={`row-center-1 justify-end py-[6px] px-2 rounded-[2px] bg-app hover:cursor-pointer ${resolvedTheme === "alter" ? "bg-app/80" : ""}`}
+                            data-select-theme={resolvedTheme === "custom"}
+                            className="
+                                col-stretch-1
+                                mt-2
+                                bg-app
+                                p-2
+                                rounded-[2px_2px_12px_2px]
+                            "
                         >
-                            <span className="text-fg text-xs">Alter</span>
-                            <DynamicSvgIcon
-                                name="evergreen.svg"
-                                className="w-5 h-5 fill-fg"
+                            <span className="text-fg text-xs font-bold ml-auto">
+                                Your custom theme
+                            </span>
+
+                            <label htmlFor="biba" className="row-center-1">
+                                <span className="text-fg text-[12px]">
+                                    Background
+                                </span>
+
+                                <input
+                                    value={customColors.background}
+                                    onChange={(event) => {
+                                        setCustomColors((current) => ({
+                                            ...current,
+                                            background: event.target.value,
+                                        }));
+                                    }}
+                                    type="color"
+                                    id="biba"
+                                    className="
+                                        w-1/2
+                                        shrink-0
+                                        cursor-pointer
+                                        flex-1
+                                    "
+                                />
+                            </label>
+
+                            <label htmlFor="boba" className="row-center-1">
+                                <span className="text-fg text-[12px]">
+                                    Foreground
+                                </span>
+
+                                <input
+                                    value={customColors.foreground}
+                                    onChange={(event) => {
+                                        setCustomColors((current) => ({
+                                            ...current,
+                                            foreground: event.target.value,
+                                        }));
+                                    }}
+                                    type="color"
+                                    id="boba"
+                                    className="
+                                        w-1/2
+                                        shrink-0
+                                        cursor-pointer
+                                        flex-1
+                                    "
+                                />
+                            </label>
+
+                            <GeneralButton
+                                variant="solid"
+                                className="
+                                    text-app!
+                                    w-auto!
+                                    ml-auto!
+                                    shrink-0!
+                                "
+                                textButton="Set custom theme"
+                                handleAction={handleCustomTheme}
                             />
                         </div>
                     </div>

@@ -3,13 +3,13 @@
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ReactNode } from "react";
 
-export const thems = ["light", "dark", "midnight", "tree", "alter"];
+export const thems = ["light", "dark", "midnight", "tree", "primary"];
 
 export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
     return (
         <NextThemesProvider
             attribute="class"
-            defaultTheme="light"
+            defaultTheme="primary"
             enableSystem
             themes={thems}
         >

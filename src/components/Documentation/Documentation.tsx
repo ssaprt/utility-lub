@@ -63,7 +63,7 @@ export const Documentation = (props: InstallationType) => {
                             px-[0.75em]
                             py-[0.4em]
                             text-[0.85em]
-                            text-fg
+                            text-white
                             transition-colors
                             hover:cursor-pointer
                             hover:bg-zinc-700
