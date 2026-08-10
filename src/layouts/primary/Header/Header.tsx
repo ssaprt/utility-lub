@@ -1,5 +1,4 @@
 import { useAppContextValues } from "@/context/appContext";
-import { BackPlate } from "./BackPlate";
 import { BoxForAnimations } from "./BoxForAnimations";
 import styles from "./Header.module.css";
 import { Left } from "./Left/Left";
@@ -16,7 +15,6 @@ export const Header = () => {
             <Left />
             <Right />
             <BoxForAnimations />
-            <BackPlate />
         </header>
     );
 };

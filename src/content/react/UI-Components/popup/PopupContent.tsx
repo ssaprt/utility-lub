@@ -3,7 +3,7 @@ import { HowUse } from "@/components/HowUse/HowUse";
 import { Install } from "@/components/Install/Install";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
-import Image from "next/image";
+import PopupIcon from "@/icons/popup.svg";
 import { useEffect } from "react";
 import { Example } from "./Example";
 import { FullExample } from "./FullExample";
@@ -17,22 +17,17 @@ export const PopupContent = () => {
     const { setIconHeader, setTitleHeader } = header || {};
 
     useEffect(() => {
-        setIconHeader(
-            <Image
-                className="w-8 h-8"
-                src="/popup.svg"
-                alt="popup.svg"
-                width={40}
-                height={40}
-            />,
-        );
+        setIconHeader(<PopupIcon className="w-8 h-8 fill-fg" />);
         setTitleHeader("Popup with timer hide");
     }, [setIconHeader, setTitleHeader]);
 
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon="popup.svg"
+                icon={{
+                    component: <PopupIcon />,
+                    meta: "popup.svg",
+                }}
                 description="Popup for React and Next.js."
                 packageName="popup-from-future"
             >

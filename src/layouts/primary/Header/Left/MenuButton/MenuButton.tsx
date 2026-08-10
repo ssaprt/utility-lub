@@ -51,7 +51,9 @@ export const MenuButton = () => {
             lg:top-auto
             lg:translate-y-0
             lg:relative
-            lg:left-auto`}
+            lg:left-auto 
+
+            `}
             style={
                 {
                     "--none-trans": noneAnimationMenu && "none",

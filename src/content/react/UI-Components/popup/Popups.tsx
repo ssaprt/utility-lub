@@ -9,8 +9,8 @@ import {
     PopupPresetName,
 } from "popup-from-future";
 
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { IconColorSwatch, IconEye, IconEyeClosed } from "@tabler/icons-react";
-import Image from "next/image";
 import { useState } from "react";
 import { inAnims, outAnims, presets } from "./data";
 import { Output } from "./Output";
@@ -148,17 +148,14 @@ export const Popups = () => {
             </TitleWithItemsBlock>
 
             <GeneralButton
+                variant="floating"
                 handleAction={() => setShow(true)}
                 textButton="Open Example Popup"
                 type="button"
                 icon={
-                    <Image
-                        unoptimized
-                        src="/popup.svg"
-                        alt="example"
-                        width={20}
-                        height={20}
-                        className="w-12 h-12"
+                    <DynamicSvgIcon
+                        name="popup.svg"
+                        className="w-12 h-12 fill-fg"
                     />
                 }
             />

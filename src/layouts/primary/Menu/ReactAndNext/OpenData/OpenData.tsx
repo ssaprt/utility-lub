@@ -6,9 +6,7 @@ export const OpenData = () => {
     return (
         <>
             <CategoryTitle
-                icon={
-                    <IconDatabase className="w-[20px] h-[20px] stroke-pink-300" />
-                }
+                icon={<IconDatabase className="w-[20px] h-[20px] stroke-fg" />}
             >
                 Open Data
             </CategoryTitle>

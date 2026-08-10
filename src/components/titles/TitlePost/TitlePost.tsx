@@ -1,27 +1,37 @@
+"use client";
+
 import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { DataLoader } from "@/components/data-loader/DataLoader";
 import { Recording, Version } from "@/components/notes/Version/Version";
 import { getVersionPackages } from "@/lib/api/getVersionPackages";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
-import Image from "next/image";
-import { useState, type ReactNode } from "react";
+import {
+    cloneElement,
+    useState,
+    type ReactElement,
+    type ReactNode,
+} from "react";
 import { TablerIcon } from "./TablerIcon";
 
+type IconElement = ReactElement<{
+    className?: string;
+}>;
+
+type TitleIcon =
+    | string
+    | {
+          component: IconElement;
+          meta: string;
+      };
+
 type TitlePostProps = {
-    icon: string;
+    icon: TitleIcon;
     description: string;
     children: ReactNode;
     recordings?: Recording[];
     packageName?: string;
-};
-
-const isImageSource = (value: string) => {
-    return (
-        value.startsWith("data:image/") ||
-        value.startsWith("blob:") ||
-        /\.(svg|png|webp|jpe?g)(?:[?#].*)?$/i.test(value)
-    );
+    useFn?: boolean;
 };
 
 export const TitlePost = ({
@@ -30,15 +40,16 @@ export const TitlePost = ({
     children,
     recordings,
     packageName,
+    useFn = true,
 }: TitlePostProps) => {
     const [recordingsList, setRecordingsList] = useState<Recording[]>(
         recordings || [],
     );
 
     const [lastUpdate, setLastUpdate] = useState(
-        new Date().toLocaleDateString("en-US", {
-            month: "2-digit",
+        new Date().toLocaleDateString("en-GB", {
             day: "2-digit",
+            month: "2-digit",
             year: "numeric",
         }),
     );
@@ -49,11 +60,29 @@ export const TitlePost = ({
         if (result) {
             setRecordingsList(result);
             setLastUpdate(result[0].date);
+
             return true;
         }
 
         return false;
     };
+
+    const iconMeta = typeof icon === "string" ? icon : icon.meta;
+
+    const renderedIcon =
+        typeof icon === "string" ? (
+            <TablerIcon name={icon} className="h-7 w-7 shrink-0 text-fg" />
+        ) : (
+            cloneElement(icon.component, {
+                className: `
+                    h-7
+                    w-7
+                    shrink-0
+                    !fill-fg
+                    ${icon.component.props.className ?? ""}
+                `,
+            })
+        );
 
     return (
         <>
@@ -66,10 +95,11 @@ export const TitlePost = ({
                         items-center
                         justify-between
                         gap-2
-                        bg-pink-500/5
+                        bg-fg/5
                         rounded-[40px]
                         pr-[var(--space-2)]
-                        shadow-[0_0_2px_1px_rgba(251,132,255,0.45)]
+                        shadow-[0_0_2px_1px]
+                        shadow-fg/45
                         px-[var(--space-3)]
                         py-[var(--space-2)]
                     "
@@ -77,23 +107,10 @@ export const TitlePost = ({
                     <Loader visible mode="space" />
 
                     <div className="flex flex-row gap-1 items-center">
-                        {isImageSource(icon) ? (
-                            <Image
-                                className="w-7 h-7"
-                                src={`/${icon}`}
-                                alt={icon}
-                                width={0}
-                                height={0}
-                            />
-                        ) : (
-                            <TablerIcon
-                                name={icon}
-                                className="h-7 w-7 shrink-0 text-pink-300"
-                            />
-                        )}
+                        {renderedIcon}
 
                         <span className="sr-only" data-pagefind-meta="icon">
-                            {icon}
+                            {iconMeta}
                         </span>
 
                         <span
@@ -104,7 +121,7 @@ export const TitlePost = ({
                         </span>
 
                         <h3
-                            className="text-md font-outfit text-pink-300"
+                            className="text-md font-outfit text-fg"
                             data-pagefind-meta="title"
                         >
                             {children}
@@ -124,7 +141,7 @@ export const TitlePost = ({
                             py-[var(--space-1)]
                         "
                     >
-                        <IconCalendarPlus className="w-6 h-6" />
+                        <IconCalendarPlus className="w-6 h-6 text-fg" />
 
                         <span
                             className="flex text-sm"
@@ -139,7 +156,7 @@ export const TitlePost = ({
             </div>
 
             <DataLoader
-                responseFn={fetchRecordings}
+                responseFn={useFn ? fetchRecordings : undefined}
                 errorText="Failed to load the version notes"
             >
                 <Version recordings={recordingsList} />

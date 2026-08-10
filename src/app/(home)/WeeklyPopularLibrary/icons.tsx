@@ -1,33 +1,42 @@
 import { TablerIcon } from "@/components/titles/TitlePost/TablerIcon";
-import Image from "next/image";
-import { ReactNode } from "react";
 
-const IMG = ({ src }: { src: string }) => (
-    <Image
-        className="w-8 h-8"
-        width={40}
-        height={40}
-        unoptimized
-        src={src}
-        alt={src}
-    />
-);
+import EasyIcon from "@/icons/easy-pagination.svg";
+import PopupIcon from "@/icons/popup.svg";
+import ScrollToFutureIcon from "@/icons/scroll-to-future.svg";
+import TooltipIcon from "@/icons/tooltip.svg";
+import { cloneElement, ReactElement, ReactNode } from "react";
+
+type IconProps = {
+    icon: ReactElement<{
+        className?: string;
+    }>;
+};
+
+const Icon = ({ icon }: IconProps) =>
+    cloneElement(icon, {
+        className: `
+            h-7
+            w-7
+            shrink-0
+            fill-fg
+        `,
+    });
 
 export const packageIcons: Record<string, [ReactNode, string]> = {
     "scroll-to-future": [
-        <IMG key="scroll-to-future" src="/scroll-to-future.svg" />,
+        <Icon key="scroll-to-future" icon={<ScrollToFutureIcon />} />,
         "/react/UI-Components/scroll-to-future",
     ],
     "popup-from-future": [
-        <IMG key="popup-from-future" src="/popup.svg" />,
+        <Icon key="popup-from-future" icon={<PopupIcon />} />,
         "/react/UI-Components/custom-popup-with-timer-hide",
     ],
     "@ssaprt/tooltip": [
-        <IMG key="@ssaprt/tooltip" src="/tooltip.svg" />,
+        <Icon key="@ssaprt/tooltip" icon={<TooltipIcon />} />,
         "/react/UI-Components/tooltip",
     ],
     "@ssaprt/easy-pagination": [
-        <IMG key="@ssaprt/easy-pagination" src="/easy-pagination.svg" />,
+        <Icon key="@ssaprt/easy-pagination" icon={<EasyIcon />} />,
         "/react/UI-Components/pagination",
     ],
     "use-image-preview": [

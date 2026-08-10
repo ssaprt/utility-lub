@@ -170,18 +170,14 @@ export const FileDrop = ({
                     ${
                         disabled
                             ? "cursor-not-allowed border-white/10 bg-white/5 opacity-50"
-                            : "cursor-pointer border-pink-300/40 bg-black/20 hover:border-pink-300 hover:bg-pink-300/10"
+                            : "cursor-pointer border-fg/40 bg-black/20 hover:border-fg hover:bg-fg/10"
                     }
-                    ${
-                        isDragging
-                            ? "scale-[1.01] border-pink-300 bg-pink-300/20"
-                            : ""
-                    }
+                    ${isDragging ? "scale-[1.01] border-fg bg-fg/20" : ""}
                 `}
             >
                 {file ? (
                     <div className="flex w-full items-center gap-3">
-                        <IconFile className="h-8 w-8 shrink-0 text-pink-300" />
+                        <IconFile className="h-8 w-8 shrink-0 text-fg" />
 
                         <div className="flex min-w-0 flex-1 flex-col">
                             <span className="truncate text-sm">
@@ -208,9 +204,9 @@ export const FileDrop = ({
                                 items-center
                                 justify-center
                                 rounded-full
-                                text-pink-300
+                                text-fg
                                 transition-colors
-                                hover:bg-pink-300/20
+                                hover:bg-fg/20
                             "
                         >
                             <IconX className="h-5 w-5" />
@@ -218,7 +214,7 @@ export const FileDrop = ({
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-2 text-center">
-                        <IconUpload className="h-8 w-8 text-pink-300" />
+                        <IconUpload className="h-8 w-8 text-fg" />
 
                         <span className="text-sm">
                             Drop a file here or click to select

@@ -31,7 +31,7 @@ export const TableWithScroll = <T extends object>({
 
     return (
         <div className="relative h-[60vh] w-full overflow-auto">
-            <table className="w-full border-collapse border border-pink-300/20 text-xs">
+            <table className="w-full border-collapse border border-fg/20 text-xs">
                 <thead>
                     <tr>
                         {columns.map((column) => (
@@ -51,7 +51,7 @@ export const TableWithScroll = <T extends object>({
                             {columns.map((column) => (
                                 <td
                                     key={String(column)}
-                                    className="border border-pink-300/20 px-4 py-2 whitespace-nowrap"
+                                    className="border border-fg/20 px-4 py-2 whitespace-nowrap"
                                 >
                                     {renderValue(row[column])}
                                 </td>

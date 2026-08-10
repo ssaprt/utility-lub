@@ -5,17 +5,6 @@ export const DotSettings = () => {
     return (
         <TransitionDropDown
             title="FINE-TUNING THEME"
-            style={{
-                "--bgPrimaryContainer": "rgb(40, 44, 52)",
-                "--bgPrimaryContainerShow": "rgb(40, 44, 52)",
-                "--bgTitleBlock": "rgb(40, 44, 52)",
-                "--colorTitleBlock": "#fda5d6",
-                "--colorTitleBlockShow": "#ba749b",
-                "--BoxShadowTitleBlock": "none",
-                "--BoxShadowTitleBlockShow": "none",
-                "--fillTitleBlockIcon": "#fda5d6",
-                "--fillTitleBlockIconShow": "#ba749b",
-            }}
             className="!rounded-[14px]"
         >
             <Documentation

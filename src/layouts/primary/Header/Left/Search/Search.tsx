@@ -8,17 +8,9 @@ import { IconCalendarPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-import Image from "next/image";
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
-
-const isImageSource = (value: string) => {
-    return (
-        value.startsWith("data:image/") ||
-        value.startsWith("blob:") ||
-        /\.(svg|png|webp|jpe?g)(?:[?#].*)?$/i.test(value)
-    );
-};
 
 export const Search = () => {
     const {
@@ -190,12 +182,12 @@ export const Search = () => {
                     mass: 0.7,
                 }}
             >
-                <IconX className="stroke-pink-300" />
+                <IconX className="stroke-fg" />
             </motion.button>
         );
     };
 
-    const renderResults = () => {
+    const renderResults = (visible: boolean) => {
         return (
             <>
                 {isLoading && (
@@ -218,7 +210,7 @@ export const Search = () => {
 
                 {!isLoading && !error && results.length > 0 && (
                     <>
-                        <Scroll />
+                        {visible && <Scroll />}
 
                         <ul className={styles["search-box__list"]}>
                             {results.map((result) => (
@@ -233,39 +225,33 @@ export const Search = () => {
                                         <div className="flex flex-row items-center justify-between gap-2">
                                             <div className="flex min-w-0 flex-row items-center gap-1">
                                                 {result.meta?.icon &&
-                                                    (isImageSource(
-                                                        result.meta.icon,
+                                                    (result.meta.icon.endsWith(
+                                                        ".svg",
                                                     ) ? (
-                                                        <Image
-                                                            src={`/${result.meta.icon}`}
-                                                            alt=""
-                                                            width={24}
-                                                            height={24}
-                                                            className="h-6 w-6 shrink-0 object-contain"
+                                                        <DynamicSvgIcon
+                                                            name={
+                                                                result.meta.icon
+                                                            }
+                                                            className="h-6 w-6 shrink-0 fill-fg"
                                                         />
                                                     ) : (
                                                         <TablerIcon
                                                             name={
                                                                 result.meta.icon
                                                             }
-                                                            className="
-                h-6
-                w-6
-                shrink-0
-                stroke-pink-300
-            "
+                                                            className="h-6 w-6 shrink-0 stroke-fg"
                                                         />
                                                     ))}
 
                                                 <span
                                                     className={`
-                                                                ${
-                                                                    styles[
-                                                                        "search-box__title"
-                                                                    ]
-                                                                }
-                                                                text-xs
-                                                            `}
+                                                            ${
+                                                                styles[
+                                                                    "search-box__title"
+                                                                ]
+                                                            }
+                                                            text-xs
+                                                        `}
                                                 >
                                                     {result.meta?.title ??
                                                         result.url}
@@ -273,15 +259,15 @@ export const Search = () => {
                                             </div>
 
                                             <div className="flex shrink-0 flex-row items-center gap-1">
-                                                <IconCalendarPlus className="h-[14px] w-[14px] stroke-pink-300" />
+                                                <IconCalendarPlus className="h-[14px] w-[14px] stroke-fg" />
 
-                                                <i className="text-[12px] text-pink-300/60">
+                                                <i className="text-[12px] text-fg/60">
                                                     {result.meta?.date}
                                                 </i>
                                             </div>
                                         </div>
 
-                                        <span className="text-sm text-pink-200">
+                                        <span className="text-sm text-fg/70">
                                             {result.meta?.description}
                                         </span>
                                     </AppLink>
@@ -304,7 +290,6 @@ export const Search = () => {
                 items-center
             `}
         >
-            {/* Desktop */}
             <div className="relative hidden lg:block">
                 <div className="relative flex flex-row items-center justify-between">
                     <Input
@@ -347,12 +332,11 @@ export const Search = () => {
                             }
                         `}
                     >
-                        {renderResults()}
+                        {renderResults(isOpen)}
                     </div>
                 )}
             </div>
 
-            {/* Mobile button */}
             <div className="block lg:hidden">
                 <motion.button
                     type="button"
@@ -372,7 +356,7 @@ export const Search = () => {
                         rounded-[18px]
                         transition-colors
                         duration-150
-                        hover:bg-pink-300/10
+                        hover:bg-fg/10
                     "
                     initial={false}
                     animate={{
@@ -407,7 +391,7 @@ export const Search = () => {
                                     duration: 0.12,
                                 }}
                             >
-                                <IconX className="h-5 w-5 stroke-pink-300" />
+                                <IconX className="h-5 w-5 stroke-fg" />
                             </motion.span>
                         ) : (
                             <motion.span
@@ -435,7 +419,6 @@ export const Search = () => {
                 </motion.button>
             </div>
 
-            {/* Mobile panel */}
             <AnimatePresence>
                 {isMobileSearchOpen && (
                     <motion.div
@@ -449,7 +432,6 @@ export const Search = () => {
                             inset-x-0
                             z-[999999]
                             block
-                       
                             pt-2
                             lg:hidden
                         "
@@ -477,10 +459,12 @@ export const Search = () => {
                                 overflow-hidden
                                 rounded-[14px]
                                 border
-                                border-pink-300/20
-                                bg-[linear-gradient(283deg,rgba(115,86,209,1)_0%,rgba(134,84,179,1)_35%,rgba(82,56,128,1)_74%,rgba(112,38,133,1)_100%)]
+                                border-fg/20
+                                bg-app
                                 p-2
-                                shadow-[0_12px_35px_rgba(0,0,0,0.35)]
+                                shadow-[0_12px_35px]
+                                shadow-[_rgba(0,0,0,0.35)]
+                                dark:shadow-fg/35
                                 backdrop-blur-xl
                             "
                         >
@@ -523,7 +507,7 @@ export const Search = () => {
                                         maxHeight: "min(60dvh, 500px)",
                                     }}
                                 >
-                                    {renderResults()}
+                                    {renderResults(isMobileSearchOpen)}
                                 </motion.div>
                             )}
                         </div>

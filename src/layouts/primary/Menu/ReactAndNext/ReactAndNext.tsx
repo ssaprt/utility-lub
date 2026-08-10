@@ -11,7 +11,7 @@ export const ReactAndNext = () => {
         <>
             <CategoryTitle
                 icon={
-                    <IconBrandReactNative className="w-[20px] h-[20px] stroke-pink-300" />
+                    <IconBrandReactNative className="w-[20px] h-[20px] stroke-fg" />
                 }
             >
                 React and NextJS

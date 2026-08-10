@@ -138,14 +138,14 @@
 
 
 .link:hover {
-    color: fn.foreground-with-opacity(0.55);
+    color: fn.foreground-with-opacity(0.95);
     background: fn.foreground-with-opacity(0.25);
         box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.25);
 
 }
 
 .linkActive {
-  
+  color: fn.foreground-with-opacity(1);
     background: fn.foreground-with-opacity(0.25);
         box-shadow: 0 2px 0px 0px rgba(0, 0, 0, 0.25);
 }

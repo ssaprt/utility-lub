@@ -8,7 +8,7 @@ export const CategoryTitle = ({
     return (
         <div className="my-2 flex flex-row items-center gap-2 p-none ">
             {icon}
-            <i className="text-pink-300 font-bold tracking-widest text-[12px]">
+            <i className="text-fg font-bold tracking-widest text-[12px]">
                 {children}
             </i>
         </div>

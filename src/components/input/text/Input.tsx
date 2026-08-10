@@ -138,7 +138,7 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                             -translate-y-1/2
                             flex-row
                             items-center 
-                            text-pink-300/50
+                            text-fg/50
                             gap-[2px]
                             rounded-[3px]
                             font-[var(--font-inner)]
@@ -149,8 +149,8 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                             ${styles.labelLeft}
                             ${
                                 active
-                                    ? `${styles.labelActive} bg-pink-300 text-black`
-                                    : `${styles.labelInactive} bg-transparent text-pink-300`
+                                    ? `${styles.labelActive} bg-fg !text-black`
+                                    : `${styles.labelInactive} bg-transparent text-fg`
                             }
                         `}
                     >
@@ -177,8 +177,8 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                             ${styles.requiredRight}
                             ${
                                 active
-                                    ? `${styles.labelActive} bg-pink-300 text-black`
-                                    : `${styles.labelInactive} bg-transparent text-pink-300`
+                                    ? `${styles.labelActive} bg-fg !text-black`
+                                    : `${styles.labelInactive} bg-transparent text-fg`
                             }
                         `}
                     >
@@ -206,14 +206,14 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                         w-full
                         rounded-[4px]
                         border
-                        border-pink-300/30
+                        borderfg/30
                         bg-black/30
                         focus:outline-none
                         focus:ring-1
-                        focus:ring-pink-300/50
+                        focus:ringfg/50
                         disabled:cursor-not-allowed
-                        disabled:bg-foreground/20
-                        disabled:text-foreground/50
+                        disabled:bg-fg/20
+                        disabled:text-fg/50
                         placeholder:text-[inherit]
                         ${styles.input}
                         ${inputClassName}

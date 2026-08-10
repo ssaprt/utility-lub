@@ -5,7 +5,7 @@
     display: flex;
     flex: 0 0 auto;
 
-    width: 0;
+    width: 0px;
     min-width: 0;
     height: 100%;
     margin-left: -1px;
@@ -53,7 +53,7 @@
 @media (max-width: 1023px) {
     .menu {
         --menu-width: 100vw;
-
+        width: 0px;
         margin-left: 0;
     }
 

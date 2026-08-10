@@ -68,8 +68,8 @@ export const ImageDropZone = () => {
 
                     ${
                         isDragging
-                            ? "border-pink-300 bg-pink-300/15"
-                            : "border-pink-300/40 bg-pink-300/5"
+                            ? "border-fg bg-fg/15"
+                            : "border-fg/40 bg-fg/5"
                     }
                 `}
             >
@@ -119,15 +119,15 @@ export const ImageDropZone = () => {
                         className="
                             shrink-0
                             rounded-md
-                            bg-pink-300/15
+                            bg-fg/15
                             px-3
                             py-1
                             text-sm 
                             cursor-pointer
-                            hover:bg-pink-300/30
+                            hover:bg-fg/30
                         "
                     >
-                        Удалить
+                        Delete
                     </button>
                 </div>
             )}

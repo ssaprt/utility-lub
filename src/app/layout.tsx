@@ -1,4 +1,5 @@
 import { PrimaryLayout } from "@/layouts/primary/PrimaryLayout";
+import { AppThemeProvider } from "@/providers/AppThemeProvider";
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope, Outfit } from "next/font/google";
 import "popup-from-future/style.css";
@@ -45,8 +46,6 @@ export const viewport: Viewport = {
     maximumScale: 1,
     userScalable: false,
     viewportFit: "cover",
-    themeColor: "#7356d1",
-    colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -56,6 +55,7 @@ export default function RootLayout({
 }>) {
     return (
         <html
+            suppressHydrationWarning
             lang="en"
             className={`
                 ${manrope.variable}
@@ -67,7 +67,9 @@ export default function RootLayout({
             `}
         >
             <body className="selection:bg-black/80">
-                <PrimaryLayout>{children}</PrimaryLayout>
+                <AppThemeProvider>
+                    <PrimaryLayout>{children}</PrimaryLayout>
+                </AppThemeProvider>
             </body>
         </html>
     );

@@ -2,17 +2,29 @@
 
 import { IconCopy, IconCopyCheckFilled } from "@tabler/icons-react";
 import { motion, useAnimation } from "framer-motion";
-import { cloneElement, useEffect, useRef, useState } from "react";
+import {
+    cloneElement,
+    useEffect,
+    useRef,
+    useState,
+    type ReactElement,
+} from "react";
+import {
+    DEFAULT_GENERAL_BUTTON_STYLE,
+    GeneralButtonStyle,
+    generalButtonStyles,
+} from "./styles";
 
 interface GeneralButtonProps {
     textButton: string;
     active?: boolean;
     className?: string;
+    variant?: GeneralButtonStyle;
     download?: {
         path: string;
         fileName: string;
     };
-    icon?: React.ReactElement<{
+    icon?: ReactElement<{
         className?: string;
     }>;
     type?: "button" | "submit" | "reset";
@@ -74,6 +86,7 @@ export const GeneralButton = ({
     textButton,
     className,
     active,
+    variant = DEFAULT_GENERAL_BUTTON_STYLE,
     download,
     type = "button",
     copy,
@@ -92,6 +105,8 @@ export const GeneralButton = ({
     const buttonRef = useRef<HTMLButtonElement>(null);
 
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const variantStyles = generalButtonStyles[variant];
 
     const handleClick = async () => {
         if (copy) {
@@ -176,27 +191,20 @@ export const GeneralButton = ({
             type={type}
             key={textButton}
             className={`
-                ${className ?? ""}
-                flex
-                flex-row
-                items-center
-                gap-2
-                rounded-[6px]
-                border-2
-                border-pink-300/80
+                row-center-2
+                shrink-0
                 px-2
                 py-1
-                shadow-md
-                hover:cursor-pointer
-                hover:bg-black/25
                 select-none
-                hover:shadow-md
-                hover:shadow-black/60
-                ${
-                    active
-                        ? "pointer-events-none bg-black/40 shadow-md shadow-black/60"
-                        : ""
-                }
+                hover:cursor-pointer
+
+                ${variantStyles.base}
+
+                ${active ? variantStyles.active : ""}
+
+                ${active ? "pointer-events-none" : ""}
+
+                ${className ?? ""}
             `}
             initial={false}
             style={{

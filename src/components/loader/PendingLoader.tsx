@@ -22,6 +22,7 @@ export const PendingLoader = () => {
     const markerRef = useRef<HTMLSpanElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const cycleStartedAtRef = useRef(0);
+    const pendingReadyRef = useRef(false);
 
     const [mounted, setMounted] = useState(false);
     const [phase, setPhase] = useState<LoaderPhase>("idle");
@@ -32,20 +33,26 @@ export const PendingLoader = () => {
     const { openMenu, pending } = menu;
 
     const { menu: menuActions } = useAppContextActions();
+
     const { setOpenMenu } = menuActions;
 
     useEffect(() => {
-        //eslint-disable-next-line
+        // eslint-disable-next-line
         setMounted(true);
     }, []);
 
     useEffect(() => {
-        if (!pending || phase !== "idle") {
+        if (!pending) {
+            pendingReadyRef.current = true;
+            return;
+        }
+
+        if (!pendingReadyRef.current || phase !== "idle") {
             return;
         }
 
         cycleStartedAtRef.current = performance.now();
-        //eslint-disable-next-line
+
         setPhase("active");
 
         if (!isDesktop && openMenu) {
@@ -80,6 +87,7 @@ export const PendingLoader = () => {
         }
 
         const parent = markerRef.current?.parentElement;
+
         const overlay = overlayRef.current;
 
         if (!parent || !overlay) {
@@ -141,7 +149,7 @@ export const PendingLoader = () => {
                             items-center
                             justify-center
                             overflow-hidden
-                            bg-[linear-gradient(283deg,rgba(115,86,209,1)_0%,rgba(134,84,179,1)_35%,rgba(82,56,128,1)_74%,rgba(112,38,133,1)_100%)]
+                            bg-app
                             will-change-[opacity]
                         "
                         style={{

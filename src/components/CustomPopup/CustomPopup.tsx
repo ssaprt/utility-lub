@@ -18,17 +18,20 @@ export const CustomPopup = forwardRef<HTMLDivElement, CustomPopupProps>(
                 isOpen={open}
                 open={() => setOpen(false)}
                 layer={{
-                    backgroundColor: "rgba(97, 45, 161, 0.75)",
+                    className: "!bg-black/30 backdrop-blur-[2px]",
                 }}
                 customStyle={{
                     container: {
                         className:
-                            "border-0 border-pink-300/30 shadow-xl shadow-black/40 !items-start",
+                            "border-0 border-fg/30 !bg-app !shadow-[0_5px_10px_4px] !shadow-black/40 !items-start",
                     },
                     header: {
                         className: "mr-12 p-1 text-[14px] ml-1",
                     },
-                    body,
+                    body: {
+                        ...body,
+                        className: "bg-app",
+                    },
                 }}
                 animation={{
                     open: {
@@ -42,12 +45,12 @@ export const CustomPopup = forwardRef<HTMLDivElement, CustomPopupProps>(
                 }}
                 close={{
                     size: "30px",
-                    icon: <IconX className="hover:text-purple-100/40" />,
-                    className: "!top-[9px] !right-[9px]",
+                    icon: <IconX className="hover:text-fg/40" />,
+                    className: "!top-[12px] !right-[12px]",
                 }}
                 header={{
                     content: (
-                        <span className="text-md">
+                        <span className="text-md text-fg">
                             {headerTitle ??
                                 "Do you have the missing information?"}
                         </span>

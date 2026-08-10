@@ -56,7 +56,7 @@ export const MountLoader = () => {
                 inset-0
                 z-[9999999]
                 overflow-hidden
-                bg-[linear-gradient(283deg,rgba(115,86,209,1)_0%,rgba(134,84,179,1)_35%,rgba(82,56,128,1)_74%,rgba(112,38,133,1)_100%)]
+                bg-app
                 will-change-[opacity]
             "
         >
@@ -98,8 +98,8 @@ export const MountLoader = () => {
                         animate-spin
                         rounded-full
                         border-4
-                        border-pink-300/20
-                        border-t-pink-300
+                        border-fg/20
+                        border-t-fg
                         will-change-transform
                     "
                 />

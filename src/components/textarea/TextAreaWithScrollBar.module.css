@@ -20,10 +20,10 @@
     overflow-y: auto;
     height: auto;
     min-height: 100%;
-    color: var(--global-neutral-color);
-    font-family: var(--1nth-font);
+    color: var(--foreground);
+
     padding: 8px 12px;
-    font-size: 16px;
+
     font-weight: 300;
     border-radius: inherit;
     outline: 1px solid transparent;
@@ -34,7 +34,7 @@
 }
 
 .textarea:focus-within {
-    outline-color: var(--global-color-link);
+    outline-color: var(--foreground);
     outline-offset: 0px;
     transition:
         outline-offset 0.13s linear,
@@ -42,9 +42,9 @@
 }
 
 .placeholder {
-    color: var(--global-neutral-color);
+    color: var(--foreground);
     opacity: 0.5;
-    font-family: var(--2nth-font);
+
     padding: 8px 12px;
     font-size: 14px;
     font-weight: 300;

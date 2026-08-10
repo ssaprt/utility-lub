@@ -34,16 +34,16 @@ export const Title = ({ title }: { title: string }) => {
                     shrink-0
                     rounded-full
                    
-                    bg-pink-400/10
+                    bg-fg/10
                     px-[1em]
                     py-[0.25em]
                     font-sans
                     text-[1em]
                     font-bold
                     uppercase
-                    text-pink-300
-                    shadow-lg
-                    shadow-black/40
+                    text-fg
+                    shadow-xs
+                    shadow-fg/40
                 "
             >
                 Theme
@@ -56,7 +56,7 @@ export const Title = ({ title }: { title: string }) => {
                     min-w-0
                     border-t-[0.125em]
                     border-dashed
-                    border-pink-300/60
+                    border-fg/60
                 "
             />
 
@@ -67,9 +67,8 @@ export const Title = ({ title }: { title: string }) => {
                     whitespace-nowrap
                     font-sans
                     text-[0.9em]
-                    text-pink-300
-                    text-shadow-xs
-                    text-shadow-black
+                    text-fg
+                  
                 "
             >
                 speed (ms)
@@ -87,19 +86,19 @@ export const Title = ({ title }: { title: string }) => {
                     w-[4.5em]
                     min-w-0
                     rounded-full
-                    bg-pink-400/10
+                    bg-fg/10
                     px-[1em]
                     py-[0.25em]
                     font-sans
                     !text-[0.9em]
                     tracking-[0.07em]
-                    text-pink-300
-                    shadow-lg
-                    shadow-black/40
+                    text-fg
+                    shadow-xs
+                    shadow-fg/40
                     outline-none
                     focus:outline-[0.125em]
                     focus:outline-offset-[0.125em]
-                    focus:outline-pink-300
+                    focus:outline-fg
                 "
             />
 
@@ -110,7 +109,7 @@ export const Title = ({ title }: { title: string }) => {
                     min-w-0
                     border-t-[0.125em]
                     border-dashed
-                    border-pink-300/60
+                    border-fg/60
                 "
             />
 
@@ -121,16 +120,16 @@ export const Title = ({ title }: { title: string }) => {
                     shrink-0
                     truncate
                     rounded-full
-                    bg-pink-400/10
+                    bg-fg/10
                     px-[1em]
                     py-[0.25em]
                     font-sans
                     text-[1em]
                     font-bold
                     capitalize
-                    text-pink-300
-                    shadow-lg
-                    shadow-black/40
+                    text-fg
+                    shadow-xs
+                    shadow-fg/40
                 "
                 title={title}
             >

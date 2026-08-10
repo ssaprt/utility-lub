@@ -7,7 +7,7 @@
 
     overflow: hidden;
      
-    color: #fb84ff;
+    color: var(--foreground);
 
     contain: layout paint;
     isolation: isolate;

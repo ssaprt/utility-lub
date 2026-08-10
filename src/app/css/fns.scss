@@ -1,5 +1,21 @@
 @use "sass:color";
 
 @function foreground-with-opacity($opacity) {
-    @return color.change(#fea5d5, $alpha: $opacity);
+    $percent: $opacity * 100%;
+
+    @return color-mix(
+        in oklab,
+        var(--foreground) #{$percent},
+        transparent
+    );
+}
+
+@function bg-with-opacity($opacity) {
+    $percent: $opacity * 100%;
+
+    @return color-mix(
+        in oklab,
+        var(--background) #{$percent},
+        transparent
+    );
 }

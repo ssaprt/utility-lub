@@ -13,12 +13,19 @@ export const DataLoader = ({
     errorText = "Failed to load data",
 }: {
     children: ReactNode;
-    responseFn: () => Promise<unknown>;
+    responseFn?: () => Promise<unknown>;
     errorText?: string;
 }) => {
-    const [status, setStatus] = useState<Status>("loading");
+    const [status, setStatus] = useState<Status>(
+        responseFn ? "loading" : "success",
+    );
 
     const load = async () => {
+        if (!responseFn) {
+            setStatus("success");
+            return;
+        }
+
         setStatus("loading");
 
         try {
@@ -31,11 +38,9 @@ export const DataLoader = ({
     };
 
     useEffect(() => {
-        async function init() {
-            void load();
-        }
+        if (!responseFn) return;
 
-        init();
+        (async () => await load())();
     }, []);
 
     return (

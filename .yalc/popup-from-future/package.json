@@ -1,0 +1,48 @@
+{
+    "name": "popup-from-future",
+    "version": "1.0.1",
+    "description": "A flexible, animated, themeable popup component for React and Next.js",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "sideEffects": [
+        "*.css",
+        "dist/*.css"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./style.css": "./dist/index.css"
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE",
+        "CHANGELOG.md"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "push": "npm run build && npx yalc push"
+    },
+    "keywords": [
+        "popup",
+        "react",
+        "next",
+        "timer",
+        "notification",
+        "animated",
+        "css",
+        "theme"
+    ],
+    "author": "ssaprt (Denis Ukhan)",
+    "license": "MIT",
+    "type": "commonjs",
+    "peerDependencies": {
+        "react": ">=18"
+    },
+    "yalcSig": "7218e0fe0649cd8a67478ef7f62b3ead"
+}

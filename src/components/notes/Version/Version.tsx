@@ -18,12 +18,11 @@ export const Version = ({ recordings }: { recordings: Recording[] }) => {
                 "--bgPrimaryContainer": "transparent",
                 "--bgPrimaryContainerShow": "transparent",
                 "--bgTitleBlock": "transparent",
+                "--bgTitleBlockShow": "transparent",
                 "--colorTitleBlock": "none",
                 "--colorTitleBlockShow": "none",
                 "--BoxShadowTitleBlock": "none",
 
-                "--fillTitleBlockIcon": "#fda5d6",
-                "--fillTitleBlockIconShow": "#ba749b",
                 "--BoxShadowPrimaryContainerShow": "none",
                 "--pl": "6px",
             }}
@@ -37,19 +36,19 @@ export const Version = ({ recordings }: { recordings: Recording[] }) => {
                             data-pagefind-meta={i === 0 && "currentVersion"}
                         >
                             <div className={styles.versionHeader}>
-                                <span className="text-xs color-pink-300/40">
+                                <span className="text-xs color-fg/40">
                                     {recording.version}
                                 </span>
-                                <div className="w-full h-[1px] border-1 border-dashed border-pink-300/20"></div>
-                                <i className="text-xs color-pink-300/40">
+                                <div className="w-full h-[1px] border-1 border-dashed border-fg/20"></div>
+                                <i className="text-xs color-fg/40">
                                     {recording.date}
                                 </i>
                             </div>
                             <div className="pl-1 flex flex-col gap-[1px]">
-                                <span className="text-sm">
+                                <span className="text-xs">
                                     {recording.title}
                                 </span>
-                                <p className="text-sm">
+                                <p className="!text-[12px] text-fg/90">
                                     {recording.description}
                                 </p>
                             </div>

@@ -1,7 +1,7 @@
 import { Hr } from "@/components/hr/Hr/Hr";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
-import Image from "next/image";
+import LogoIcon from "@/icons/mana.svg";
 
 export const HeaderTitle = () => {
     const isDesktop = useBreakpoint("lg");
@@ -26,10 +26,8 @@ export const HeaderTitle = () => {
                     minWidth: "max-content",
                 }}
             >
-                <Image src="/mana.svg" alt="logo" width={30} height={30} />
-                <h4 className="!tracking-[1.25px] text-pink-300">
-                    Utility Lab
-                </h4>
+                <LogoIcon className="w-[30px] h-[30px] fill-fg" />
+                <h4 className="!tracking-[1.25px] text-fg">Utility Lab</h4>
             </AppLink>
             <Hr mode="horizontal" size={1} />
         </div>
@@ -55,8 +53,8 @@ export const HeaderTitle = () => {
                 minWidth: "max-content",
             }}
         >
-            <Image src="/mana.svg" alt="logo" width={30} height={30} />
-            <h4 className="!tracking-[1.5px] text-pink-300">Utility Lab</h4>
+            <LogoIcon className="w-[30px] h-[30px] fill-fg" />
+            <h4 className="!tracking-[1.5px] text-fg">Utility Lab</h4>
         </AppLink>
     );
 };

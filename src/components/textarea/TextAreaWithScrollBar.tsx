@@ -131,7 +131,11 @@ export const TextAreaWithScrollBar = ({
                 ref={ref}
                 onFocus={onFocus}
                 onBlur={handleBlur}
-                className={clsx(styles.textarea, emoji && styles.emoji)}
+                className={clsx(
+                    styles.textarea,
+                    emoji && styles.emoji,
+                    "text-[16px] lg:text-xs",
+                )}
                 contentEditable
                 suppressContentEditableWarning
                 onInput={handleChange}

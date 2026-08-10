@@ -1,5 +1,8 @@
+"use client";
+
 import { IconBrandGithub } from "@tabler/icons-react";
 import { Search } from "../Left/Search/Search";
+import { ToggleTheme } from "./ToggleTheme";
 
 export const Right = () => {
     return (
@@ -9,19 +12,23 @@ export const Right = () => {
             <a
                 href="https://github.com/ssaprt"
                 target="_blank"
-                className="my-2 
-                flex 
-                flex-row 
-                items-center 
-                select-none 
-                gap-2 
-                px-1 
-                py-1 
-                rounded-full 
-                hover:[&>svg]:stroke-purple-100/80"
+                className="
+                    my-2
+                    flex
+                    flex-row
+                    items-center
+                    select-none
+                    gap-2
+                    px-1
+                    py-1
+                    rounded-full
+                    hover:[&>svg]:stroke-fg/50
+                "
             >
-                <IconBrandGithub className="w-[20px] h-[20px] stroke-pink-300" />
+                <IconBrandGithub className="w-[20px] h-[20px] stroke-fg" />
             </a>
+
+            <ToggleTheme />
         </div>
     );
 };

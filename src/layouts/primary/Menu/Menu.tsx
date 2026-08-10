@@ -21,6 +21,7 @@ export const Menu = () => {
             className={`
                 ${styles.menu}
                 ${openMenu ? styles.open : ""}
+                 
             `}
             style={{
                 transition: noneAnimationMenu

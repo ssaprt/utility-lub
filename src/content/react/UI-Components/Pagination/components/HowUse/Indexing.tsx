@@ -3,21 +3,7 @@ import { TransitionDropDown } from "../dropDown/TransitionDropDown/TransitionDro
 
 export const Indexing = () => {
     return (
-        <TransitionDropDown
-            title="INDEXING"
-            style={{
-                "--bgPrimaryContainer": "rgb(40, 44, 52)",
-                "--bgPrimaryContainerShow": "rgb(40, 44, 52)",
-                "--bgTitleBlock": "rgb(40, 44, 52)",
-                "--colorTitleBlock": "#fda5d6",
-                "--colorTitleBlockShow": "#ba749b",
-                "--BoxShadowTitleBlock": "none",
-                "--BoxShadowTitleBlockShow": "none",
-                "--fillTitleBlockIcon": "#fda5d6",
-                "--fillTitleBlockIconShow": "#ba749b",
-            }}
-            className="!rounded-[14px]"
-        >
+        <TransitionDropDown title="INDEXING" className="!rounded-[14px]">
             <Documentation
                 titleEnd="App"
                 code={`import "@ssaprt/easy-pagination/style.css";

@@ -9,8 +9,8 @@ import { Input } from "@/components/input/text/Input";
 import { TableWithScroll } from "@/components/table/TableWithScroll/TableWithScroll";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
+import CitiesIcon from "@/icons/map.svg";
 import { IconDownload, IconTrashFilled } from "@tabler/icons-react";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ScrollToFuture } from "scroll-to-future";
 
@@ -66,22 +66,17 @@ export const TableOfRussianCities = () => {
     }, []);
 
     useEffect(() => {
-        setIconHeader(
-            <Image
-                className="w-8 h-8"
-                src="/map.svg"
-                alt="map.svg"
-                width={40}
-                height={40}
-            />,
-        );
+        setIconHeader(<CitiesIcon className="w-8 h-8 fill-fg" />);
         setTitleHeader("Table of Russian Cities");
     }, [setIconHeader, setTitleHeader]);
 
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon="map.svg"
+                icon={{
+                    component: <CitiesIcon />,
+                    meta: "map.svg",
+                }}
                 description="Table of Russian Cities with Crimea"
                 recordings={[
                     {
@@ -91,6 +86,7 @@ export const TableOfRussianCities = () => {
                         description: "Created table",
                     },
                 ]}
+                useFn={false}
             >
                 Table of Russian Cities
             </TitlePost>
@@ -231,8 +227,8 @@ export const TableOfRussianCities = () => {
                                 cursor-pointer
                                 rounded-full
                                 p-[4px]
-                                text-pink-300
-                                hover:bg-pink-300/30
+                                text-fg
+                                hover:bg-fg/30
                             "
                                                                 onClick={() => {
                                                                     setItems(
@@ -258,7 +254,7 @@ export const TableOfRussianCities = () => {
                                                             ([key, value]) => (
                                                                 <Input
                                                                     key={key}
-                                                                    size="xs"
+                                                                    size="sm"
                                                                     required={
                                                                         !selectedFile
                                                                     }

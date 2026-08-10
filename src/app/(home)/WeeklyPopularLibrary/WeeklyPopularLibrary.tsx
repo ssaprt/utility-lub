@@ -1,4 +1,3 @@
-import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
 import { DataLoader } from "@/components/data-loader/DataLoader";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { IconExternalLinkFilled } from "@tabler/icons-react";
@@ -21,14 +20,11 @@ export const WeeklyPopularLibrary = () => {
     };
 
     return (
-        <TitleWithItemsBlock
-            title={
-                <div className="row-center-2">
-                    <PopularIcon className="w-6 h-6 fill-pink-300" />
-                    <span className="text-pink-300">Weekly popular tools</span>
-                </div>
-            }
-        >
+        <div>
+            <div className="row-center-2">
+                <PopularIcon className="w-6 h-6 fill-fg" />
+                <span className="text-fg">Weekly popular tools</span>
+            </div>
             <DataLoader
                 responseFn={fetchData}
                 errorText="Failed to load weekly populars"
@@ -73,25 +69,28 @@ export const WeeklyPopularLibrary = () => {
                         hover:[&>svg:last-of-type]:p-[4px] 
                         hover:[&>svg:last-of-type]:mr-0 
                         
-                        hover:bg-white/20"
+                        hover:bg-fg/20 
+                        "
                             >
                                 <div className="col-stretch-2">
                                     <div className="row-center-2">
                                         {packageIcons[item.name][0]}
-                                        <span>{item.name}</span>
+                                        <span className="text-sm">
+                                            {item.name}
+                                        </span>
                                     </div>
 
                                     <div className="col-start-1 w-0 min-w-full">
                                         <div className="row-center-1">
-                                            <span className="text-[10px] text-pink-300/70">
+                                            <span className="text-[10px] text-fg/70">
                                                 Installs weekly:
                                             </span>
-                                            <span className="text-[10px] text-pink-300/70 font-semibold">
+                                            <span className="text-[10px] text-fg/70 font-semibold">
                                                 {item.monthlyDownloads}
                                             </span>
                                         </div>
 
-                                        <span className="w-full text-[10px] whitespace-normal break-words">
+                                        <span className="w-full text-[12px] whitespace-normal break-words">
                                             {item.description}
                                         </span>
                                     </div>
@@ -99,7 +98,7 @@ export const WeeklyPopularLibrary = () => {
 
                                 <IconExternalLinkFilled
                                     className="
-                                text-pink-300
+                                text-fg
                                 relative 
                                 top-1/2 
                                 -translate-y-1/2
@@ -115,6 +114,7 @@ export const WeeklyPopularLibrary = () => {
 
                                 shadow-md 
                                 shafow-black/40
+                        
 
                                 ml-auto
 
@@ -140,6 +140,6 @@ export const WeeklyPopularLibrary = () => {
                     </div>
                 )}
             </DataLoader>
-        </TitleWithItemsBlock>
+        </div>
     );
 };

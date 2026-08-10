@@ -5,9 +5,11 @@ import { useBreakpoint } from "@/hooks/useBreakPoint";
 
 import {
     createContext,
+    RefObject,
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
     type Dispatch,
     type ReactNode,
@@ -37,6 +39,7 @@ type AppContextType = {
         titleHeader?: string;
         hrefHeader?: string;
         boxForAnimations?: HTMLDivElement | null;
+        themePopupRef?: RefObject<HTMLDialogElement | null>;
         isScrolled: boolean;
     };
     menu: {
@@ -64,6 +67,7 @@ export const AppContextProvider = ({
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);
     const isScrolled = useDetectedScrollMain();
+    const themePopupRef = useRef<HTMLDialogElement>(null);
     //* header context =============================================
 
     //* menu context =============================================
@@ -86,6 +90,7 @@ export const AppContextProvider = ({
                 hrefHeader,
                 boxForAnimations,
                 isScrolled,
+                themePopupRef,
             },
             menu: {
                 openMenu,

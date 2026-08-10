@@ -23,6 +23,7 @@ export const FeedBack = ({ subject }: { subject: string }) => {
                         icon={<IconSend className="w-4 h-4" />}
                         textButton="Send Feedback"
                         type="button"
+                        variant="pill"
                         handleAction={() => setOpen(true)}
                     />
                 </div>

@@ -79,16 +79,7 @@ const positions = ["top", "right", "bottom", "left"] as const;
 
 const Example = () => {
     return (
-        <div className="flex flex-col items-center gap-2 h-[120px] overflow-y-scroll">
-            <div className="flex flex-row items-center gap-2">
-                <IconTooltip size={32} />
-                <span>Example</span>
-            </div>
-            <div className="grid grid-cols-5 gap-2">
-                {emojis.slice(0, 50).map((emoji, i) => (
-                    <span key={`${emoji}-${i}`}>{emoji}</span>
-                ))}
-            </div>
+        <div className="col-center-2 h-[120px] overflow-y-scroll relative">
             <ScrollToFuture
                 nativeOnMobile={false}
                 scrollBar={{
@@ -99,6 +90,15 @@ const Example = () => {
                     heightTrack: "98%",
                 }}
             />
+            <div className="row-center-2">
+                <IconTooltip size={32} />
+                <span>Example</span>
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+                {emojis.slice(0, 50).map((emoji, i) => (
+                    <span key={`${emoji}-${i}`}>{emoji}</span>
+                ))}
+            </div>
         </div>
     );
 };

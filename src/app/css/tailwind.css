@@ -1,26 +1,36 @@
 @import "tailwindcss";
 
+@custom-variant light (&:where(.light, .light *));
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant midnight (&:where(.midnight, .midnight *));
+@custom-variant tree (&:where(.tree, .tree *));
+@custom-variant alter (&:where(.alter, .alter *));
+
 /** Blocks ------------------------------------------------------------------ */
 
 @utility row-stretch-* {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: stretch;
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility row-start-* {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: start;
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility row-center-* {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility row-end-* {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: end;
@@ -28,6 +38,7 @@
 }
 
 @utility col-stretch-* {
+    position: relative;
     display: flex;
     flex-direction: column;
 
@@ -35,6 +46,7 @@
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility col-start-* {
+    position: relative;
     display: flex;
     flex-direction: column;
 
@@ -42,6 +54,7 @@
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility col-center-* {
+    position: relative;
     display: flex;
     flex-direction: column;
 
@@ -49,6 +62,7 @@
     gap: calc(var(--spacing) * --value(integer));
 }
 @utility col-end-* {
+    position: relative;
     display: flex;
     flex-direction: column;
 
@@ -67,6 +81,8 @@
     }
 }
 
+/** Anims ------------------------------------------------------------------ */
 @utility data-loader-fade-in {
     animation: data-loader-fade-in 500ms ease-out forwards;
 }
+/** Anims ------------------------------------------------------------------ */

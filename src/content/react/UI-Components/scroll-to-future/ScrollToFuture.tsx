@@ -3,7 +3,7 @@ import { HowUse } from "@/components/HowUse/HowUse";
 import { Install } from "@/components/Install/Install";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
-import Image from "next/image";
+import ScrollToFutureIcon from "@/icons/scroll-to-future.svg";
 import { useEffect } from "react";
 import { Example } from "./Example";
 import { MixTheme } from "./MixTheme";
@@ -14,22 +14,17 @@ export const ScrollToFuture = () => {
     const { setIconHeader, setTitleHeader } = header || {};
 
     useEffect(() => {
-        setIconHeader(
-            <Image
-                className="w-8 h-8"
-                src="/scroll-to-future.svg"
-                alt="scroll-to-future"
-                width={40}
-                height={40}
-            />,
-        );
+        setIconHeader(<ScrollToFutureIcon className="w-8 h-8 fill-fg" />);
         setTitleHeader("scroll-to-future");
     }, [setIconHeader, setTitleHeader]);
 
     return (
         <div className="flex flex-col gap-4">
             <TitlePost
-                icon="scroll-to-future.svg"
+                icon={{
+                    component: <ScrollToFutureIcon />,
+                    meta: "scroll-to-future.svg",
+                }}
                 description="Scrollbar supporting both X and Y axes. Position settings for the start and end of the block. Custom positioning options (above or after the element). 20+ built-in themes"
                 packageName="scroll-to-future"
             >

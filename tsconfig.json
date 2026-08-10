@@ -59,6 +59,10 @@
       "@css/*": [
         "./src/app/css/*"
       ]
+      ,
+      "@icons/*": [
+        "./src/icons/*"
+      ]
     }
   },
   "include": [

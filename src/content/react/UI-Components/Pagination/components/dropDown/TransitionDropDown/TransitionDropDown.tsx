@@ -1,6 +1,6 @@
 import { IconCaretDownFilled } from "@tabler/icons-react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import styles from "./TransitionDropDown.module.css";
+import styles from "./TransitionDropDown.module.scss";
 
 //use any styles parameters from interface TransitionDropDownPropsCss
 //use any styles parameters from interface TransitionDropDownPropsCss
