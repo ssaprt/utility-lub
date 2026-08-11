@@ -3,6 +3,7 @@
 .search-box {
     position: relative;
     width: min-content;
+    box-sizing: border-box;
 
     &__input {
         box-sizing: border-box;
@@ -97,7 +98,7 @@
     &__list {
         display: flex;
         flex-direction: column;
-
+       position: relative;
         width: 100%;
         margin: 0;
         padding: 6px;
