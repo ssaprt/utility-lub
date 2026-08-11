@@ -7,8 +7,8 @@ export default function Loading() {
                     animate-spin
                     rounded-full
                     border-4
-                    border-pink-300/20
-                    border-t-pink-300
+                    border-fg/20
+                    border-t-fg
                 "
             />
         </div>
