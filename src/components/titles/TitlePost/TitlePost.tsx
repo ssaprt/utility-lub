@@ -46,13 +46,7 @@ export const TitlePost = ({
         recordings || [],
     );
 
-    const [lastUpdate, setLastUpdate] = useState(
-        new Date().toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        }),
-    );
+    const [lastUpdate, setLastUpdate] = useState(recordings?.[0]?.date ?? "");
 
     const fetchRecordings = async () => {
         const result = await getVersionPackages(packageName || "");
@@ -147,7 +141,8 @@ export const TitlePost = ({
                             className="flex text-sm"
                             data-pagefind-meta="date"
                         >
-                            update {formatRelativeDate(lastUpdate)}
+                            update{" "}
+                            {lastUpdate ? formatRelativeDate(lastUpdate) : ""}
                         </span>
                     </div>
                 </div>

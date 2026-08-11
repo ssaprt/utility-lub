@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
+import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
 
@@ -210,7 +211,7 @@ export const Search = () => {
 
                 {!isLoading && !error && results.length > 0 && (
                     <>
-                        {visible && <Scroll />}
+                        {visible && <Scroll nativeOnMobile={false} />}
 
                         <ul className={styles["search-box__list"]}>
                             {results.map((result) => (
@@ -262,7 +263,11 @@ export const Search = () => {
                                                 <IconCalendarPlus className="h-[14px] w-[14px] stroke-fg" />
 
                                                 <i className="text-[12px] text-fg/60">
-                                                    {result.meta?.date}
+                                                    {result.meta?.date
+                                                        ? formatRelativeDate(
+                                                              result.meta.date,
+                                                          )
+                                                        : ""}
                                                 </i>
                                             </div>
                                         </div>

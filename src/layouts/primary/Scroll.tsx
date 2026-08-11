@@ -2,11 +2,14 @@ import { ScrollToFuture } from "scroll-to-future";
 
 export const Scroll = ({
     imposition = "after",
+    nativeOnMobile = true,
 }: {
     imposition?: "over" | "after";
+    nativeOnMobile?: boolean;
 }) => {
     return (
         <ScrollToFuture
+            nativeOnMobile={nativeOnMobile}
             scrollBar={{
                 widthTrack: "10px",
                 positionMode: "after",
