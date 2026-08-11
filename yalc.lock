@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "scroll-to-future": {
-      "signature": "d87277d812d2c98f0c8afc64f5987b60",
+      "signature": "299cac8d77dafdd98c2ac8b9f43f4a9d",
       "file": true,
       "replaced": "^1.0.18"
     },

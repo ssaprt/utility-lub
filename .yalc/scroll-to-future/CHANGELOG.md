@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.19] - 2026-08-10
+## [1.0.20] - 2026-08-11
+
+### Fixed bugs
+
+- Fixed bugs
+
+## [1.0.19] - 2026-08-11
 
 ### Delete comments
 

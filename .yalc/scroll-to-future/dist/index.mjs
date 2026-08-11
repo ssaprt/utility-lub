@@ -1,7 +1,7 @@
 "use client";
 
 // src/ScrollToFuture.tsx
-import { useRef as useRef3, useState as useState5 } from "react";
+import { useRef as useRef4, useState as useState5 } from "react";
 import { createPortal } from "react-dom";
 
 // src/components/Axios/ScrollAxis.tsx
@@ -590,7 +590,7 @@ var useElementScrollObserver = (target) => {
 };
 
 // src/hooks/useFuture.ts
-import { useEffect as useEffect3 } from "react";
+import { useEffect as useEffect3, useRef as useRef3 } from "react";
 
 // src/utils/native-scrollbar.ts
 var STYLE_ID = "scroll-to-future-native-scrollbar-styles";
@@ -710,6 +710,77 @@ var hideNativeScrollbar = (target, mode, nativeOnMobile) => {
 };
 
 // src/hooks/useFuture.ts
+var paddingRegistries = /* @__PURE__ */ new WeakMap();
+var readPadding = (element) => {
+  const style = window.getComputedStyle(element);
+  return {
+    left: Number.parseFloat(style.paddingLeft) || 0,
+    right: Number.parseFloat(style.paddingRight) || 0,
+    top: Number.parseFloat(style.paddingTop) || 0,
+    bottom: Number.parseFloat(style.paddingBottom) || 0
+  };
+};
+var readInlinePadding = (element) => ({
+  left: element.style.paddingLeft,
+  right: element.style.paddingRight,
+  top: element.style.paddingTop,
+  bottom: element.style.paddingBottom
+});
+var getPaddingRegistry = (element) => {
+  const existing = paddingRegistries.get(element);
+  if (existing) {
+    return existing;
+  }
+  const registry = {
+    base: readPadding(element),
+    inline: readInlinePadding(element),
+    reservations: /* @__PURE__ */ new Map()
+  };
+  paddingRegistries.set(element, registry);
+  return registry;
+};
+var applyPaddingRegistry = (element, registry) => {
+  const reserved = {
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0
+  };
+  for (const reservation of registry.reservations.values()) {
+    reserved.left = Math.max(reserved.left, reservation.left);
+    reserved.right = Math.max(reserved.right, reservation.right);
+    reserved.top = Math.max(reserved.top, reservation.top);
+    reserved.bottom = Math.max(reserved.bottom, reservation.bottom);
+  }
+  element.style.paddingLeft = `${registry.base.left + reserved.left}px`;
+  element.style.paddingRight = `${registry.base.right + reserved.right}px`;
+  element.style.paddingTop = `${registry.base.top + reserved.top}px`;
+  element.style.paddingBottom = `${registry.base.bottom + reserved.bottom}px`;
+};
+var restoreInlinePadding = (element, registry) => {
+  element.style.paddingLeft = registry.inline.left;
+  element.style.paddingRight = registry.inline.right;
+  element.style.paddingTop = registry.inline.top;
+  element.style.paddingBottom = registry.inline.bottom;
+};
+var setPaddingReservation = (element, id, reservation) => {
+  const registry = getPaddingRegistry(element);
+  registry.reservations.set(id, reservation);
+  applyPaddingRegistry(element, registry);
+};
+var removePaddingReservation = (element, id) => {
+  const registry = paddingRegistries.get(element);
+  if (!registry) {
+    return;
+  }
+  registry.reservations.delete(id);
+  if (registry.reservations.size === 0) {
+    restoreInlinePadding(element, registry);
+    paddingRegistries.delete(element);
+    return;
+  }
+  applyPaddingRegistry(element, registry);
+};
 var useFuture = ({
   target,
   anchorRef,
@@ -725,6 +796,7 @@ var useFuture = ({
   coversAllScrollableAxes,
   nativeOnMobile
 }) => {
+  const reservationIdRef = useRef3(/* @__PURE__ */ Symbol("scroll-to-future-reservation"));
   useEffect3(() => {
     if (!mounted) return;
     let rafId = null;
@@ -752,8 +824,8 @@ var useFuture = ({
     };
   }, [mounted, target, anchorRef, targetRef, setFindedTarget]);
   useEffect3(() => {
-    const el = targetRef.current;
-    if (!el) return;
+    const element = findedTarget ?? targetRef.current;
+    if (!element) return;
     const trackThickness = parsePxValue(config.scrollBar?.widthTrack) ?? DEFAULT_TRACK_THICKNESS;
     const reservedY = showY ? computeReservedSpace(
       config.scrollBar?.boundaryOffset,
@@ -765,38 +837,30 @@ var useFuture = ({
       trackThickness,
       superimposition
     ) : 0;
-    const previousInlinePadding = {
-      left: el.style.paddingLeft,
-      right: el.style.paddingRight,
-      top: el.style.paddingTop,
-      bottom: el.style.paddingBottom
-    };
-    const computedStyle = window.getComputedStyle(el);
-    const basePadding = {
-      left: Number.parseFloat(computedStyle.paddingLeft) || 0,
-      right: Number.parseFloat(computedStyle.paddingRight) || 0,
-      top: Number.parseFloat(computedStyle.paddingTop) || 0,
-      bottom: Number.parseFloat(computedStyle.paddingBottom) || 0
+    const reservation = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0
     };
     if (reservedY > 0) {
       if (positionMode === "before") {
-        el.style.paddingLeft = `${basePadding.left + reservedY}px`;
+        reservation.left = reservedY;
       } else {
-        el.style.paddingRight = `${basePadding.right + reservedY}px`;
+        reservation.right = reservedY;
       }
     }
     if (reservedX > 0) {
       if (positionMode === "before") {
-        el.style.paddingTop = `${basePadding.top + reservedX}px`;
+        reservation.top = reservedX;
       } else {
-        el.style.paddingBottom = `${basePadding.bottom + reservedX}px`;
+        reservation.bottom = reservedX;
       }
     }
+    const reservationId = reservationIdRef.current;
+    setPaddingReservation(element, reservationId, reservation);
     return () => {
-      el.style.paddingLeft = previousInlinePadding.left;
-      el.style.paddingRight = previousInlinePadding.right;
-      el.style.paddingTop = previousInlinePadding.top;
-      el.style.paddingBottom = previousInlinePadding.bottom;
+      removePaddingReservation(element, reservationId);
     };
   }, [
     findedTarget,
@@ -1829,9 +1893,9 @@ var ScrollToFuture = ({
   nativeOnMobile = true,
   overlayHide = false
 }) => {
-  const anchorRef = useRef3(null);
-  const targetRef = useRef3(null);
-  const overlayRef = useRef3(null);
+  const anchorRef = useRef4(null);
+  const targetRef = useRef4(null);
+  const overlayRef = useRef4(null);
   const mounted = useMounted();
   const [findedTarget, setFindedTarget] = useState5(null);
   const config = merge({
