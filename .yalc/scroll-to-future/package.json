@@ -1,7 +1,7 @@
 {
-    "name": "popup-from-future",
-    "version": "1.0.1",
-    "description": "A flexible, animated, themeable popup component for React and Next.js",
+    "name": "scroll-to-future",
+    "version": "1.0.19",
+    "description": "",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
@@ -29,14 +29,14 @@
         "push": "npm run build && npx yalc push"
     },
     "keywords": [
-        "popup",
+        "scrollbar",
+        "scroll",
         "react",
         "next",
-        "timer",
-        "notification",
-        "animated",
-        "css",
-        "theme"
+        "scroller",
+        "custom-scrollbar",
+        "custom-scroll",
+        "x-y-scroll"
     ],
     "author": "ssaprt (Denis Ukhan)",
     "license": "MIT",
@@ -44,5 +44,5 @@
     "peerDependencies": {
         "react": ">=18"
     },
-    "yalcSig": "7218e0fe0649cd8a67478ef7f62b3ead"
+    "yalcSig": "d87277d812d2c98f0c8afc64f5987b60"
 }

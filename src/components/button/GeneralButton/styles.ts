@@ -176,7 +176,7 @@ export const generalButtonStyles = {
         base: `
             rounded-[10px]
             border-2
-            border-fg/30
+            border-fg/70
             bg-fg/10
             shadow-[0_4px_10px]
             shadow-black/30
@@ -194,4 +194,4 @@ export const generalButtonStyles = {
 
 export type GeneralButtonStyle = keyof typeof generalButtonStyles;
 
-export const DEFAULT_GENERAL_BUTTON_STYLE: GeneralButtonStyle = "floating";
+export const DEFAULT_GENERAL_BUTTON_STYLE: GeneralButtonStyle = "ghost";

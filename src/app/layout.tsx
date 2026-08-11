@@ -33,7 +33,7 @@ const outfit = Outfit({
 export const metadata: Metadata = {
     title: "Utility Lab",
     description: "Your space for frontend development",
-    icons: "/mana.svg",
+    icons: "/mana.png",
     appleWebApp: {
         capable: true,
         statusBarStyle: "black-translucent",

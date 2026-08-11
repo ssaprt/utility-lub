@@ -9,7 +9,7 @@ export const AppThemeProvider = ({ children }: { children: ReactNode }) => {
     return (
         <NextThemesProvider
             attribute="class"
-            defaultTheme="primary"
+            defaultTheme="dark"
             enableSystem
             themes={thems}
         >
