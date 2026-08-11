@@ -3,7 +3,6 @@
 import { TablerIcon } from "@/components/titles/TitlePost/TablerIcon";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { useSearch } from "@/hooks/Search/useSearch";
-import { Scroll } from "@/layouts/primary/Scroll";
 import { IconCalendarPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
@@ -210,7 +209,7 @@ export const Search = () => {
 
                 {!isLoading && !error && results.length > 0 && (
                     <>
-                        {visible && <Scroll />}
+                        {/* {visible && <Scroll />} */}
 
                         <ul className={styles["search-box__list"]}>
                             {results.map((result) => (
