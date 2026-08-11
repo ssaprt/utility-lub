@@ -210,8 +210,9 @@ export const Search = () => {
 
                 {!isLoading && !error && results.length > 0 && (
                     <>
+                        {visible && <Scroll />}
+
                         <ul className={styles["search-box__list"]}>
-                            {visible && <Scroll imposition="over" />}
                             {results.map((result) => (
                                 <li
                                     key={result.url}

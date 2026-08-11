@@ -16,7 +16,7 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
             id="main"
         >
             <PendingLoader />
-            <Scroll imposition="over" />
+            <Scroll />
             {children}
             <div className="my-5"></div>
             <FeedBack subject="Form Feedback" />
