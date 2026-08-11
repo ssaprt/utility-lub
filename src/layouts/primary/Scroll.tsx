@@ -1,15 +1,16 @@
-import { useTheme } from "next-themes";
 import { ScrollToFuture } from "scroll-to-future";
 
-export const Scroll = () => {
-    const { resolvedTheme } = useTheme();
-
+export const Scroll = ({
+    imposition = "after",
+}: {
+    imposition?: "over" | "after";
+}) => {
     return (
         <ScrollToFuture
             scrollBar={{
                 widthTrack: "10px",
                 positionMode: "after",
-                superimposition: "over",
+                superimposition: imposition,
                 heightTrack: "98%",
             }}
             thumb={{

@@ -222,7 +222,7 @@ export const Search = () => {
                                         href={result.url}
                                         onClick={closeResults}
                                     >
-                                        <div className="flex flex-row items-center justify-between gap-2">
+                                        <div className="flex flex-row items-center justify-between gap-2 hover:bg-fg/5">
                                             <div className="flex min-w-0 flex-row items-center gap-1">
                                                 {result.meta?.icon &&
                                                     (result.meta.icon.endsWith(
