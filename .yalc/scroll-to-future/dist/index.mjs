@@ -1,7 +1,7 @@
 "use client";
 
 // src/ScrollToFuture.tsx
-import { useRef as useRef4, useState as useState5 } from "react";
+import { useRef as useRef4, useState as useState6 } from "react";
 import { createPortal } from "react-dom";
 
 // src/components/Axios/ScrollAxis.tsx
@@ -590,7 +590,7 @@ var useElementScrollObserver = (target) => {
 };
 
 // src/hooks/useFuture.ts
-import { useEffect as useEffect3, useRef as useRef3 } from "react";
+import { useEffect as useEffect3, useRef as useRef3, useState as useState4 } from "react";
 
 // src/utils/native-scrollbar.ts
 var STYLE_ID = "scroll-to-future-native-scrollbar-styles";
@@ -711,6 +711,103 @@ var hideNativeScrollbar = (target, mode, nativeOnMobile) => {
 
 // src/hooks/useFuture.ts
 var paddingRegistries = /* @__PURE__ */ new WeakMap();
+var keyboardInputTypes = /* @__PURE__ */ new Set([
+  "text",
+  "search",
+  "email",
+  "url",
+  "tel",
+  "password",
+  "number",
+  "date",
+  "datetime-local",
+  "month",
+  "time",
+  "week"
+]);
+var isKeyboardInput = (element) => {
+  if (element instanceof HTMLTextAreaElement) {
+    return !element.disabled && !element.readOnly;
+  }
+  if (element instanceof HTMLInputElement) {
+    return !element.disabled && !element.readOnly && keyboardInputTypes.has(element.type);
+  }
+  return element instanceof HTMLElement && element.isContentEditable;
+};
+var getViewportReferenceHeight = () => Math.max(
+  document.documentElement.clientHeight,
+  window.innerHeight,
+  window.visualViewport?.height ?? 0
+);
+var useVirtualKeyboardOpen = (mounted) => {
+  const [open, setOpen] = useState4(false);
+  const baselineHeightRef = useRef3(0);
+  useEffect3(() => {
+    if (!mounted || typeof window === "undefined") {
+      return;
+    }
+    const viewport = window.visualViewport;
+    if (!viewport) {
+      return;
+    }
+    let rafId = null;
+    const update = () => {
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const activeInput = isKeyboardInput(document.activeElement);
+        const referenceHeight = getViewportReferenceHeight();
+        if (!activeInput) {
+          baselineHeightRef.current = referenceHeight;
+          setOpen(false);
+          return;
+        }
+        if (baselineHeightRef.current <= 0) {
+          baselineHeightRef.current = referenceHeight;
+        }
+        baselineHeightRef.current = Math.max(
+          baselineHeightRef.current,
+          referenceHeight
+        );
+        const hiddenHeight = baselineHeightRef.current - viewport.height;
+        const threshold = Math.max(
+          100,
+          baselineHeightRef.current * 0.15
+        );
+        setOpen(hiddenHeight > threshold);
+      });
+    };
+    const handleFocusIn = () => {
+      if (isKeyboardInput(document.activeElement)) {
+        baselineHeightRef.current = Math.max(
+          baselineHeightRef.current,
+          getViewportReferenceHeight()
+        );
+      }
+      update();
+    };
+    baselineHeightRef.current = getViewportReferenceHeight();
+    document.addEventListener("focusin", handleFocusIn);
+    document.addEventListener("focusout", update);
+    window.addEventListener("resize", update);
+    viewport.addEventListener("resize", update);
+    viewport.addEventListener("scroll", update);
+    update();
+    return () => {
+      document.removeEventListener("focusin", handleFocusIn);
+      document.removeEventListener("focusout", update);
+      window.removeEventListener("resize", update);
+      viewport.removeEventListener("resize", update);
+      viewport.removeEventListener("scroll", update);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, [mounted]);
+  return open;
+};
 var readPadding = (element) => {
   const style = window.getComputedStyle(element);
   return {
@@ -797,6 +894,7 @@ var useFuture = ({
   nativeOnMobile
 }) => {
   const reservationIdRef = useRef3(/* @__PURE__ */ Symbol("scroll-to-future-reservation"));
+  const virtualKeyboardOpen = useVirtualKeyboardOpen(mounted);
   useEffect3(() => {
     if (!mounted) return;
     let rafId = null;
@@ -827,15 +925,16 @@ var useFuture = ({
     const element = findedTarget ?? targetRef.current;
     if (!element) return;
     const trackThickness = parsePxValue(config.scrollBar?.widthTrack) ?? DEFAULT_TRACK_THICKNESS;
+    const reservationMode = virtualKeyboardOpen ? "over" : superimposition;
     const reservedY = showY ? computeReservedSpace(
       config.scrollBar?.boundaryOffset,
       trackThickness,
-      superimposition
+      reservationMode
     ) : 0;
     const reservedX = showX ? computeReservedSpace(
       config.scrollBar?.boundaryOffset,
       trackThickness,
-      superimposition
+      reservationMode
     ) : 0;
     const reservation = {
       left: 0,
@@ -869,7 +968,8 @@ var useFuture = ({
     positionMode,
     superimposition,
     config.scrollBar?.boundaryOffset,
-    config.scrollBar?.widthTrack
+    config.scrollBar?.widthTrack,
+    virtualKeyboardOpen
   ]);
   useEffect3(() => {
     if (!findedTarget) return;
@@ -887,9 +987,9 @@ var useFuture = ({
 };
 
 // src/hooks/useMounted.tsx
-import { useEffect as useEffect4, useState as useState4 } from "react";
+import { useEffect as useEffect4, useState as useState5 } from "react";
 function useMounted() {
-  const [mounted, setMounted] = useState4(false);
+  const [mounted, setMounted] = useState5(false);
   useEffect4(() => {
     if (mounted) return;
     setMounted(true);
@@ -1897,7 +1997,7 @@ var ScrollToFuture = ({
   const targetRef = useRef4(null);
   const overlayRef = useRef4(null);
   const mounted = useMounted();
-  const [findedTarget, setFindedTarget] = useState5(null);
+  const [findedTarget, setFindedTarget] = useState6(null);
   const config = merge({
     scrollBar,
     thumb,
