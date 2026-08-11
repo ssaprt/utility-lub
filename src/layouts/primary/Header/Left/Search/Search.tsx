@@ -9,9 +9,12 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
+import { getVersionPackages } from "@/lib/api/getVersionPackages";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
+
+const versionDateCache = new Map<string, string>();
 
 export const Search = () => {
     const {
@@ -28,6 +31,10 @@ export const Search = () => {
     } = useSearch({});
 
     const mobilePanelRef = useRef<HTMLDivElement>(null);
+
+    const [versionDates, setVersionDates] = useState<Record<string, string>>(
+        {},
+    );
 
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
@@ -65,6 +72,65 @@ export const Search = () => {
             return nextValue;
         });
     };
+
+    useEffect(() => {
+        const packageNames = Array.from(
+            new Set(
+                results
+                    .map((result) => result.meta?.package)
+                    .filter(
+                        (value): value is string =>
+                            typeof value === "string" && value.length > 0,
+                    ),
+            ),
+        );
+
+        if (packageNames.length === 0) {
+            return;
+        }
+
+        let active = true;
+
+        const loadDates = async () => {
+            const entries = await Promise.all(
+                packageNames.map(async (packageName) => {
+                    const cached = versionDateCache.get(packageName);
+
+                    if (cached !== undefined) {
+                        return [packageName, cached] as const;
+                    }
+
+                    try {
+                        const recordings =
+                            await getVersionPackages(packageName);
+
+                        const date = recordings?.[0]?.date ?? "";
+
+                        versionDateCache.set(packageName, date);
+
+                        return [packageName, date] as const;
+                    } catch {
+                        return [packageName, ""] as const;
+                    }
+                }),
+            );
+
+            if (!active) {
+                return;
+            }
+
+            setVersionDates((current) => ({
+                ...current,
+                ...Object.fromEntries(entries),
+            }));
+        };
+
+        void loadDates();
+
+        return () => {
+            active = false;
+        };
+    }, [results]);
 
     useEffect(() => {
         if (!isMobileSearchOpen) {
@@ -214,38 +280,47 @@ export const Search = () => {
                         {visible && <Scroll nativeOnMobile={false} />}
 
                         <ul className={styles["search-box__list"]}>
-                            {results.map((result) => (
-                                <li
-                                    key={result.url}
-                                    className={styles["search-box__item"]}
-                                >
-                                    <AppLink
-                                        href={result.url}
-                                        onClick={closeResults}
-                                    >
-                                        <div className="flex flex-row items-center justify-between gap-2 hover:bg-fg/5">
-                                            <div className="flex min-w-0 flex-row items-center gap-1">
-                                                {result.meta?.icon &&
-                                                    (result.meta.icon.endsWith(
-                                                        ".svg",
-                                                    ) ? (
-                                                        <DynamicSvgIcon
-                                                            name={
-                                                                result.meta.icon
-                                                            }
-                                                            className="h-6 w-6 shrink-0 fill-fg"
-                                                        />
-                                                    ) : (
-                                                        <TablerIcon
-                                                            name={
-                                                                result.meta.icon
-                                                            }
-                                                            className="h-6 w-6 shrink-0 stroke-fg"
-                                                        />
-                                                    ))}
+                            {results.map((result) => {
+                                const packageName = result.meta?.package;
 
-                                                <span
-                                                    className={`
+                                const date = packageName
+                                    ? versionDates[packageName]
+                                    : "";
+
+                                return (
+                                    <li
+                                        key={result.url}
+                                        className={styles["search-box__item"]}
+                                    >
+                                        <AppLink
+                                            href={result.url}
+                                            onClick={closeResults}
+                                        >
+                                            <div className="flex flex-row items-center justify-between gap-2 hover:bg-fg/5">
+                                                <div className="flex min-w-0 flex-row items-center gap-1">
+                                                    {result.meta?.icon &&
+                                                        (result.meta.icon.endsWith(
+                                                            ".svg",
+                                                        ) ? (
+                                                            <DynamicSvgIcon
+                                                                name={
+                                                                    result.meta
+                                                                        .icon
+                                                                }
+                                                                className="h-6 w-6 shrink-0 fill-fg"
+                                                            />
+                                                        ) : (
+                                                            <TablerIcon
+                                                                name={
+                                                                    result.meta
+                                                                        .icon
+                                                                }
+                                                                className="h-6 w-6 shrink-0 stroke-fg"
+                                                            />
+                                                        ))}
+
+                                                    <span
+                                                        className={`
                                                             ${
                                                                 styles[
                                                                     "search-box__title"
@@ -253,31 +328,32 @@ export const Search = () => {
                                                             }
                                                             text-xs
                                                         `}
-                                                >
-                                                    {result.meta?.title ??
-                                                        result.url}
-                                                </span>
+                                                    >
+                                                        {result.meta?.title ??
+                                                            result.url}
+                                                    </span>
+                                                </div>
+
+                                                {date && (
+                                                    <div className="flex shrink-0 flex-row items-center gap-1">
+                                                        <IconCalendarPlus className="h-[14px] w-[14px] stroke-fg" />
+
+                                                        <i className="text-[12px] text-fg/60">
+                                                            {formatRelativeDate(
+                                                                date,
+                                                            )}
+                                                        </i>
+                                                    </div>
+                                                )}
                                             </div>
 
-                                            <div className="flex shrink-0 flex-row items-center gap-1">
-                                                <IconCalendarPlus className="h-[14px] w-[14px] stroke-fg" />
-
-                                                <i className="text-[12px] text-fg/60">
-                                                    {result.meta?.date
-                                                        ? formatRelativeDate(
-                                                              result.meta.date,
-                                                          )
-                                                        : ""}
-                                                </i>
-                                            </div>
-                                        </div>
-
-                                        <span className="text-sm text-fg/70">
-                                            {result.meta?.description}
-                                        </span>
-                                    </AppLink>
-                                </li>
-                            ))}
+                                            <span className="text-sm text-fg/70">
+                                                {result.meta?.description}
+                                            </span>
+                                        </AppLink>
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </>
                 )}

@@ -2,7 +2,7 @@
 
 import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { DataLoader } from "@/components/data-loader/DataLoader";
-import { Version, type Recording } from "@/components/notes/Version/Version";
+import { Recording, Version } from "@/components/notes/Version/Version";
 import { getVersionPackages } from "@/lib/api/getVersionPackages";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
@@ -46,34 +46,32 @@ export const TitlePost = ({
         recordings || [],
     );
 
-    const [lastUpdate, setLastUpdate] = useState(recordings?.[0]?.date ?? "");
+    const [lastUpdate, setLastUpdate] = useState(
+        new Date().toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        }),
+    );
 
     const fetchRecordings = async () => {
         const result = await getVersionPackages(packageName || "");
 
-        if (!result || result.length === 0) {
-            return false;
+        if (result) {
+            setRecordingsList(result);
+            setLastUpdate(result[0].date);
+
+            return true;
         }
 
-        setRecordingsList(result);
-        setLastUpdate(result[0].date);
-
-        return true;
+        return false;
     };
 
     const iconMeta = typeof icon === "string" ? icon : icon.meta;
 
     const renderedIcon =
         typeof icon === "string" ? (
-            <TablerIcon
-                name={icon}
-                className="
-                    h-7
-                    w-7
-                    shrink-0
-                    text-fg
-                "
-            />
+            <TablerIcon name={icon} className="h-7 w-7 shrink-0 text-fg" />
         ) : (
             cloneElement(icon.component, {
                 className: `
@@ -144,16 +142,17 @@ export const TitlePost = ({
                         "
                     >
                         <IconCalendarPlus className="w-6 h-6 text-fg" />
-
-                        {lastUpdate && (
-                            <span className="sr-only" data-pagefind-meta="date">
-                                {lastUpdate}
+                        {packageName && (
+                            <span
+                                className="sr-only"
+                                data-pagefind-meta="package"
+                            >
+                                {packageName}
                             </span>
                         )}
 
                         <span className="flex text-sm">
-                            update{" "}
-                            {lastUpdate ? formatRelativeDate(lastUpdate) : ""}
+                            update {formatRelativeDate(lastUpdate)}
                         </span>
                     </div>
                 </div>
