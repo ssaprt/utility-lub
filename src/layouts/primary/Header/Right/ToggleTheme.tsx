@@ -231,16 +231,26 @@ export const ToggleTheme = () => {
                 header={{
                     content: (
                         <div className="row-center-1">
-                            <DynamicSvgIcon
+                            <span
                                 className="
-                                    absolute
-                                    w-5
-                                    h-5
-                                    fill-app
-                                    rotate-45!
-                                "
-                                name="top-elevator.svg"
-                            />
+            absolute
+            flex
+            w-5
+            h-5
+            items-center
+            justify-center
+        "
+                            >
+                                <DynamicSvgIcon
+                                    className="
+                w-5
+                h-5
+                fill-app
+                rotate-45!
+            "
+                                    name="top-elevator.svg"
+                                />
+                            </span>
 
                             <span className="text-app ml-7">
                                 Theme settings
@@ -288,27 +298,34 @@ export const ToggleTheme = () => {
             >
                 <div className="row-stretch-2 w-full">
                     <div
-                        className="
-                            w-5
-                            shrink-0
-                            bg-app/0
-                            rounded-[2px]
-                            relative
+                        className={`
+    w-5
+    shrink-0
+    bg-app/0
+    rounded-[2px]
+    relative
 
-                            before:absolute
-                            before:top-[-8px]
-                            before:content-['']
-                            before:w-[2px]
-                            before:left-[calc(50%+1px)]
-                            before:-translate-x-1/2
-                            before:h-[var(--before-height)]!
-                            before:border-l-1
-                            before:border-dashed
-                            before:border-app
-                            before:transition-[height]
-                            before:duration-300
-                            before:ease-in-out
-                        "
+    before:absolute
+    before:top-[-8px]
+    before:content-['']
+    before:w-[2px]
+    before:left-[calc(50%+1px)]
+    before:-translate-x-1/2
+    before:h-[var(--before-height)]!
+    before:border-l-1
+    before:border-dashed
+    before:border-app
+
+    ${
+        positionReady
+            ? `
+                before:transition-[height]
+                before:duration-300
+                before:ease-in-out
+            `
+            : ""
+    }
+`}
                         style={
                             {
                                 "--before-height": positionReady
@@ -317,25 +334,34 @@ export const ToggleTheme = () => {
                             } as React.CSSProperties
                         }
                     >
-                        {positionReady && (
+                        <span
+                            className="
+        absolute
+        left-0
+        flex
+        w-[20px]
+        h-[20px]
+        shrink-0
+        items-center
+        justify-center
+        transition-[top,opacity]
+        duration-300
+        ease-in-out
+    "
+                            style={{
+                                top: `${top}px`,
+                                opacity: positionReady ? 1 : 0,
+                            }}
+                        >
                             <DynamicSvgIcon
                                 name="elevator.svg"
                                 className="
-                                    absolute!
-                                    w-[20px]
-                                    h-[20px]
-                                    shrink-0!
-                                    left-0
-                                    fill-app
-                                    transition-[top]
-                                    duration-300
-                                    ease-in-out
-                                "
-                                style={{
-                                    top: `${top}px`,
-                                }}
+            w-[20px]
+            h-[20px]
+            fill-app
+        "
                             />
-                        )}
+                        </span>
                     </div>
 
                     <div

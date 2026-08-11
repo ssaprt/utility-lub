@@ -2,7 +2,7 @@
 
 import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { DataLoader } from "@/components/data-loader/DataLoader";
-import { Recording, Version } from "@/components/notes/Version/Version";
+import { Version, type Recording } from "@/components/notes/Version/Version";
 import { getVersionPackages } from "@/lib/api/getVersionPackages";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
@@ -51,21 +51,29 @@ export const TitlePost = ({
     const fetchRecordings = async () => {
         const result = await getVersionPackages(packageName || "");
 
-        if (result) {
-            setRecordingsList(result);
-            setLastUpdate(result[0].date);
-
-            return true;
+        if (!result || result.length === 0) {
+            return false;
         }
 
-        return false;
+        setRecordingsList(result);
+        setLastUpdate(result[0].date);
+
+        return true;
     };
 
     const iconMeta = typeof icon === "string" ? icon : icon.meta;
 
     const renderedIcon =
         typeof icon === "string" ? (
-            <TablerIcon name={icon} className="h-7 w-7 shrink-0 text-fg" />
+            <TablerIcon
+                name={icon}
+                className="
+                    h-7
+                    w-7
+                    shrink-0
+                    text-fg
+                "
+            />
         ) : (
             cloneElement(icon.component, {
                 className: `
@@ -137,10 +145,13 @@ export const TitlePost = ({
                     >
                         <IconCalendarPlus className="w-6 h-6 text-fg" />
 
-                        <span
-                            className="flex text-sm"
-                            data-pagefind-meta="date"
-                        >
+                        {lastUpdate && (
+                            <span className="sr-only" data-pagefind-meta="date">
+                                {lastUpdate}
+                            </span>
+                        )}
+
+                        <span className="flex text-sm">
                             update{" "}
                             {lastUpdate ? formatRelativeDate(lastUpdate) : ""}
                         </span>

@@ -21,12 +21,12 @@ export const Theme = ({
             className={`
                 row-center-1
                 justify-end
+                min-h-8
                 py-[6px]
                 px-2
                 rounded-[2px]
                 bg-app
                 hover:cursor-pointer
-
                 ${selected ? "bg-app/80" : ""}
             `}
         >
@@ -34,7 +34,9 @@ export const Theme = ({
                 {theme.charAt(0).toUpperCase() + theme.slice(1)}
             </span>
 
-            <DynamicSvgIcon name={svgPath} className="w-5 h-5 fill-fg" />
+            <span className="flex w-5 h-5 shrink-0 items-center justify-center">
+                <DynamicSvgIcon name={svgPath} className="w-5 h-5 fill-fg" />
+            </span>
         </div>
     );
 };
