@@ -9,7 +9,7 @@ export const Scroll = () => {
             scrollBar={{
                 widthTrack: "10px",
                 positionMode: "after",
-                superimposition: "after",
+                superimposition: "over",
                 heightTrack: "98%",
             }}
             thumb={{
