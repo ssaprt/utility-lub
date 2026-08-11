@@ -5,6 +5,7 @@ import { Inter, JetBrains_Mono, Manrope, Outfit } from "next/font/google";
 import "popup-from-future/style.css";
 import "scroll-to-future/style.css";
 import "./css/globals.css";
+import { StoreProvider } from "./StoreProvider";
 
 const manrope = Manrope({
     subsets: ["latin"],
@@ -66,10 +67,12 @@ export default function RootLayout({
                 antialiased
             `}
         >
-            <body className="selection:bg-black/80">
-                <AppThemeProvider>
-                    <PrimaryLayout>{children}</PrimaryLayout>
-                </AppThemeProvider>
+            <body className="selection:bg-fg/80 selection:text-app">
+                <StoreProvider>
+                    <AppThemeProvider>
+                        <PrimaryLayout>{children}</PrimaryLayout>
+                    </AppThemeProvider>
+                </StoreProvider>
             </body>
         </html>
     );

@@ -3,15 +3,10 @@
 import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { DataLoader } from "@/components/data-loader/DataLoader";
 import { Recording, Version } from "@/components/notes/Version/Version";
-import { getVersionPackages } from "@/lib/api/getVersionPackages";
+import { useGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
-import {
-    cloneElement,
-    useState,
-    type ReactElement,
-    type ReactNode,
-} from "react";
+import { cloneElement, type ReactElement, type ReactNode } from "react";
 import { TablerIcon } from "./TablerIcon";
 
 type IconElement = ReactElement<{
@@ -42,30 +37,11 @@ export const TitlePost = ({
     packageName,
     useFn = true,
 }: TitlePostProps) => {
-    const [recordingsList, setRecordingsList] = useState<Recording[]>(
-        recordings || [],
-    );
-
-    const [lastUpdate, setLastUpdate] = useState(
-        new Date().toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-        }),
-    );
-
-    const fetchRecordings = async () => {
-        const result = await getVersionPackages(packageName || "");
-
-        if (result) {
-            setRecordingsList(result);
-            setLastUpdate(result[0].date);
-
-            return true;
-        }
-
-        return false;
-    };
+    const { data, isLoading, isFetching, isError, refetch } =
+        useGetNPMPackageVersionsQuery(
+            { packageName: packageName || "" },
+            { skip: !useFn },
+        );
 
     const iconMeta = typeof icon === "string" ? icon : icon.meta;
 
@@ -152,7 +128,16 @@ export const TitlePost = ({
                         )}
 
                         <span className="flex text-sm">
-                            update {formatRelativeDate(lastUpdate)}
+                            update{" "}
+                            {formatRelativeDate(
+                                data?.[0].date ||
+                                    recordings?.[0].date ||
+                                    new Date().toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                    }),
+                            )}
                         </span>
                     </div>
                 </div>
@@ -161,10 +146,13 @@ export const TitlePost = ({
             </div>
 
             <DataLoader
-                responseFn={useFn ? fetchRecordings : undefined}
+                isLoading={useFn ? isLoading : undefined}
+                isFetching={useFn ? isFetching : undefined}
+                isError={useFn ? isError : undefined}
+                onRetry={useFn ? refetch : undefined}
                 errorText="Failed to load the version notes"
             >
-                <Version recordings={recordingsList} />
+                <Version recordings={recordings || data || []} />
             </DataLoader>
         </>
     );

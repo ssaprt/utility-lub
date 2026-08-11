@@ -1,21 +1,29 @@
-"use client";
 import { DataLoader } from "@/components/data-loader/DataLoader";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { useGetNpmPackagesQuery } from "@/services/NPM/NPMApi";
-import { topFive } from "@/services/NPM/utils/top-five";
-import { IconExternalLinkFilled } from "@tabler/icons-react";
+
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
+import { latestOrModifiedFive } from "@/services/NPM/utils/latest-or-modifed-five";
+import { IconCalendarPlus, IconExternalLinkFilled } from "@tabler/icons-react";
 import { ScrollToFuture } from "scroll-to-future";
-import PopularIcon from "./ask.svg";
 import { packageIcons } from "./icons";
 
-export const WeeklyPopularLibrary = () => {
+export const LastReleasesOrNModifed = ({
+    fieldSort,
+    title,
+    icon,
+}: {
+    fieldSort: "created" | "modified";
+    title: string;
+    icon: string;
+}) => {
     const { data, isLoading, isFetching, isError, refetch } =
         useGetNpmPackagesQuery(
             {},
             {
                 selectFromResult: (result) => ({
                     ...result,
-                    data: topFive(result.data),
+                    data: latestOrModifiedFive(result.data, fieldSort),
                 }),
             },
         );
@@ -23,8 +31,8 @@ export const WeeklyPopularLibrary = () => {
     return (
         <div className="col-stretch-3">
             <div className="row-center-2">
-                <PopularIcon className="w-6 h-6 fill-fg" />
-                <span className="text-fg">Weekly popular tools</span>
+                <DynamicSvgIcon name={icon} className="w-6 h-6 fill-fg" />
+                <span className="text-fg">{title}</span>
             </div>
             <DataLoader
                 isLoading={isLoading}
@@ -87,11 +95,13 @@ export const WeeklyPopularLibrary = () => {
 
                                     <div className="col-start-1 w-0 min-w-full">
                                         <div className="row-center-1">
-                                            <span className="text-[10px] text-fg/70">
-                                                Installs weekly:
-                                            </span>
+                                            <IconCalendarPlus className="w-4 h-4 text-fg/70" />
+
                                             <span className="text-[10px] text-fg/70 font-semibold">
-                                                {item.monthlyDownloads}
+                                                {fieldSort === "created"
+                                                    ? "Created"
+                                                    : "Modified"}{" "}
+                                                {item.time[fieldSort]}
                                             </span>
                                         </div>
 

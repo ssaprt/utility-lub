@@ -206,8 +206,10 @@ export const Input = forwardRef<HTMLInputElement, InputType>(
                         w-full
                         rounded-[4px]
                         border
-                        borderfg/30
-                        bg-black/30
+                        border-fg/10
+                        bg-fg/10
+                        shadow-[inset_0px_0px_5px_0px]
+                        shadow-app/30
                         focus:outline-none
                         focus:ring-1
                         focus:ringfg/50

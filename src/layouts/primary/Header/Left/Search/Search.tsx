@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { getVersionPackages } from "@/lib/api/getVersionPackages";
+import { useLazyGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
@@ -41,6 +41,16 @@ export const Search = () => {
     const [mobilePanelTop, setMobilePanelTop] = useState(0);
 
     const hasSearchQuery = value.trim().length >= 2;
+
+    const [
+        getPackages,
+        {
+            data,
+
+            isFetching,
+            isError,
+        },
+    ] = useLazyGetNPMPackageVersionsQuery();
 
     const handleChange = (nextValue: string) => {
         setValue(nextValue);
@@ -101,8 +111,9 @@ export const Search = () => {
                     }
 
                     try {
-                        const recordings =
-                            await getVersionPackages(packageName);
+                        const recordings = await getPackages({
+                            packageName,
+                        }).unwrap();
 
                         const date = recordings?.[0]?.date ?? "";
 

@@ -22,8 +22,9 @@ export const Version = ({ recordings }: { recordings: Recording[] }) => {
                 "--colorTitleBlock": "none",
                 "--colorTitleBlockShow": "none",
                 "--BoxShadowTitleBlock": "none",
-
                 "--BoxShadowPrimaryContainerShow": "none",
+                "--fillTitleBlockIcon": "var(--foreground)",
+                "--fillTitleBlockIconShow": "var(--foreground)",
                 "--pl": "6px",
             }}
         >

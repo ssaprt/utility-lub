@@ -15,7 +15,7 @@ export interface NpmPackagesStats {
     packages: NpmPackage[];
 }
 
-export const getNpmPackagesStats = async (
+export const getNewReleases = async (
     username?: string,
     size?: number,
 ): Promise<NpmPackagesStats | null> => {

@@ -117,7 +117,16 @@ export const TextAreaWithScrollBar = ({
     return (
         <div
             ref={containerRef}
-            className={clsx(styles.textareaOverlay, className)}
+            className={clsx(
+                styles.textareaOverlay,
+                className,
+                `
+                border
+                        border-fg/10
+                        bg-fg/10
+                        shadow-[inset_0px_0px_5px_0px]
+                        shadow-app/30`,
+            )}
             style={style}
             {...props}
         >

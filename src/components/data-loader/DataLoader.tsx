@@ -1,72 +1,61 @@
 "use client";
 
 import { IconDownload, IconFileNeutral } from "@tabler/icons-react";
-import { useEffect, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Loader } from "../animationIcons/Loader/Loader";
 import { GeneralButton } from "../button/GeneralButton/GeneralButton";
 
-type Status = "loading" | "success" | "error";
+interface DataLoaderProps {
+    children: ReactNode;
+    isLoading?: boolean;
+    isFetching?: boolean;
+    isError?: boolean;
+    errorText?: string;
+    onRetry?: () => void | Promise<unknown>;
+}
 
 export const DataLoader = ({
     children,
-    responseFn,
+    isLoading,
+    isFetching,
+    isError,
     errorText = "Failed to load data",
-}: {
-    children: ReactNode;
-    responseFn?: () => Promise<unknown>;
-    errorText?: string;
-}) => {
-    const [status, setStatus] = useState<Status>(
-        responseFn ? "loading" : "success",
-    );
+    onRetry,
+}: DataLoaderProps) => {
+    const enabled =
+        isLoading !== undefined ||
+        isFetching !== undefined ||
+        isError !== undefined;
 
-    const load = async () => {
-        if (!responseFn) {
-            setStatus("success");
-            return;
-        }
+    if (!enabled) {
+        return children;
+    }
 
-        setStatus("loading");
-
-        try {
-            const success = await responseFn();
-
-            setStatus(success ? "success" : "error");
-        } catch {
-            setStatus("error");
-        }
-    };
-
-    useEffect(() => {
-        if (!responseFn) return;
-
-        (async () => await load())();
-    }, []);
+    const loading = isLoading === true || isFetching === true;
 
     return (
-        <div
-            className="relative min-h-10 w-full"
-            aria-busy={status === "loading"}
-        >
-            {status === "loading" && <Loader visible mode="wave" />}
+        <div className="relative min-h-10 w-full" aria-busy={loading}>
+            {loading && <Loader visible mode="wave" />}
 
-            {status === "error" && (
+            {!loading && isError && (
                 <div className="row-center-2 data-loader-fade-in">
                     <IconFileNeutral className="w-8 h-8 shrink-0" />
 
                     <span className="text-sm">{errorText}</span>
 
-                    <GeneralButton
-                        icon={<IconDownload className="w-4 h-4" />}
-                        handleAction={() => {
-                            void load();
-                        }}
-                        textButton="Try again"
-                    />
+                    {onRetry && (
+                        <GeneralButton
+                            icon={<IconDownload className="w-4 h-4" />}
+                            handleAction={() => {
+                                void onRetry();
+                            }}
+                            textButton="Try again"
+                        />
+                    )}
                 </div>
             )}
 
-            {status === "success" && (
+            {!loading && !isError && (
                 <div className="data-loader-fade-in">{children}</div>
             )}
         </div>
