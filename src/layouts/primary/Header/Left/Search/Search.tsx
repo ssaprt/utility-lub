@@ -290,7 +290,7 @@ export const Search = () => {
                                 return (
                                     <li
                                         key={result.url}
-                                        className={`${styles["search-box__item"]} hover:bg-app/10`}
+                                        className={`${styles["search-box__item"]} hover:bg-fg/10!`}
                                     >
                                         <AppLink
                                             href={result.url}
