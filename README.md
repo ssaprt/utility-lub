@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="./public/mana.png" alt="Tools Portal" width="220" />
+</p>
 
-## Getting Started
+<h1 align="center">Developer Tools Portal</h1>
 
-First, run the development server:
+<p align="center">
+  A growing collection of tools, libraries, components and utilities for modern web development.
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<p align="center">
+  Built to make development faster, cleaner and more enjoyable.
+</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## One place for development tools
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Developer Tools Portal** is a curated workspace for reusable development solutions.
 
-## Learn More
+The portal brings together tools created for real-world development tasks — from UI components and React hooks to NPM libraries, utilities, animations and experimental interfaces.
 
-To learn more about Next.js, take a look at the following resources:
+Everything is organized in one place with a focus on usability, reusability and modern frontend development.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## What you can find here
 
-## Deploy on Vercel
+### UI Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Reusable interface components designed for modern applications.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Tooltips, popups, pagination, custom scrollbars, loaders, navigation elements and other interactive UI solutions.
+
+### React Hooks
+
+Custom hooks for solving common frontend tasks with a clean and reusable API.
+
+### NPM Packages
+
+Published packages with package information, versions, download statistics and release activity.
+
+### Utilities
+
+Small focused tools for simplifying repetitive development tasks.
+
+### Experiments
+
+Ideas, UI concepts and experimental implementations exploring modern browser and React capabilities.
+
+---
+
+## Built for reuse
+
+The tools are designed around a simple idea:
+
+> Build once. Configure when needed. Reuse everywhere.
+
+Components and utilities are created to remain flexible without forcing unnecessary implementation details into the project that uses them.
+
+---
+
+## Package ecosystem
+
+The portal also works as a central place for exploring published packages.
+
+Package pages can include information such as:
+
+* current version
+* release activity
+* creation and modification dates
+* weekly downloads
+* monthly downloads
+* descriptions
+* documentation
+* usage examples
+
+This makes the portal both a development toolbox and a visual hub for the surrounding package ecosystem.
+
+---
+
+## Modern development
+
+The project is built around technologies used in modern frontend development.
+
+<p align="center">
+  <strong>Next.js · React · TypeScript · Tailwind CSS · Redux Toolkit · RTK Query</strong>
+</p>
+
+The interface focuses on responsive layouts, reusable architecture, smooth interactions and a consistent visual language.
+
+---
+
+## Growing collection
+
+The portal is continuously evolving as new development problems are solved.
+
+New components, libraries, hooks and utilities are added over time, turning the project into an expanding personal ecosystem of development tools.
+
+---
+
+<p align="center">
+  <img src="./public/mana.png" alt="Tools Portal" width="90" />
+</p>
+
+<h3 align="center">Tools made to be used.</h3>
+
+<p align="center">
+  Reusable solutions for modern development.
+</p>

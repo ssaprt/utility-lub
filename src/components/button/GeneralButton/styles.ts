@@ -194,4 +194,4 @@ export const generalButtonStyles = {
 
 export type GeneralButtonStyle = keyof typeof generalButtonStyles;
 
-export const DEFAULT_GENERAL_BUTTON_STYLE: GeneralButtonStyle = "ghost";
+export const DEFAULT_GENERAL_BUTTON_STYLE: GeneralButtonStyle = "pill";

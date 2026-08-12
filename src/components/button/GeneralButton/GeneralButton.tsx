@@ -4,6 +4,7 @@ import { IconCopy, IconCopyCheckFilled } from "@tabler/icons-react";
 import { motion, useAnimation } from "framer-motion";
 import {
     cloneElement,
+    ReactNode,
     useEffect,
     useRef,
     useState,
@@ -16,7 +17,7 @@ import {
 } from "./styles";
 
 interface GeneralButtonProps {
-    textButton: string;
+    textButton: ReactNode | string;
     active?: boolean;
     className?: string;
     variant?: GeneralButtonStyle;
@@ -189,7 +190,7 @@ export const GeneralButton = ({
         <motion.button
             ref={buttonRef}
             type={type}
-            key={textButton}
+            key={typeof textButton === "string" ? textButton : undefined}
             className={`
                 row-center-2
                 shrink-0

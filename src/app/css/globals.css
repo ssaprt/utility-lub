@@ -66,8 +66,8 @@
 }
 
 .dark {
-    --background: lab(0% 0 0);
-    --foreground: #c5c5c5;
+    --background: #1a1a1a;
+    --foreground: #e6e6e6;
 }
 
 .midnight {

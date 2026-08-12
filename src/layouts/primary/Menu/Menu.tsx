@@ -46,7 +46,7 @@ export const Menu = () => {
                             <HeaderTitle />
                         </motion.div>
 
-                        <Hr mode="horizontal" size={2} />
+                        <Hr mode="horizontal" size={0} />
                     </>
                 ) : (
                     <HeaderTitle />

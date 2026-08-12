@@ -43,7 +43,7 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
                     <Header data-pagefind-ignore />
 
                     <div className="shrink-0">
-                        <Hr mode="horizontal" />
+                        <Hr mode="horizontal" size={1} />
                     </div>
 
                     <Main>{children}</Main>
