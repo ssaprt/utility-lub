@@ -1,8 +1,5 @@
 "use client";
 
-import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
-import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { IconBrandGithub } from "@tabler/icons-react";
 import { Search } from "../Left/Search/Search";
 import { ToggleTheme } from "./ToggleTheme";
@@ -16,7 +13,7 @@ export const Right = () => {
         <div className="flex flex-row items-center gap-2 pr-2">
             <Search />
 
-            <AppLink href="/coffee">
+            {/* <AppLink href="/coffee">
                 <GeneralButton
                     textButton={<Text />}
                     variant="ghost"
@@ -27,10 +24,10 @@ export const Right = () => {
                         />
                     }
                 />
-            </AppLink>
+            </AppLink> */}
 
             <a
-                href="https://github.com/ssaprt"
+                href="https://github.com/ssaprt/utility-lab"
                 target="_blank"
                 className="
                     my-2
