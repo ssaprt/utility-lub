@@ -27,6 +27,7 @@ type TitlePostProps = {
     recordings?: Recording[];
     packageName?: string;
     useFn?: boolean;
+    hideVersion?: boolean;
 };
 
 export const TitlePost = ({
@@ -36,6 +37,7 @@ export const TitlePost = ({
     recordings,
     packageName,
     useFn = true,
+    hideVersion = false,
 }: TitlePostProps) => {
     const { data, isLoading, isFetching, isError, refetch } =
         useGetNPMPackageVersionsQuery(
@@ -144,16 +146,17 @@ export const TitlePost = ({
 
                 <span className="pl-4 w-full text-xs mt-2">{description}</span>
             </div>
-
-            <DataLoader
-                isLoading={useFn ? isLoading : undefined}
-                isFetching={useFn ? isFetching : undefined}
-                isError={useFn ? isError : undefined}
-                onRetry={useFn ? refetch : undefined}
-                errorText="Failed to load the version notes"
-            >
-                <Version recordings={recordings || data || []} />
-            </DataLoader>
+            {!hideVersion && (
+                <DataLoader
+                    isLoading={useFn ? isLoading : undefined}
+                    isFetching={useFn ? isFetching : undefined}
+                    isError={useFn ? isError : undefined}
+                    onRetry={useFn ? refetch : undefined}
+                    errorText="Failed to load the version notes"
+                >
+                    <Version recordings={recordings || data || []} />
+                </DataLoader>
+            )}
         </>
     );
 };

@@ -99,7 +99,7 @@ export const generalButtonStyles = {
             border-2
             border-transparent
             bg-fg
-            text-black
+            text-app
             shadow-md
             shadow-black/25
             hover:bg-fg/85

@@ -5,9 +5,10 @@ import { useRef } from "react";
 import { Hr } from "@/components/hr/Hr/Hr";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { Scroll } from "../Scroll";
+import { CSS } from "./CSS/CSS";
 import { HeaderTitle } from "./HeaderTitle/HeaderTitle";
 import styles from "./Menu.module.css";
-import { OpenData } from "./ReactAndNext/OpenData/OpenData";
+import { OpenData } from "./OpenData/OpenData";
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
 
 export const Menu = () => {
@@ -73,11 +74,8 @@ export const Menu = () => {
                     >
                         <div className="mt-2"></div>
                         <ReactAndNext />
-
-                        {/*<div className="my-2 h-px shrink-0 border-b-1 border-pink-300/10" />
-
-                       <CSSGenerator /> */}
                         <OpenData />
+                        <CSS />
                     </div>
                 </div>
             </div>

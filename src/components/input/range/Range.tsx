@@ -6,7 +6,7 @@ export const Range = ({
     step,
 }: {
     value: number;
-    onChange: (value: number) => void;
+    onChange: (value: number, e?: React.ChangeEvent<HTMLInputElement>) => void;
     min?: number;
     max?: number;
     step?: number;
@@ -59,7 +59,9 @@ export const Range = ({
             min={min || 0}
             max={max || 100}
             step={step || 1}
-            onChange={(e) => onChange(Number(e.target.value))}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onChange(Number(e.target.value), e)
+            }
             value={value || 0}
         />
     );
