@@ -6,7 +6,7 @@
     />
 </p>
 
-<h1 align="center"><a style="color: white;" href="https://utility-lab.store">Developer Tools Portal</a></h1>
+<h1 align="center" style="color: white;"><a style="color: white;" href="https://utility-lab.store">Developer Tools Portal</a></h1>
 
 <p align="center">
   A growing collection of tools, libraries, components and utilities for modern web development.
