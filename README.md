@@ -1,5 +1,4 @@
 <p align="center">
-  
 <img
         src="./public/mana.svg"
         alt="Developer Tools Portal"
