@@ -3,6 +3,8 @@
 import { ItemWithCopy } from "@/components/blocks/Item/ItemWithCopy";
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Range } from "@/components/input/range/Range";
+import { useAppContextValues } from "@/context/appContext";
+import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { patternPresetCategories } from "./pattern.presets";
 import { PatternConfig, PatternPreset, patternTypes } from "./pattern.types";
@@ -64,9 +66,9 @@ const RangeControl = ({
     return (
         <div className="col-stretch-2 rounded-[4px] bg-fg/5 p-3">
             <div className="row-center-2">
-                <span className="text-sm">{label}</span>
+                <span className="text-[12px]">{label}</span>
 
-                <span className="ml-auto text-sm text-fg/60">
+                <span className="ml-auto text-[12px] text-fg/60">
                     {value}
                     {unit}
                 </span>
@@ -104,7 +106,7 @@ const ColorControl = ({
 
     return (
         <div className="col-stretch-2 rounded-[4px] bg-fg/5 p-3">
-            <span className="text-sm">{label}</span>
+            <span className="text-[12px]">{label}</span>
 
             <div className="row-center-2 min-w-0">
                 <input
@@ -136,10 +138,10 @@ const ColorControl = ({
                         bg-fg/10
                         px-2
                         py-1.5
-                        text-sm
+                        text-[12px]!
                         outline-none
                         transition-colors
-                        duration-200
+                        duration-30
                         hover:bg-fg/15
                         focus:bg-fg/15
                     "
@@ -153,8 +155,10 @@ export const IsGenerator = () => {
     const [config, setConfig] = useState<PatternConfig>(defaultPatternConfig);
 
     const previewStyle = useMemo(() => patternConfigToStyle(config), [config]);
-    const css = useMemo(() => patternConfigToCss(config), [config]);
+    const { header } = useAppContextValues();
+    const { isScrolled } = header || {};
 
+    const css = useMemo(() => patternConfigToCss(config), [config]);
     const updateConfig = <K extends keyof PatternConfig>(
         key: K,
         value: PatternConfig[K],
@@ -164,29 +168,40 @@ export const IsGenerator = () => {
             [key]: value,
         }));
     };
-
     const applyPreset = (preset: PatternPreset) => {
         setConfig(preset.config);
     };
-
     const reset = () => {
         setConfig(defaultPatternConfig);
     };
 
+    const previewVariants = {
+        hidden: { height: "300px" },
+        visible: {
+            height: "64px",
+            boxShadow:
+                "0 -20px 0px 0px var(--background), 0 14px 4px -4px rgba(0, 0, 0, .7)",
+        },
+    };
+
     return (
         <div className="col-stretch-4 w-full min-w-0">
-            <div
-                className="
-                sticky
-                top-[-20px]
-                z-2
-                    min-h-64
+            <motion.div
+                animate={isScrolled ? "visible" : "hidden"}
+                variants={previewVariants}
+                initial="hidden"
+                className={`sticky
+                    top-[-14px]
+                    z-2
                     w-full
-                    overflow-hidden
+                    transition-[box-shadow]
+                    duration-300
+                    ease-in-out
+                    
+                    overflow-visible
                     rounded-xl
-                    shadow-xl
-                    shadow-black/40
-                "
+                 
+                `}
                 style={previewStyle}
             />
 
