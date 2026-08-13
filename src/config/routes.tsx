@@ -1,4 +1,5 @@
 import { Gradient } from "@/content/CSS/Generator/Gradient/Gradient";
+import { Pattern } from "@/content/CSS/Generator/Pattern/Pattern";
 import { TableOfRussianCities } from "@/content/OpenData/SqlTables/TableOfRussianCities/TableOfRussianCities";
 import { UseImagePreview } from "@/content/react/hooks/media/useImagePreview/UseImagePreview";
 import { EasyPagination } from "@/content/react/UI-Components/Pagination/EasyPagination";
@@ -48,5 +49,10 @@ export const routes = [
         title: "CSS Gradient Generator",
         path: ["css", "generator", "gradient"],
         Component: Gradient,
+    },
+    {
+        title: "CSS Gradient Generator",
+        path: ["css", "generator", "pattern"],
+        Component: Pattern,
     },
 ] as const satisfies readonly AppRoute[];

@@ -1,24 +1,45 @@
-import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
-import { Preset } from "./Preset";
-import { gradientPresetCategories } from "./presetsGenerator";
+import { ItemWithCopy } from "@/components/blocks/Item/ItemWithCopy";
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
+import { IconMenuOrder } from "@tabler/icons-react";
+import { useState } from "react";
+import { GradientPreset } from "./presetsGenerator";
 
-export const Presets = () => {
+export const Presets = ({ presets }: { presets: GradientPreset[] }) => {
+    const [viewPresets, setViewPresets] = useState(presets.slice(0, 10));
+
     return (
-        <TitleWithItemsBlock title="Just click on the desired gradient">
-            <div className="col-start-10 w-full mt-4">
-                {gradientPresetCategories.map((category) => (
-                    <div key={category.id} className="col-start-1 w-full">
-                        <span className="text-[14px] text-fg mb-4">
-                            {category.name}
-                        </span>
-                        <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 w-full">
-                            {category.presets.map((preset) => (
-                                <Preset key={preset.id} preset={preset} />
-                            ))}
-                        </div>
-                    </div>
+        <div className="col-stretch-2 w-full p-2 rounded-[12px] bg-fg/4 border-1 border-fg/8">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 w-full">
+                {viewPresets.map((preset) => (
+                    <ItemWithCopy
+                        key={preset.id}
+                        item={{
+                            ...preset,
+                            content: preset.gradient,
+                            title: preset.name,
+                        }}
+                    />
                 ))}
             </div>
-        </TitleWithItemsBlock>
+            {}
+            {presets.length > 10 && (
+                <GeneralButton
+                    icon={<IconMenuOrder />}
+                    variant="minimal"
+                    textButton={
+                        viewPresets.length < presets.length
+                            ? "Show more"
+                            : "Show less"
+                    }
+                    handleAction={() =>
+                        setViewPresets(
+                            viewPresets.length < presets.length
+                                ? presets
+                                : presets.slice(0, 10),
+                        )
+                    }
+                />
+            )}
+        </div>
     );
 };

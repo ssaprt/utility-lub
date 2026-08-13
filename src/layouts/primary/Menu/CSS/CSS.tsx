@@ -28,7 +28,12 @@ export const CSS = () => {
                     {
                         type: "link",
                         href: "/css/generator/gradient",
-                        title: "Gradient generator",
+                        title: "Gradient Generator",
+                    },
+                    {
+                        type: "link",
+                        href: "/css/generator/pattern",
+                        title: "BG Pattern Generator",
                     },
                 ]}
             />

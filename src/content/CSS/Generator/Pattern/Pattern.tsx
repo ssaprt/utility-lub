@@ -3,18 +3,17 @@ import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
 import { useEffect } from "react";
-import { Categories } from "./Categories";
 import { IsGenerator } from "./IsGenerator";
 
-export const Gradient = () => {
+export const Pattern = () => {
     const { header } = useAppContextActions();
     const { setIconHeader, setTitleHeader } = header || {};
 
     useEffect(() => {
         setIconHeader(
-            <DynamicSvgIcon name="gradient.svg" className="w-8 h-8 fill-fg" />,
+            <DynamicSvgIcon name="pattern.svg" className="w-8 h-8 fill-fg" />,
         );
-        setTitleHeader("Gradient Generator");
+        setTitleHeader("BG Pattern Generator");
     }, [setIconHeader, setTitleHeader]);
 
     return (
@@ -23,20 +22,19 @@ export const Gradient = () => {
                 icon={{
                     component: (
                         <DynamicSvgIcon
-                            name="gradient.svg"
+                            name="pattern.svg"
                             className="w-8 h-8 fill-fg"
                         />
                     ),
-                    meta: "gradient.svg",
+                    meta: "pattern.svg",
                 }}
-                description="Gradient generator. Over 1,000 ready-made presets and a user-friendly interface for creating your own gradients"
+                description="Gradient generator. A large collection of ready-made presets that can be modified."
                 hideVersion
             >
-                Gradient Generator
+                BG Pattern Generator
             </TitlePost>
 
             <IsGenerator />
-            <Categories />
         </div>
     );
 };
