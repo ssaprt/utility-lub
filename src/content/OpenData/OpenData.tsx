@@ -1,3 +1,4 @@
+"use client";
 import { PageLink } from "@/components/PageLink/PageLink";
 
 export const OpenData = () => {
