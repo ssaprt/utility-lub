@@ -30,7 +30,7 @@ export const LastReleasesOrNModifed = ({
 
     return (
         <div className="col-stretch-3">
-            <div className="row-center-2">
+            <div className="row-center-2 px-2">
                 <DynamicSvgIcon name={icon} className="w-6 h-6 fill-fg" />
                 <span className="text-fg">{title}</span>
             </div>
@@ -53,7 +53,7 @@ export const LastReleasesOrNModifed = ({
                 
                 overflow-x-auto 
                 py-2
-                px-0
+                px-2
                 `}
                     >
                         {data?.packages.map((item) => (

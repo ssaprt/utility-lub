@@ -22,7 +22,7 @@ export const WeeklyPopularLibrary = () => {
 
     return (
         <div className="col-stretch-3">
-            <div className="row-center-2">
+            <div className="row-center-2 px-2">
                 <PopularIcon className="w-6 h-6 fill-fg" />
                 <span className="text-fg">Weekly popular tools</span>
             </div>
@@ -45,7 +45,7 @@ export const WeeklyPopularLibrary = () => {
                 
                 overflow-x-auto 
                 py-2
-                px-0
+                px-2
                 `}
                     >
                         {data?.packages.map((item) => (
