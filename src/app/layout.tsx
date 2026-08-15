@@ -68,11 +68,11 @@ export default function RootLayout({
             `}
         >
             <body className="selection:bg-fg/80 selection:text-app">
-                <StoreProvider>
-                    <AppThemeProvider>
+                <AppThemeProvider>
+                    <StoreProvider>
                         <PrimaryLayout>{children}</PrimaryLayout>
-                    </AppThemeProvider>
-                </StoreProvider>
+                    </StoreProvider>
+                </AppThemeProvider>
             </body>
         </html>
     );

@@ -1,19 +1,30 @@
 "use client";
+
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Categories } from "./Categories";
+import { defaultGradientConfig, type GradientConfig } from "./gradient.type";
+import { parseGradient } from "./gradient.utils";
 import { IsGenerator } from "./IsGenerator";
+import type { GradientPreset } from "./presetsGenerator";
 
 export const Gradient = () => {
     const { header } = useAppContextActions();
     const { setIconHeader, setTitleHeader } = header || {};
 
+    const [config, setConfig] = useState<GradientConfig>(defaultGradientConfig);
+
+    const applyPreset = (preset: GradientPreset) => {
+        setConfig(parseGradient(preset.gradient));
+    };
+
     useEffect(() => {
         setIconHeader(
             <DynamicSvgIcon name="gradient.svg" className="w-8 h-8 fill-fg" />,
         );
+
         setTitleHeader("Gradient Generator");
     }, [setIconHeader, setTitleHeader]);
 
@@ -35,8 +46,9 @@ export const Gradient = () => {
                 Gradient Generator
             </TitlePost>
 
-            <IsGenerator />
-            <Categories />
+            <IsGenerator config={config} setConfig={setConfig} />
+
+            <Categories onSelectPreset={applyPreset} />
         </div>
     );
 };

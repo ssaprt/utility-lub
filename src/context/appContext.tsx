@@ -1,13 +1,15 @@
 //TODO imports =============================================================
 "use client";
-import { useDetectedScrollMain } from "@/hooks/AppContext/useDetectedScrollMain";
+
 import { useBreakpoint } from "@/hooks/useBreakPoint";
+import { detectedScrollMain } from "@/utils/scrolled-main";
 
 import {
     createContext,
     RefObject,
     useContext,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -40,7 +42,12 @@ type AppContextType = {
         hrefHeader?: string;
         boxForAnimations?: HTMLDivElement | null;
         themePopupRef?: RefObject<HTMLDialogElement | null>;
-        isScrolled: boolean;
+        isScrolled: {
+            main: HTMLElement;
+            scroll: { scrollTop: number; scrolled: boolean };
+            position: { x: number; y: number };
+            sizes: { width: number; height: number };
+        };
     };
     menu: {
         openMenu: boolean;
@@ -66,7 +73,17 @@ export const AppContextProvider = ({
     const [hrefHeader, setHrefHeader] = useState("");
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);
-    const isScrolled = useDetectedScrollMain();
+    const [isScrolled, setIsScrolled] = useState<{
+        main: HTMLElement;
+        scroll: { scrollTop: number; scrolled: boolean };
+        position: { x: number; y: number };
+        sizes: { width: number; height: number };
+    }>({
+        main: document.body,
+        scroll: { scrollTop: 0, scrolled: false },
+        position: { x: 0, y: 0 },
+        sizes: { width: 0, height: 0 },
+    });
     const themePopupRef = useRef<HTMLDialogElement>(null);
     //* header context =============================================
 
@@ -147,6 +164,10 @@ export const AppContextProvider = ({
         return () => {
             media.removeEventListener("change", handleChange);
         };
+    }, []);
+
+    useLayoutEffect(() => {
+        return detectedScrollMain(setIsScrolled);
     }, []);
 
     useEffect(() => {

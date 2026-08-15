@@ -1,8 +1,15 @@
 import { TitleWithItemsBlock } from "@/components/blocks/TitleWithItemsBlock/TitleWithItemsBlock";
 import { Presets } from "./Presets";
-import { gradientPresetCategories } from "./presetsGenerator";
+import {
+    gradientPresetCategories,
+    type GradientPreset,
+} from "./presetsGenerator";
 
-export const Categories = () => {
+interface CategoriesProps {
+    onSelectPreset: (preset: GradientPreset) => void;
+}
+
+export const Categories = ({ onSelectPreset }: CategoriesProps) => {
     return (
         <TitleWithItemsBlock title="Just click on the desired gradient">
             <div className="col-start-10 w-full mt-4">
@@ -11,7 +18,11 @@ export const Categories = () => {
                         <span className="text-[14px] text-fg mb-4">
                             {category.name}
                         </span>
-                        <Presets key={category.id} presets={category.presets} />
+
+                        <Presets
+                            presets={category.presets}
+                            onSelectPreset={onSelectPreset}
+                        />
                     </div>
                 ))}
             </div>

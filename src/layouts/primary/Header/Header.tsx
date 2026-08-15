@@ -5,7 +5,8 @@ import { Left } from "./Left/Left";
 import { Right } from "./Right/Right";
 
 export const Header = () => {
-    const isScrolled = useAppContextValues()?.header?.isScrolled;
+    const isScrolled =
+        useAppContextValues()?.header?.isScrolled.scroll.scrolled;
 
     return (
         <header

@@ -2,9 +2,14 @@ import { ItemWithCopy } from "@/components/blocks/Item/ItemWithCopy";
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { IconMenuOrder } from "@tabler/icons-react";
 import { useState } from "react";
-import { GradientPreset } from "./presetsGenerator";
+import type { GradientPreset } from "./presetsGenerator";
 
-export const Presets = ({ presets }: { presets: GradientPreset[] }) => {
+interface PresetsProps {
+    presets: GradientPreset[];
+    onSelectPreset: (preset: GradientPreset) => void;
+}
+
+export const Presets = ({ presets, onSelectPreset }: PresetsProps) => {
     const [viewPresets, setViewPresets] = useState(presets.slice(0, 10));
 
     return (
@@ -13,6 +18,7 @@ export const Presets = ({ presets }: { presets: GradientPreset[] }) => {
                 {viewPresets.map((preset) => (
                     <ItemWithCopy
                         key={preset.id}
+                        handleAction={() => onSelectPreset(preset)}
                         item={{
                             ...preset,
                             content: preset.gradient,
@@ -21,7 +27,7 @@ export const Presets = ({ presets }: { presets: GradientPreset[] }) => {
                     />
                 ))}
             </div>
-            {}
+
             {presets.length > 10 && (
                 <GeneralButton
                     icon={<IconMenuOrder />}

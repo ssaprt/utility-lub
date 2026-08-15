@@ -175,34 +175,55 @@ export const IsGenerator = () => {
         setConfig(defaultPatternConfig);
     };
 
-    const previewVariants = {
-        hidden: { height: "300px" },
-        visible: {
-            height: "64px",
-            boxShadow:
-                "0 -20px 0px 0px var(--background), 0 14px 4px -4px rgba(0, 0, 0, .7)",
-        },
-    };
+    const scroll =
+        isScrolled?.scroll.scrollTop && isScrolled.scroll.scrollTop > 380;
 
     return (
         <div className="col-stretch-4 w-full min-w-0">
-            <motion.div
-                animate={isScrolled ? "visible" : "hidden"}
-                variants={previewVariants}
-                initial="hidden"
-                className={`sticky
+            <div
+                className={`relative
                     top-[-14px]
                     z-2
                     w-full
                     transition-[box-shadow]
                     duration-300
                     ease-in-out
-                    
+                    h-64
                     overflow-visible
                     rounded-xl
                  
                 `}
                 style={previewStyle}
+            />
+
+            <motion.div
+                onClick={() =>
+                    isScrolled?.main.scrollTo({ top: 0, behavior: "smooth" })
+                }
+                animate={{
+                    opacity: scroll ? 1 : 0,
+                    x: scroll ? 0 : "100%",
+                }}
+                transition={{
+                    type: "spring",
+                    stiffness: scroll ? 100 : 500,
+                    damping: scroll ? 8 : 24,
+                    mass: 0.4,
+                }}
+                className={`fixed
+                    z-2
+                    w-[100px]
+                    rounded-xl
+                    cursor-pointer
+                    shadow-lg
+                    h-[100px]
+                    shadow-black/80
+                `}
+                style={{
+                    ...previewStyle,
+                    right: `20px`,
+                    top: `90px`,
+                }}
             />
 
             <div className="col-stretch-2">

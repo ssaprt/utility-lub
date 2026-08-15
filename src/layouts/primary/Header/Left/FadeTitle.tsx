@@ -6,17 +6,19 @@ import { motion } from "framer-motion";
 export const FadeTitle = () => {
     const { header } = useAppContextValues();
     const { iconHeader, titleHeader, isScrolled } = header ?? {};
+    const { scroll } = isScrolled ?? {};
+    const { scrolled } = scroll || {};
 
     return (
         <motion.div
             initial={false}
             animate={{
-                opacity: isScrolled && titleHeader?.length ? 1 : 0,
-                x: isScrolled && titleHeader?.length ? 0 : 8,
+                opacity: scrolled && titleHeader?.length ? 1 : 0,
+                x: scrolled && titleHeader?.length ? 0 : 8,
             }}
             transition={{
                 opacity: {
-                    duration: isScrolled && titleHeader?.length ? 0.14 : 0.14,
+                    duration: scrolled && titleHeader?.length ? 0.14 : 0.14,
                 },
                 x: {
                     type: "spring",
@@ -37,9 +39,9 @@ export const FadeTitle = () => {
             "
             style={{
                 pointerEvents:
-                    isScrolled && titleHeader?.length ? "auto" : "none",
+                    scrolled && titleHeader?.length ? "auto" : "none",
             }}
-            aria-hidden={!isScrolled && !titleHeader?.length}
+            aria-hidden={!scrolled && !titleHeader?.length}
         >
             {iconHeader}
             <span className="text-fg">{titleHeader}</span>

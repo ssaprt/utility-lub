@@ -13,6 +13,7 @@ import { useLazyGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
+import { interactivePlaceholder } from "./search.utils";
 
 const versionDateCache = new Map<string, string>();
 
@@ -35,6 +36,7 @@ export const Search = () => {
     const [versionDates, setVersionDates] = useState<Record<string, string>>(
         {},
     );
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
@@ -42,15 +44,24 @@ export const Search = () => {
 
     const hasSearchQuery = value.trim().length >= 2;
 
-    const [
-        getPackages,
-        {
-            data,
+    const [getPackages, {}] = useLazyGetNPMPackageVersionsQuery();
 
-            isFetching,
-            isError,
-        },
-    ] = useLazyGetNPMPackageVersionsQuery();
+    //eslint-disable-next-line
+    const placeholderRef = useRef<any>(null);
+
+    useEffect(() => {
+        placeholderRef.current = interactivePlaceholder((phrase) => {
+            if (inputRef.current) {
+                inputRef.current.placeholder = phrase;
+            }
+        });
+
+        placeholderRef.current.start();
+
+        return () => {
+            placeholderRef.current?.destroy();
+        };
+    }, []);
 
     const handleChange = (nextValue: string) => {
         setValue(nextValue);
@@ -59,6 +70,7 @@ export const Search = () => {
     };
 
     const clearSearch = () => {
+        placeholderRef.current?.restart();
         setValue("");
         setResults([]);
         setError(null);
@@ -385,6 +397,13 @@ export const Search = () => {
             <div className="relative hidden lg:block">
                 <div className="relative flex flex-row items-center justify-between">
                     <Input
+                        onFocus={() => {
+                            placeholderRef.current?.stop();
+                            if (!inputRef.current) return;
+                            inputRef.current.placeholder = "";
+                        }}
+                        onBlur={() => placeholderRef.current?.restart()}
+                        ref={inputRef}
                         type="search"
                         autoComplete="off"
                         autoCorrect="off"

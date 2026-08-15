@@ -99,7 +99,7 @@ export const TitlePost = ({
                         </span>
 
                         <h3
-                            className="text-md font-outfit text-fg"
+                            className="text-xs lg:text-md font-outfit text-fg"
                             data-pagefind-meta="title"
                         >
                             {children}
@@ -108,10 +108,8 @@ export const TitlePost = ({
 
                     <div
                         className="
-                            flex
-                            flex-row
-                            items-center
-                            gap-1
+                            row-center-1
+                          
                             bg-black/15
                             rounded-[24px]
                             shadow-[0_0_1px_1px_rgba(0,0,0,0.25)]
@@ -119,7 +117,7 @@ export const TitlePost = ({
                             py-[var(--space-1)]
                         "
                     >
-                        <IconCalendarPlus className="w-6 h-6 text-fg" />
+                        <IconCalendarPlus className="w-4 lg:w-6 h-4 lg:h-6 text-fg shrink-0" />
                         {packageName && (
                             <span
                                 className="sr-only"
@@ -129,8 +127,7 @@ export const TitlePost = ({
                             </span>
                         )}
 
-                        <span className="flex text-sm">
-                            update{" "}
+                        <span className="flex text-xs lg:text-sm w-auto">
                             {formatRelativeDate(
                                 data?.[0].date ||
                                     recordings?.[0].date ||
