@@ -20,8 +20,9 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
             <Breadcrumbs />
             <Scroll />
             {children}
-            <div className="my-5"></div>
             <Breadcrumbs />
+            <div className="my-5"></div>
+
             <FeedBack subject="Form Feedback" />
 
             {/* <Footer /> */}

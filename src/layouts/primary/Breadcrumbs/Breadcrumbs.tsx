@@ -87,11 +87,6 @@ export const Breadcrumbs = () => {
                     hover:shadow-black/50
                 "
             >
-                <DynamicSvgIcon
-                    name="signpost.svg"
-                    className="h-4 w-4 shrink-0 fill-fg"
-                />
-
                 <span>{segment}</span>
             </AppLink>
         );

@@ -18,7 +18,7 @@ export const OpenData = () => {
                 items={[
                     {
                         type: "link",
-                        href: "/open-data/table-of-russian-cities",
+                        href: "/open-data/tables/table-of-russian-cities",
                         title: "Table of Russian Cities",
                     },
                 ]}
