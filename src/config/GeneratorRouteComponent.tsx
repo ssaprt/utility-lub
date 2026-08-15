@@ -29,8 +29,6 @@ export const GeneratorRouteComponent = () => {
             hasChildren: hasChildren(route.path, routes),
         }));
 
-    console.log(nextRoutes);
-
     return (
         <div className="col-start-2">
             {nextRoutes.map((route) => (
