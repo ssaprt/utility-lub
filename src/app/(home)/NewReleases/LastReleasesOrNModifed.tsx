@@ -53,7 +53,7 @@ export const LastReleasesOrNModifed = ({
                 
                 overflow-x-auto 
                 py-2
-                px-2
+                px-0
                 `}
                     >
                         {data?.packages.map((item) => (
