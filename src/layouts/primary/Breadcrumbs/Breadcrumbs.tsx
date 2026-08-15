@@ -4,7 +4,13 @@ import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { IconHome } from "@tabler/icons-react";
 import { useSelectedLayoutSegments } from "next/navigation";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
 export const Breadcrumbs = () => {
     const selectedSegments = useSelectedLayoutSegments();
@@ -54,6 +60,7 @@ export const Breadcrumbs = () => {
                             text-ellipsis
                             whitespace-nowrap
                             text-xs
+                            text-fg/70
                         "
                     >
                         {segment}
@@ -63,16 +70,16 @@ export const Breadcrumbs = () => {
         }
 
         return (
-            <AppLink
-                key={`${measure ? "measure-" : ""}${href}`}
-                data-breadcrumb-segment={measure ? "" : undefined}
-                href={href}
-                className="
+            <React.Fragment key={`${measure ? "measure-" : ""}${href}`}>
+                <AppLink
+                    data-breadcrumb-segment={measure ? "" : undefined}
+                    href={href}
+                    className="
                     row-center-1
                     shrink-0
                     whitespace-nowrap
                     overflow-visible
-                    rounded-md
+                    rounded-[4px]
                     bg-fg/10
                     px-2
                     py-1
@@ -86,9 +93,11 @@ export const Breadcrumbs = () => {
                     hover:shadow-[0_4px_8px_0]
                     hover:shadow-black/50
                 "
-            >
-                <span>{segment}</span>
-            </AppLink>
+                >
+                    <span>{segment}</span>
+                </AppLink>
+                <span>/</span>
+            </React.Fragment>
         );
     };
 

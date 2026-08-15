@@ -2,13 +2,12 @@ import { EasyPagination } from "@/content/react/UI-Components/Pagination/EasyPag
 import { PopupContent } from "@/content/react/UI-Components/popup/PopupContent";
 import { ScrollToFuture } from "@/content/react/UI-Components/scroll-to-future/ScrollToFuture";
 import { Tooltip } from "@/content/react/UI-Components/Tooltip/Tooltip";
-import { UIComponents } from "@/content/react/UI-Components/UI-Components";
 
 export const UIComponentsRoute = [
     {
         title: "UI Components",
         path: ["react", "UI-Components"],
-        Component: UIComponents,
+        Component: () => null,
     },
     {
         title: "Easy-pagination",

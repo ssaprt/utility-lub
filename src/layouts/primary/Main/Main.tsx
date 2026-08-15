@@ -1,5 +1,6 @@
 import { FeedBack } from "@/components/feed-back/FeedBack";
 import { PendingLoader } from "@/components/loader/PendingLoader";
+import { GeneratorRouteComponent } from "@/config/GeneratorRouteComponent";
 import { useAppContextValues } from "@/context/appContext";
 import clsx from "clsx";
 import React from "react";
@@ -17,7 +18,9 @@ export const Main = ({ children }: { children: React.ReactNode }) => {
             id="main"
         >
             <PendingLoader />
+
             <Breadcrumbs />
+            <GeneratorRouteComponent />
             <Scroll />
             {children}
             <Breadcrumbs />

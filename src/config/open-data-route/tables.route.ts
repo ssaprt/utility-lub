@@ -1,11 +1,10 @@
 import { TableOfRussianCities } from "@/content/OpenData/Tables/TableOfRussianCities/TableOfRussianCities";
-import { Tables } from "@/content/OpenData/Tables/TableOfRussianCities/Tables";
 
 export const tablesRoute = [
     {
         title: "Tables",
         path: ["open-data", "tables"],
-        Component: Tables,
+        Component: () => null,
     },
     {
         title: "TableOfRussianCities",
