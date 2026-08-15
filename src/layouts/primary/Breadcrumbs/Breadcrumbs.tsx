@@ -261,6 +261,7 @@ export const Breadcrumbs = () => {
                 >
                     <IconHome className="h-4 w-4" />
                 </AppLink>
+                <span>/</span>
 
                 {hiddenCount > 0 && (
                     <details
