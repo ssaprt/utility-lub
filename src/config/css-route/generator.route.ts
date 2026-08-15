@@ -5,6 +5,7 @@ export const generatorRoute = [
     {
         title: "CSS Gradient Generator",
         path: ["css", "generator"],
+        Component: () => null,
     },
     {
         title: "CSS Gradient Generator",
