@@ -3,7 +3,7 @@ import { Pattern } from "@/content/CSS/Generator/Pattern/Pattern";
 
 export const generatorRoute = [
     {
-        title: "CSS Gradient Generator",
+        title: "CSS Gernerator",
         path: ["css", "generator"],
         Component: () => null,
     },
@@ -13,7 +13,7 @@ export const generatorRoute = [
         Component: Gradient,
     },
     {
-        title: "CSS Gradient Generator",
+        title: "CSS Pattern Generator",
         path: ["css", "generator", "pattern"],
         Component: Pattern,
     },
