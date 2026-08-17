@@ -1,16 +1,23 @@
 "use client";
-
 import { Hr } from "@/components/hr/Hr/Hr";
 import { AppContextProvider } from "@/context/appContext";
 
+import { AIAvailability, getAIAvailability } from "@/AI/getAvalibility";
 import { MountLoader } from "@/components/loader/MountLoader";
 import { TooltipProvider } from "@ssaprt/tooltip";
 import "@ssaprt/tooltip/style.css";
+import { useEffect, useState } from "react";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
 import { Menu } from "./Menu/Menu";
 
 export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
+    const [ai, setAI] = useState<AIAvailability | null>(null);
+    useEffect(() => {
+        const f = async () => setAI(await getAIAvailability());
+        f();
+    }, []);
+
     return (
         <AppContextProvider>
             <TooltipProvider defaultRenderPosition="left">
@@ -46,7 +53,7 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
                         <Hr mode="horizontal" size={1} />
                     </div>
 
-                    <Main>{children}</Main>
+                    <Main ai={ai}>{children}</Main>
                 </div>
             </TooltipProvider>
         </AppContextProvider>

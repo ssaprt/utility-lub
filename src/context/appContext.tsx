@@ -32,6 +32,7 @@ interface AppContextActionsType {
         setWidthMenu: Dispatch<SetStateAction<number>>;
         setPending: Dispatch<SetStateAction<boolean>>;
         setNoneAnimationMenu: Dispatch<SetStateAction<boolean>>;
+        setVisibleAgent: Dispatch<SetStateAction<boolean>>;
     };
 }
 
@@ -63,6 +64,7 @@ type AppContextType = {
         widthMenu: number;
         noneAnimationMenu: boolean;
         pending: boolean;
+        visibleAgent: boolean;
     };
 };
 
@@ -118,6 +120,7 @@ export const AppContextProvider = ({
     const [openMenu, setOpenMenu] = useState(false);
     const [widthMenu, setWidthMenu] = useState(0);
     const [noneAnimationMenu, setNoneAnimationMenu] = useState(false);
+    const [visibleAgent, setVisibleAgent] = useState(false);
     //* menu context =============================================
 
     //*general context =============================================
@@ -141,6 +144,7 @@ export const AppContextProvider = ({
                 widthMenu,
                 noneAnimationMenu,
                 pending,
+                visibleAgent,
             },
         }),
         [
@@ -153,6 +157,7 @@ export const AppContextProvider = ({
             widthMenu,
             noneAnimationMenu,
             pending,
+            visibleAgent,
         ],
     );
     //* context ====================================================
@@ -171,6 +176,7 @@ export const AppContextProvider = ({
                 setWidthMenu,
                 setNoneAnimationMenu,
                 setPending,
+                setVisibleAgent,
             },
         }),
         [],

@@ -1,4 +1,5 @@
 "use client";
+import { AIAgent } from "@/AI/AIAgent";
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
@@ -33,6 +34,7 @@ export const Pattern = () => {
             >
                 BG Pattern Generator
             </TitlePost>
+            <AIAgent />
 
             <IsGenerator />
         </div>

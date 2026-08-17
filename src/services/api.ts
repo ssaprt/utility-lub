@@ -6,6 +6,6 @@ export const api = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: apiUrl,
     }),
-    tagTypes: ["NpmPackages", "Versions"],
+    tagTypes: ["NpmPackages", "Versions", "AIAgent"],
     endpoints: () => ({}),
 });

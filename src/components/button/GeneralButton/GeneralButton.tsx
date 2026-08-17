@@ -188,6 +188,7 @@ export const GeneralButton = ({
 
     return (
         <motion.button
+            aria-pressed={typeof active === "boolean" ? active : undefined}
             ref={buttonRef}
             type={type}
             key={typeof textButton === "string" ? textButton : undefined}

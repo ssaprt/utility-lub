@@ -4,6 +4,8 @@ import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
 import { useEffect, useState } from "react";
+
+import { AIAgent } from "@/AI/AIAgent";
 import { Categories } from "./Categories";
 import { defaultGradientConfig, type GradientConfig } from "./gradient.type";
 import { parseGradient } from "./gradient.utils";
@@ -30,6 +32,7 @@ export const Gradient = () => {
 
     return (
         <div className="flex flex-col w-full h-auto gap-8 z-2">
+            <AIAgent />
             <TitlePost
                 icon={{
                     component: (
