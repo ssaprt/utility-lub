@@ -35,6 +35,16 @@ export const CSS = () => {
                         href: "/css/generator/pattern",
                         title: "BG Pattern Generator",
                     },
+                    {
+                        type: "link",
+                        href: "/css/generator/clip-patch",
+                        title: "Clip Patch Generator",
+                    },
+                    {
+                        type: "link",
+                        href: "/css/generator/box-shadow",
+                        title: "Box Shadow Generator",
+                    },
                 ]}
             />
         </>

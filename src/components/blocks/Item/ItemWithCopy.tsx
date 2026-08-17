@@ -32,6 +32,7 @@ export const ItemWithCopy = ({
         id: string;
         title: string;
         content: React.ReactNode | CSSProperties;
+        copyContent?: string;
     };
     handleAction?: () => void;
 }) => {
@@ -47,11 +48,18 @@ export const ItemWithCopy = ({
             }
           : undefined;
 
-    const forCopy = isCSSProperties(item.content)
-        ? cssPropertiesToString(item.content)
-        : typeof item.content === "string"
-          ? item.content
-          : "";
+    const forCopy =
+        item.copyContent ??
+        (isCSSProperties(item.content)
+            ? cssPropertiesToString(item.content)
+            : typeof item.content === "string"
+              ? item.content
+              : "");
+
+    const contentNode =
+        !isCSSProperties(item.content) && typeof item.content !== "string"
+            ? item.content
+            : null;
 
     useEffect(() => {
         if (!copied) return;
@@ -155,14 +163,15 @@ export const ItemWithCopy = ({
             <div
                 style={style}
                 className="
-                    flex-1
-                    shrink-0
-                    w-full
-                    flex-1
-                    rounded-[0_0_12px_12px]
-                    overflow-hidden
-                "
-            />
+        flex-1
+        shrink-0
+        w-full
+        rounded-[0_0_12px_12px]
+        overflow-hidden
+    "
+            >
+                {contentNode}
+            </div>
 
             <motion.div
                 animate={{
