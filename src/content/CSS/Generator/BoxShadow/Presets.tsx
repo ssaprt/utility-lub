@@ -15,16 +15,8 @@ export const Presets = ({ presets, onSelectPreset }: PresetsProps) => {
     const [viewPresets, setViewPresets] = useState(presets.slice(0, 10));
 
     return (
-        <div className="col-stretch-2 w-full rounded-[12px] border-1 border-fg/8 bg-fg/4 p-2">
-            <div
-                className="
-                    grid
-                    w-full
-                    grid-cols-[repeat(auto-fill,110px)]
-                    justify-start
-                    gap-2
-                "
-            >
+        <div className="col-stretch-2 w-full p-2 rounded-[12px] bg-fg/4 border-1 border-fg/8">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 w-full">
                 {viewPresets.map((preset) => {
                     const boxShadow = boxShadowPresetToCss(preset);
 

@@ -1,13 +1,14 @@
 "use client";
 
-import { ItemWithCopy } from "@/components/blocks/Item/ItemWithCopy";
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Range } from "@/components/input/range/Range";
 import { useAppContextValues } from "@/context/appContext";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { patternPresetCategories } from "./pattern.presets";
+
+import { Categories } from "./Categories";
 import { PatternConfig, PatternPreset, patternTypes } from "./pattern.types";
+
 import {
     defaultPatternConfig,
     isValidHex,
@@ -155,10 +156,13 @@ export const IsGenerator = () => {
     const [config, setConfig] = useState<PatternConfig>(defaultPatternConfig);
 
     const previewStyle = useMemo(() => patternConfigToStyle(config), [config]);
+
     const { header } = useAppContextValues();
+
     const { isScrolled } = header || {};
 
     const css = useMemo(() => patternConfigToCss(config), [config]);
+
     const updateConfig = <K extends keyof PatternConfig>(
         key: K,
         value: PatternConfig[K],
@@ -168,9 +172,11 @@ export const IsGenerator = () => {
             [key]: value,
         }));
     };
+
     const applyPreset = (preset: PatternPreset) => {
         setConfig(preset.config);
     };
+
     const reset = () => {
         setConfig(defaultPatternConfig);
     };
@@ -179,264 +185,259 @@ export const IsGenerator = () => {
         isScrolled?.scroll.scrollTop && isScrolled.scroll.scrollTop > 380;
 
     return (
-        <div className="col-stretch-4 w-full min-w-0">
-            <div
-                className={`relative
-                    top-[-14px]
-                    z-2
-                    w-full
-                    transition-[box-shadow]
-                    duration-300
-                    ease-in-out
-                    h-64
-                    overflow-visible
-                    rounded-xl
-                 
-                `}
-                style={previewStyle}
-            />
-
-            <motion.div
-                onClick={() =>
-                    isScrolled?.main.scrollTo({ top: 0, behavior: "smooth" })
-                }
-                animate={{
-                    opacity: scroll ? 1 : 0,
-                    x: scroll ? 0 : "100%",
-                }}
-                transition={{
-                    type: "spring",
-                    stiffness: scroll ? 100 : 500,
-                    damping: scroll ? 8 : 24,
-                    mass: 0.4,
-                }}
-                className={`fixed
-                    z-2
-                    w-[100px]
-                    rounded-xl
-                    cursor-pointer
-                    shadow-lg
-                    h-[100px]
-                    shadow-black/80
-                `}
-                style={{
-                    ...previewStyle,
-                    right: `20px`,
-                    top: `90px`,
-                }}
-            />
-
-            <div className="col-stretch-2">
-                <span className="text-sm">Pattern</span>
-
-                <div className="row-center-1 flex-wrap rounded-[8px] bg-fg/10 p-1">
-                    {patternTypes.map((type) => (
-                        <GeneralButton
-                            key={type}
-                            variant="ghost"
-                            textButton={patternNames[type]}
-                            handleAction={() =>
-                                updateConfig("patternType", type)
-                            }
-                            active={config.patternType === type}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            <div className="grid w-full min-w-0 grid-cols-1 gap-2 md:grid-cols-3">
-                <ColorControl
-                    label="Background"
-                    value={config.backgroundColor}
-                    fallback="#0f172a"
-                    onChange={(value) => updateConfig("backgroundColor", value)}
+        <div className="col-stretch-4">
+            <div className="col-stretch-4 lg:row-stretch-4 w-full min-w-0">
+                <div
+                    className="
+                        relative
+                        top-[-14px]
+                        z-2
+                        h-64
+                        w-full
+                        overflow-visible
+                        rounded-xl
+                        transition-[box-shadow]
+                        duration-300
+                        ease-in-out
+                        lg:sticky
+                        lg:top-0
+                        lg:min-w-[400px]
+                    "
+                    style={previewStyle}
                 />
 
-                <ColorControl
-                    label="Pattern color"
-                    value={config.patternColor}
-                    fallback="#8b5cf6"
-                    onChange={(value) => updateConfig("patternColor", value)}
-                />
+                <motion.div
+                    onClick={() =>
+                        isScrolled?.main?.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        })
+                    }
+                    animate={{
+                        opacity: scroll ? 1 : 0,
 
-                <ColorControl
-                    label="Secondary color"
-                    value={config.secondaryColor}
-                    fallback="#ec4899"
-                    onChange={(value) => updateConfig("secondaryColor", value)}
-                />
-            </div>
-
-            <div className="grid w-full min-w-0 grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-                <RangeControl
-                    label="Element size"
-                    value={config.size}
-                    min={4}
-                    max={200}
-                    onChange={(value) => updateConfig("size", value)}
-                />
-
-                <RangeControl
-                    label="Gap X"
-                    value={config.gapX}
-                    min={0}
-                    max={200}
-                    onChange={(value) => updateConfig("gapX", value)}
-                />
-
-                <RangeControl
-                    label="Gap Y"
-                    value={config.gapY}
-                    min={0}
-                    max={200}
-                    onChange={(value) => updateConfig("gapY", value)}
-                />
-
-                <RangeControl
-                    label="Thickness"
-                    value={config.thickness}
-                    min={1}
-                    max={30}
-                    onChange={(value) => updateConfig("thickness", value)}
-                />
-
-                <RangeControl
-                    label="Opacity"
-                    value={config.opacity}
-                    min={0}
-                    max={100}
-                    unit="%"
-                    onChange={(value) => updateConfig("opacity", value)}
-                />
-
-                <RangeControl
-                    label="Angle"
-                    value={config.angle}
-                    min={-180}
-                    max={180}
-                    unit="°"
-                    onChange={(value) => updateConfig("angle", value)}
-                />
-
-                <RangeControl
-                    label="Element offset X"
-                    value={config.elementOffsetX}
-                    min={-150}
-                    max={150}
-                    onChange={(value) => updateConfig("elementOffsetX", value)}
-                />
-
-                <RangeControl
-                    label="Element offset Y"
-                    value={config.elementOffsetY}
-                    min={-150}
-                    max={150}
-                    onChange={(value) => updateConfig("elementOffsetY", value)}
-                />
-
-                <RangeControl
-                    label="Pattern position X"
-                    value={config.positionX}
-                    min={-300}
-                    max={300}
-                    onChange={(value) => updateConfig("positionX", value)}
-                />
-
-                <RangeControl
-                    label="Pattern position Y"
-                    value={config.positionY}
-                    min={-300}
-                    max={300}
-                    onChange={(value) => updateConfig("positionY", value)}
-                />
-
-                <RangeControl
-                    label="Scale X"
-                    value={config.scaleX}
-                    min={25}
-                    max={250}
-                    unit="%"
-                    onChange={(value) => updateConfig("scaleX", value)}
-                />
-
-                <RangeControl
-                    label="Scale Y"
-                    value={config.scaleY}
-                    min={25}
-                    max={250}
-                    unit="%"
-                    onChange={(value) => updateConfig("scaleY", value)}
-                />
-            </div>
-
-            <div className="row-center-2 flex-wrap">
-                <GeneralButton
-                    textButton="Reset"
-                    handleAction={reset}
-                    variant="minimal"
-                />
-
-                <GeneralButton
-                    textButton="Copy CSS"
-                    copy={{
-                        copyItem: css,
+                        x: scroll ? 0 : "100%",
                     }}
-                    variant="soft"
+                    transition={{
+                        type: "spring",
+
+                        stiffness: scroll ? 100 : 500,
+
+                        damping: scroll ? 8 : 24,
+
+                        mass: 0.4,
+                    }}
+                    className="
+                        fixed
+                        z-2
+                        h-[100px]
+                        w-[100px]
+                        cursor-pointer
+                        rounded-xl
+                        shadow-lg
+                        shadow-black/80
+                    "
+                    style={{
+                        ...previewStyle,
+                        right: "20px",
+                        top: "90px",
+                    }}
                 />
-            </div>
 
-            <div
-                className="
-                    rounded-lg
-                    bg-black/20
-                    p-3
-                    transition-colors
-                    duration-200
-                    hover:bg-black/25
-                "
-            >
-                <code className="block whitespace-pre-wrap break-all text-sm">
-                    {css}
-                </code>
-            </div>
+                <div className="col-stretch-2">
+                    <div className="col-stretch-2">
+                        <span className="text-[12px]">Pattern</span>
 
-            <div className="col-stretch-4">
-                {patternPresetCategories.map((category) => (
-                    <div key={category.id} className="col-stretch-2">
-                        <div className="row-center-2">
-                            <span className="text-sm font-medium">
-                                {category.name}
-                            </span>
-
-                            <span className="ml-auto text-xs text-fg/50">
-                                {category.presets.length}
-                            </span>
-                        </div>
-
-                        <div
-                            className="grid w-full min-w-0 gap-2"
-                            style={{
-                                gridTemplateColumns:
-                                    "repeat(auto-fill, minmax(100px, 1fr))",
-                            }}
-                        >
-                            {category.presets.map((preset) => (
-                                <ItemWithCopy
-                                    key={preset.id}
-                                    handleAction={() => applyPreset(preset)}
-                                    item={{
-                                        id: preset.id,
-                                        title: preset.name,
-                                        content: patternConfigToStyle(
-                                            preset.config,
-                                        ),
-                                    }}
+                        <div className="row-center-1 flex-wrap rounded-[8px] bg-fg/10 p-1">
+                            {patternTypes.map((type) => (
+                                <GeneralButton
+                                    key={type}
+                                    variant="ghost"
+                                    textButton={patternNames[type]}
+                                    handleAction={() =>
+                                        updateConfig("patternType", type)
+                                    }
+                                    active={config.patternType === type}
                                 />
                             ))}
                         </div>
                     </div>
-                ))}
+
+                    <div className="grid w-full min-w-0 grid-cols-1 gap-2 md:grid-cols-3">
+                        <ColorControl
+                            label="Background"
+                            value={config.backgroundColor}
+                            fallback="#0f172a"
+                            onChange={(value) =>
+                                updateConfig("backgroundColor", value)
+                            }
+                        />
+
+                        <ColorControl
+                            label="Pattern color"
+                            value={config.patternColor}
+                            fallback="#8b5cf6"
+                            onChange={(value) =>
+                                updateConfig("patternColor", value)
+                            }
+                        />
+
+                        <ColorControl
+                            label="Secondary color"
+                            value={config.secondaryColor}
+                            fallback="#ec4899"
+                            onChange={(value) =>
+                                updateConfig("secondaryColor", value)
+                            }
+                        />
+                    </div>
+
+                    <div className="grid w-full min-w-0 grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+                        <RangeControl
+                            label="Element size"
+                            value={config.size}
+                            min={4}
+                            max={200}
+                            onChange={(value) => updateConfig("size", value)}
+                        />
+
+                        <RangeControl
+                            label="Gap X"
+                            value={config.gapX}
+                            min={0}
+                            max={200}
+                            onChange={(value) => updateConfig("gapX", value)}
+                        />
+
+                        <RangeControl
+                            label="Gap Y"
+                            value={config.gapY}
+                            min={0}
+                            max={200}
+                            onChange={(value) => updateConfig("gapY", value)}
+                        />
+
+                        <RangeControl
+                            label="Thickness"
+                            value={config.thickness}
+                            min={1}
+                            max={30}
+                            onChange={(value) =>
+                                updateConfig("thickness", value)
+                            }
+                        />
+
+                        <RangeControl
+                            label="Opacity"
+                            value={config.opacity}
+                            min={0}
+                            max={100}
+                            unit="%"
+                            onChange={(value) => updateConfig("opacity", value)}
+                        />
+
+                        <RangeControl
+                            label="Angle"
+                            value={config.angle}
+                            min={-180}
+                            max={180}
+                            unit="°"
+                            onChange={(value) => updateConfig("angle", value)}
+                        />
+
+                        <RangeControl
+                            label="Element offset X"
+                            value={config.elementOffsetX}
+                            min={-150}
+                            max={150}
+                            onChange={(value) =>
+                                updateConfig("elementOffsetX", value)
+                            }
+                        />
+
+                        <RangeControl
+                            label="Element offset Y"
+                            value={config.elementOffsetY}
+                            min={-150}
+                            max={150}
+                            onChange={(value) =>
+                                updateConfig("elementOffsetY", value)
+                            }
+                        />
+
+                        <RangeControl
+                            label="Pattern position X"
+                            value={config.positionX}
+                            min={-300}
+                            max={300}
+                            onChange={(value) =>
+                                updateConfig("positionX", value)
+                            }
+                        />
+
+                        <RangeControl
+                            label="Pattern position Y"
+                            value={config.positionY}
+                            min={-300}
+                            max={300}
+                            onChange={(value) =>
+                                updateConfig("positionY", value)
+                            }
+                        />
+
+                        <RangeControl
+                            label="Scale X"
+                            value={config.scaleX}
+                            min={25}
+                            max={250}
+                            unit="%"
+                            onChange={(value) => updateConfig("scaleX", value)}
+                        />
+
+                        <RangeControl
+                            label="Scale Y"
+                            value={config.scaleY}
+                            min={25}
+                            max={250}
+                            unit="%"
+                            onChange={(value) => updateConfig("scaleY", value)}
+                        />
+                    </div>
+
+                    <div className="row-center-2 flex-wrap">
+                        <GeneralButton
+                            textButton="Reset"
+                            handleAction={reset}
+                            variant="minimal"
+                        />
+
+                        <GeneralButton
+                            textButton="Copy CSS"
+                            copy={{
+                                copyItem: css,
+                            }}
+                            variant="soft"
+                        />
+                    </div>
+
+                    <div
+                        className="
+                            rounded-lg
+                            bg-black/20
+                            p-3
+                            transition-colors
+                            duration-200
+                            hover:bg-black/25
+                        "
+                    >
+                        <code className="block whitespace-pre-wrap break-all text-[12px]">
+                            {css}
+                        </code>
+                    </div>
+                </div>
             </div>
+
+            <Categories onSelectPreset={applyPreset} />
         </div>
     );
 };

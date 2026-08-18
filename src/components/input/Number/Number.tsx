@@ -1,5 +1,5 @@
+import { clamp } from "@/content/CSS/Generator/BoxShadow/box-shadow.utils";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
-import { clamp } from "framer-motion";
 
 interface NumberInputProps {
     value: number;

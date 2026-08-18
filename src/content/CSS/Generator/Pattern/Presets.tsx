@@ -1,41 +1,55 @@
 "use client";
 
-import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
-import { useAppContextActions } from "@/context/appContext";
-import { useEffect } from "react";
-import { IsGenerator } from "./IsGenerator";
+import { ItemWithCopy } from "@/components/blocks/Item/ItemWithCopy";
+import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
+import { IconMenuOrder } from "@tabler/icons-react";
+import { useState } from "react";
 
-export const Pattern = () => {
-    const { header } = useAppContextActions();
-    const { setIconHeader, setTitleHeader } = header || {};
+import type { PatternPreset } from "./pattern.types";
+import { patternConfigToStyle } from "./pattern.utils";
 
-    useEffect(() => {
-        setIconHeader(
-            <DynamicSvgIcon name="pattern.svg" className="w-8 h-8 fill-fg" />,
-        );
-        setTitleHeader("BG Pattern Generator");
-    }, [setIconHeader, setTitleHeader]);
+interface PresetsProps {
+    presets: PatternPreset[];
+    onSelectPreset: (preset: PatternPreset) => void;
+}
+
+export const Presets = ({ presets, onSelectPreset }: PresetsProps) => {
+    const [viewPresets, setViewPresets] = useState(presets.slice(0, 10));
 
     return (
-        <div className="flex h-auto w-full flex-col gap-8 z-2">
-            <TitlePost
-                icon={{
-                    component: (
-                        <DynamicSvgIcon
-                            name="pattern.svg"
-                            className="w-8 h-8 fill-fg"
-                        />
-                    ),
-                    meta: "pattern.svg",
-                }}
-                description="Background pattern generator with editable geometry, spacing, position, scale, colors and ready-made presets."
-                hideVersion
-            >
-                BG Pattern Generator
-            </TitlePost>
+        <div className="col-stretch-2 w-full rounded-[12px] border-1 border-fg/8 bg-fg/4 p-2">
+            <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2">
+                {viewPresets.map((preset) => (
+                    <ItemWithCopy
+                        key={preset.id}
+                        handleAction={() => onSelectPreset(preset)}
+                        item={{
+                            id: preset.id,
+                            title: preset.name,
+                            content: patternConfigToStyle(preset.config),
+                        }}
+                    />
+                ))}
+            </div>
 
-            <IsGenerator />
+            {presets.length > 10 && (
+                <GeneralButton
+                    icon={<IconMenuOrder />}
+                    variant="minimal"
+                    textButton={
+                        viewPresets.length < presets.length
+                            ? "Show more"
+                            : "Show less"
+                    }
+                    handleAction={() =>
+                        setViewPresets(
+                            viewPresets.length < presets.length
+                                ? presets
+                                : presets.slice(0, 10),
+                        )
+                    }
+                />
+            )}
         </div>
     );
 };

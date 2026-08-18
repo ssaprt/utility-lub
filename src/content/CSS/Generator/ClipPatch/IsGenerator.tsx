@@ -1,6 +1,7 @@
 "use client";
 
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
+import { NumberInput } from "@/components/input/Number/Number";
 import { useAppContextValues } from "@/context/appContext";
 import {
     IconPhoto,
@@ -271,85 +272,90 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     };
 
     return (
-        <div className="col-stretch-4 w-full">
-            <input
-                ref={fileRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImage}
-                className="hidden"
-            />
-
-            <div className="row-center-2 flex-wrap">
-                <GeneralButton
-                    icon={<IconPhoto />}
-                    textButton={imageUrl ? "Change image" : "Upload image"}
-                    variant="soft"
-                    handleAction={() => fileRef.current?.click()}
-                />
-
-                {imageUrl && (
-                    <GeneralButton
-                        icon={<IconPhotoOff />}
-                        textButton="Remove image"
-                        variant="minimal"
-                        handleAction={clearImage}
+        <div className="col-start-1 lg:row-stretch-4 w-full">
+            <div className="col-start-2 p-3 h-fit bg-fg/10 rounded-xl relative lg:sticky lg:top-0">
+                <div className="row-center-1 w-full p-2">
+                    <input
+                        ref={fileRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImage}
+                        className="hidden"
                     />
-                )}
 
-                <GeneralButton
-                    textButton="Custom polygon"
-                    variant="soft"
-                    active={config.mode === "custom" && !imageUrl}
-                    handleAction={startCustom}
-                />
-            </div>
+                    <div className="row-center-2 w-full flex-wrap justify-between">
+                        {!imageUrl && (
+                            <GeneralButton
+                                icon={<IconPhoto />}
+                                textButton={
+                                    imageUrl ? "Change image" : "Upload image"
+                                }
+                                variant="soft"
+                                handleAction={() => fileRef.current?.click()}
+                            />
+                        )}
 
-            <div className="flex w-full justify-center">
-                <div
-                    ref={editorRef}
-                    className="
+                        {imageUrl && (
+                            <GeneralButton
+                                icon={<IconPhotoOff />}
+                                textButton="Remove image"
+                                variant="minimal"
+                                handleAction={clearImage}
+                            />
+                        )}
+
+                        <GeneralButton
+                            textButton="Custom polygon"
+                            variant="soft"
+                            active={config.mode === "custom" && !imageUrl}
+                            handleAction={startCustom}
+                        />
+                    </div>
+                </div>
+
+                <div className="flex w-full justify-center z-22222">
+                    <div
+                        ref={editorRef}
+                        className="
                         relative
-                        size-[300px]
+                        size-[80vw]
+                        lg:size-[450px]
                         shrink-0
                         overflow-visible
-                        rounded-xl
-                        bg-fg/5
-                        shadow-lg
-                        shadow-black/20
+                       
                     "
-                >
-                    <div
-                        className="
+                    >
+                        <div
+                            className="
                             absolute
                             inset-0
                             overflow-hidden
                             rounded-xl
                         "
-                    >
-                        <div
-                            className="
+                        >
+                            <div
+                                className="
                                 size-full
                                 transition-[clip-path,background]
                                 duration-300
                                 ease-out
                             "
-                            style={visualStyle}
-                        />
-                    </div>
+                                style={visualStyle}
+                            />
+                        </div>
 
-                    {config.points.map((point, index) => (
-                        <button
-                            key={point.id}
-                            type="button"
-                            aria-label={`Clip path point ${index + 1}`}
-                            onPointerDown={(event) =>
-                                handlePointerDown(event, point.id)
-                            }
-                            onPointerMove={(event) =>
-                                handlePointerMove(event, point.id)
-                            }
-                            className="
+                        {config.points.map((point, index) => (
+                            <button
+                                key={point.id}
+                                type="button"
+                                aria-label={`Clip path point ${index + 1}`}
+                                onPointerDown={(event) =>
+                                    handlePointerDown(event, point.id)
+                                }
+                                onPointerMove={(event) =>
+                                    handlePointerMove(event, point.id)
+                                }
+                                className="
                                     absolute
                                     z-2
                                     flex
@@ -375,14 +381,15 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                     active:scale-110
                                     active:cursor-grabbing
                                 "
-                            style={{
-                                left: `${point.x}%`,
-                                top: `${point.y}%`,
-                            }}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
+                                style={{
+                                    left: `${point.x}%`,
+                                    top: `${point.y}%`,
+                                }}
+                            >
+                                {index + 1}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
 
@@ -422,141 +429,122 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                 <div className="size-full" style={visualStyle} />
             </motion.div>
 
-            {config.mode === "custom" && (
-                <div className="col-stretch-2">
-                    <div className="row-center-2 flex-wrap">
-                        <GeneralButton
-                            icon={<IconPlus />}
-                            textButton="Add point"
-                            variant="soft"
-                            active={config.points.length >= 30}
-                            handleAction={addPoint}
-                        />
+            <div className="col-start-2 w-full">
+                {config.mode === "custom" && (
+                    <div className="col-start-2 w-full lg:w-auto">
+                        <div className="row-center-2 flex-wrap">
+                            <GeneralButton
+                                icon={<IconPlus />}
+                                textButton="Add point"
+                                variant="soft"
+                                active={config.points.length >= 30}
+                                handleAction={addPoint}
+                            />
 
-                        <GeneralButton
-                            textButton="Reset polygon"
-                            variant="minimal"
-                            handleAction={resetCustom}
-                        />
-                    </div>
+                            <GeneralButton
+                                textButton="Reset polygon"
+                                variant="minimal"
+                                handleAction={resetCustom}
+                            />
+                        </div>
 
-                    <div className="col-stretch-2">
-                        {config.points.map((point, index) => (
-                            <div
-                                key={point.id}
-                                className="
-                                        grid
-                                        grid-cols-[70px_1fr_1fr_auto]
+                        <div className="col-start-2 w-full">
+                            {config.points.map((point, index) => (
+                                <div
+                                    key={point.id}
+                                    className="
+                                        row-center-1
                                         items-center
+                                        justify-between
                                         gap-2
                                         rounded-[4px]
                                         bg-fg/5
                                         p-2
+                                        w-full
                                     "
-                            >
-                                <span className="text-sm">
-                                    Point {index + 1}
-                                </span>
-
-                                <label className="row-center-1">
-                                    <span className="text-xs text-fg/60">
-                                        X
+                                >
+                                    <span className="text-[12px]">
+                                        Point {index + 1}
                                     </span>
 
-                                    <input
-                                        type="number"
-                                        aria-label={`Point ${index + 1} X`}
-                                        min={0}
-                                        max={100}
-                                        value={point.x}
-                                        onChange={(event) =>
-                                            updatePoint(point.id, {
-                                                x: clamp(
-                                                    Number(event.target.value),
-                                                    0,
-                                                    100,
-                                                ),
-                                            })
+                                    <label className="row-center-1">
+                                        <span className="text-[12px] text-fg/60">
+                                            X
+                                        </span>
+
+                                        <NumberInput
+                                            value={point.x}
+                                            min={-100}
+                                            max={100}
+                                            ariaLabel={`Point ${index + 1} X`}
+                                            onChange={(event) =>
+                                                updatePoint(point.id, {
+                                                    x: clamp(
+                                                        Number(event),
+                                                        0,
+                                                        100,
+                                                    ),
+                                                })
+                                            }
+                                        />
+
+                                        <span className="text-xs text-fg/60">
+                                            %
+                                        </span>
+                                    </label>
+
+                                    <label className="row-center-1">
+                                        <span className="text-xs text-fg/60">
+                                            Y
+                                        </span>
+
+                                        <NumberInput
+                                            value={point.y}
+                                            min={-100}
+                                            max={100}
+                                            ariaLabel={`Point ${index + 1} Y`}
+                                            onChange={(event) =>
+                                                updatePoint(point.id, {
+                                                    y: clamp(event, 0, 100),
+                                                })
+                                            }
+                                        />
+
+                                        <span className="text-xs text-fg/60">
+                                            %
+                                        </span>
+                                    </label>
+
+                                    <GeneralButton
+                                        textButton="Remove"
+                                        icon={<IconTrash />}
+                                        variant="minimal"
+                                        active={config.points.length <= 3}
+                                        handleAction={() =>
+                                            removePoint(point.id)
                                         }
-                                        className="
-                                                min-w-0
-                                                w-full
-                                                rounded-[4px]
-                                                bg-fg/10
-                                                px-2
-                                                py-1.5
-                                                text-sm
-                                                outline-none
-                                            "
                                     />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
-                                    <span className="text-xs text-fg/60">
-                                        %
-                                    </span>
-                                </label>
+                <div className="col-start-2 bg-fg/10 rounded-xl p-2">
+                    <div className="row-center-2 flex-wrap">
+                        <GeneralButton
+                            textButton="Copy CSS"
+                            copy={{
+                                copyItem: css,
+                            }}
+                            variant="soft"
+                        />
+                    </div>
 
-                                <label className="row-center-1">
-                                    <span className="text-xs text-fg/60">
-                                        Y
-                                    </span>
-
-                                    <input
-                                        type="number"
-                                        aria-label={`Point ${index + 1} Y`}
-                                        min={0}
-                                        max={100}
-                                        value={point.y}
-                                        onChange={(event) =>
-                                            updatePoint(point.id, {
-                                                y: clamp(
-                                                    Number(event.target.value),
-                                                    0,
-                                                    100,
-                                                ),
-                                            })
-                                        }
-                                        className="
-                                                min-w-0
-                                                w-full
-                                                rounded-[4px]
-                                                bg-fg/10
-                                                px-2
-                                                py-1.5
-                                                text-sm
-                                                outline-none
-                                            "
-                                    />
-
-                                    <span className="text-xs text-fg/60">
-                                        %
-                                    </span>
-                                </label>
-
-                                <GeneralButton
-                                    textButton="Remove"
-                                    icon={<IconTrash />}
-                                    variant="minimal"
-                                    active={config.points.length <= 3}
-                                    handleAction={() => removePoint(point.id)}
-                                />
-                            </div>
-                        ))}
+                    <div className="rounded-lg p-3 transition-colors duration-200 hover:bg-black/25">
+                        <code className="text-sm break-all">{css}</code>
                     </div>
                 </div>
-            )}
-
-            <div className="row-center-2 flex-wrap">
-                <GeneralButton
-                    textButton="Copy CSS"
-                    copy={{
-                        copyItem: css,
-                    }}
-                    variant="soft"
-                />
-            </div>
-
-            <div className="rounded-lg bg-black/20 p-3 transition-colors duration-200 hover:bg-black/25">
-                <code className="text-sm break-all">{css}</code>
             </div>
         </div>
     );

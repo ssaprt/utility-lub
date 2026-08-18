@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export interface BoxShadowLayer {
     id: string;
     offsetX: number;
@@ -33,3 +35,25 @@ export const defaultBoxShadowConfig: BoxShadowConfig = {
         },
     ],
 };
+
+export interface IsGeneratorProps {
+    config: BoxShadowConfig;
+    setConfig: Dispatch<SetStateAction<BoxShadowConfig>>;
+}
+
+export interface ShadowEditorProps {
+    shadow: BoxShadowLayer;
+    index: number;
+    total: number;
+
+    updateShadow: (
+        id: string,
+        values: Partial<Omit<BoxShadowLayer, "id">>,
+    ) => void;
+
+    removeShadow: (id: string) => void;
+
+    duplicateShadow: (id: string) => void;
+}
+
+export type ResizeAxis = "x" | "y" | "xy";

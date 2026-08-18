@@ -22,15 +22,7 @@ export const Presets = ({ presets, onSelectPreset }: PresetsProps) => {
 
     return (
         <div className="col-stretch-2 w-full p-2 rounded-[12px] bg-fg/4 border-1 border-fg/8">
-            <div
-                className="
-                    grid
-                    grid-cols-[repeat(auto-fill,110px)]
-                    justify-start
-                    gap-2
-                    w-full
-                "
-            >
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 w-full">
                 {viewPresets.map((preset) => {
                     const clipPath = presetToClipPath(preset);
 

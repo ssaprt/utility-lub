@@ -1,9 +1,9 @@
 "use client";
 
 import { AIAgent } from "@/AI/AIAgent";
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
-import { IconPolygon } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Categories } from "./Categories";
 import { IsGenerator } from "./IsGenerator";
@@ -29,7 +29,9 @@ export const ClipPathGenerator = () => {
     };
 
     useEffect(() => {
-        setIconHeader(<IconPolygon className="h-8 w-8" />);
+        setIconHeader(
+            <DynamicSvgIcon name="clip.svg" className="w-8 h-8 fill-fg" />,
+        );
 
         setTitleHeader("Clip Path Generator");
     }, [setIconHeader, setTitleHeader]);
@@ -40,8 +42,13 @@ export const ClipPathGenerator = () => {
 
             <TitlePost
                 icon={{
-                    component: <IconPolygon className="h-8 w-8 fill-none!" />,
-                    meta: "clip-path",
+                    component: (
+                        <DynamicSvgIcon
+                            name="clip.svg"
+                            className="w-8 h-8 fill-fg"
+                        />
+                    ),
+                    meta: "clip.svg",
                 }}
                 description="Create CSS polygon clip paths visually, use ready-made shapes, edit points and preview the result with your own image"
                 hideVersion

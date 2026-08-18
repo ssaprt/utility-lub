@@ -1,19 +1,27 @@
 "use client";
 
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
-import { Range } from "@/components/input/range/Range";
 import { useAppContextValues } from "@/context/appContext";
 
 import {
-    IconChevronDown,
-    IconChevronUp,
-    IconCopy,
-    IconGripVertical,
-    IconPlus,
-    IconTrash,
-} from "@tabler/icons-react";
+    DndContext,
+    KeyboardSensor,
+    PointerSensor,
+    closestCenter,
+    useSensor,
+    useSensors,
+    type DragEndEvent,
+} from "@dnd-kit/core";
 
-import { Reorder, motion, useDragControls } from "framer-motion";
+import {
+    SortableContext,
+    arrayMove,
+    rectSortingStrategy,
+    sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+
+import { IconPlus } from "@tabler/icons-react";
+import { motion } from "framer-motion";
 
 import {
     useMemo,
@@ -25,14 +33,17 @@ import {
 
 import type { BoxShadowConfig, BoxShadowLayer } from "./box-shadow.type";
 
-import { boxShadowConfigToCss } from "./box-shadow.utils";
+import { boxShadowConfigToCss, clamp, createId } from "./box-shadow.utils";
 
-interface IsGeneratorProps {
+import { ConfigShadow } from "./ConfigShadow";
+import { ShadowEditor } from "./ShadowEditor";
+
+export interface IsGeneratorProps {
     config: BoxShadowConfig;
     setConfig: Dispatch<SetStateAction<BoxShadowConfig>>;
 }
 
-interface ShadowEditorProps {
+export interface ShadowEditorProps {
     shadow: BoxShadowLayer;
     index: number;
     total: number;
@@ -47,468 +58,7 @@ interface ShadowEditorProps {
     duplicateShadow: (id: string) => void;
 }
 
-interface NumberInputProps {
-    value: number;
-    min: number;
-    max: number;
-    step?: number;
-    ariaLabel: string;
-    onChange: (value: number) => void;
-}
-
 type ResizeAxis = "x" | "y" | "xy";
-
-const clamp = (value: number, min: number, max: number) => {
-    return Math.min(Math.max(value, min), max);
-};
-
-const createId = () => {
-    return crypto.randomUUID();
-};
-
-const normalizeColor = (color: string) => {
-    return /^#[0-9a-fA-F]{6}$/.test(color) ? color : "#000000";
-};
-
-const NumberInput = ({
-    value,
-    min,
-    max,
-    step = 1,
-    ariaLabel,
-    onChange,
-}: NumberInputProps) => {
-    const changeValue = (direction: 1 | -1) => {
-        const nextValue = Number((value + step * direction).toFixed(6));
-
-        onChange(clamp(nextValue, min, max));
-    };
-
-    return (
-        <div className="relative w-full">
-            <input
-                type="number"
-                aria-label={ariaLabel}
-                min={min}
-                max={max}
-                step={step}
-                value={value}
-                onChange={(event) => {
-                    const nextValue = Number(event.target.value);
-
-                    if (Number.isNaN(nextValue)) {
-                        return;
-                    }
-
-                    onChange(clamp(nextValue, min, max));
-                }}
-                className="
-                    w-full
-                    rounded-[4px]
-                    bg-fg/10
-                    py-1.5
-                    pr-8
-                    pl-2
-                    text-[12px]
-                    text-fg
-                    outline-none
-                    transition-colors
-                    duration-200
-                    hover:bg-fg/15
-                    focus:bg-fg/15
-
-                    [appearance:textfield]
-
-                    [&::-webkit-inner-spin-button]:appearance-none
-                    [&::-webkit-outer-spin-button]:appearance-none
-                "
-            />
-
-            <div
-                className="
-                    absolute
-                    top-0
-                    right-0
-                    bottom-0
-                    grid
-                    w-7
-                    grid-rows-2
-                    overflow-hidden
-                    rounded-r-[4px]
-                    border-l
-                    border-fg/10
-                "
-            >
-                <button
-                    type="button"
-                    aria-label={`${ariaLabel} increase`}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => changeValue(1)}
-                    className="
-                        flex
-                        cursor-pointer
-                        items-center
-                        justify-center
-                        bg-app
-                        text-fg
-                        transition-colors
-                        duration-150
-                        hover:bg-fg
-                        hover:text-app
-                        active:bg-fg/80
-                    "
-                >
-                    <IconChevronUp className="size-3" />
-                </button>
-
-                <button
-                    type="button"
-                    aria-label={`${ariaLabel} decrease`}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => changeValue(-1)}
-                    className="
-                        flex
-                        cursor-pointer
-                        items-center
-                        justify-center
-                        border-t
-                        border-fg/10
-                        bg-app
-                        text-fg
-                        transition-colors
-                        duration-150
-                        hover:bg-fg
-                        hover:text-app
-                        active:bg-fg/80
-                    "
-                >
-                    <IconChevronDown className="size-3" />
-                </button>
-            </div>
-        </div>
-    );
-};
-
-const ShadowEditor = ({
-    shadow,
-    index,
-    total,
-    updateShadow,
-    removeShadow,
-    duplicateShadow,
-}: ShadowEditorProps) => {
-    const dragControls = useDragControls();
-
-    return (
-        <Reorder.Item
-            value={shadow}
-            dragListener={false}
-            dragControls={dragControls}
-            layout
-            className="
-                col-stretch-3
-                rounded-[8px]
-                border
-                border-fg/8
-                bg-fg/5
-                p-3
-                shadow-sm
-                shadow-black/5
-            "
-        >
-            <div className="row-center-2 w-full">
-                <button
-                    type="button"
-                    aria-label={`Reorder shadow ${index + 1}`}
-                    onPointerDown={(event) => dragControls.start(event)}
-                    className="
-                        row-center-0
-                        shrink-0
-                        cursor-grab
-                        rounded-[4px]
-                        p-1
-                        text-fg/50
-                        transition-colors
-                        hover:bg-fg/10
-                        hover:text-fg
-                        active:cursor-grabbing
-                    "
-                >
-                    <IconGripVertical className="size-5" />
-                </button>
-
-                <span className="text-[12px]">Shadow {index + 1}</span>
-
-                <div
-                    className="
-                        ml-auto
-                        size-5
-                        rounded-full
-                        border
-                        border-fg/20
-                    "
-                    style={{
-                        backgroundColor: normalizeColor(shadow.color),
-                    }}
-                />
-
-                <GeneralButton
-                    textButton="Inset"
-                    variant="minimal"
-                    active={shadow.inset}
-                    handleAction={() =>
-                        updateShadow(shadow.id, {
-                            inset: !shadow.inset,
-                        })
-                    }
-                />
-
-                <button
-                    type="button"
-                    aria-label={`Duplicate shadow ${index + 1}`}
-                    onClick={() => duplicateShadow(shadow.id)}
-                    className="
-                        row-center-0
-                        cursor-pointer
-                        rounded-[4px]
-                        p-1
-                        text-fg/60
-                        transition-colors
-                        hover:bg-fg/10
-                        hover:text-fg
-                    "
-                >
-                    <IconCopy className="size-5" />
-                </button>
-
-                <button
-                    type="button"
-                    aria-label={`Delete shadow ${index + 1}`}
-                    disabled={total <= 1}
-                    onClick={() => removeShadow(shadow.id)}
-                    className="
-                        row-center-0
-                        cursor-pointer
-                        rounded-[4px]
-                        p-1
-                        text-fg/60
-                        transition-colors
-                        hover:bg-fg/10
-                        hover:text-red-500
-                        disabled:pointer-events-none
-                        disabled:opacity-30
-                    "
-                >
-                    <IconTrash className="size-5" />
-                </button>
-            </div>
-
-            <div
-                className="
-                    grid
-                    grid-cols-1
-                    gap-3
-                    md:grid-cols-2
-                "
-            >
-                <div className="col-stretch-1">
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Offset X</span>
-
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {shadow.offsetX}
-                            px
-                        </span>
-                    </div>
-
-                    <Range
-                        value={shadow.offsetX}
-                        min={-100}
-                        max={100}
-                        step={1}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                offsetX: value,
-                            })
-                        }
-                    />
-
-                    <NumberInput
-                        value={shadow.offsetX}
-                        min={-100}
-                        max={100}
-                        ariaLabel={`Shadow ${index + 1} offset X`}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                offsetX: value,
-                            })
-                        }
-                    />
-                </div>
-
-                <div className="col-stretch-1">
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Offset Y</span>
-
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {shadow.offsetY}
-                            px
-                        </span>
-                    </div>
-
-                    <Range
-                        value={shadow.offsetY}
-                        min={-100}
-                        max={100}
-                        step={1}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                offsetY: value,
-                            })
-                        }
-                    />
-
-                    <NumberInput
-                        value={shadow.offsetY}
-                        min={-100}
-                        max={100}
-                        ariaLabel={`Shadow ${index + 1} offset Y`}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                offsetY: value,
-                            })
-                        }
-                    />
-                </div>
-
-                <div className="col-stretch-1">
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Blur</span>
-
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {shadow.blur}
-                            px
-                        </span>
-                    </div>
-
-                    <Range
-                        value={shadow.blur}
-                        min={0}
-                        max={150}
-                        step={1}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                blur: value,
-                            })
-                        }
-                    />
-
-                    <NumberInput
-                        value={shadow.blur}
-                        min={0}
-                        max={150}
-                        ariaLabel={`Shadow ${index + 1} blur`}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                blur: value,
-                            })
-                        }
-                    />
-                </div>
-
-                <div className="col-stretch-1">
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Spread</span>
-
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {shadow.spread}
-                            px
-                        </span>
-                    </div>
-
-                    <Range
-                        value={shadow.spread}
-                        min={-100}
-                        max={100}
-                        step={1}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                spread: value,
-                            })
-                        }
-                    />
-
-                    <NumberInput
-                        value={shadow.spread}
-                        min={-100}
-                        max={100}
-                        ariaLabel={`Shadow ${index + 1} spread`}
-                        onChange={(value) =>
-                            updateShadow(shadow.id, {
-                                spread: value,
-                            })
-                        }
-                    />
-                </div>
-            </div>
-
-            <div className="row-center-2">
-                <label
-                    htmlFor={`shadow-${shadow.id}-color`}
-                    className="text-[12px]"
-                >
-                    Shadow color
-                </label>
-
-                <input
-                    id={`shadow-${shadow.id}-color`}
-                    type="color"
-                    aria-label={`Shadow ${index + 1} color`}
-                    value={normalizeColor(shadow.color)}
-                    onChange={(event) =>
-                        updateShadow(shadow.id, {
-                            color: event.target.value,
-                        })
-                    }
-                    className="
-                        ml-auto
-                        h-9
-                        w-12
-                        cursor-pointer
-                        rounded-md
-                        border-0
-                        bg-transparent
-                        p-0
-                        outline-none
-                    "
-                />
-
-                <input
-                    type="text"
-                    aria-label={`Shadow ${index + 1} color value`}
-                    value={shadow.color}
-                    onChange={(event) =>
-                        updateShadow(shadow.id, {
-                            color: event.target.value,
-                        })
-                    }
-                    className="
-                        w-28
-                        rounded-[4px]
-                        bg-fg/10
-                        px-2
-                        py-1.5
-                        text-[12px]
-                        outline-none
-                        transition-colors
-                        hover:bg-fg/15
-                        focus:bg-fg/15
-                    "
-                />
-            </div>
-        </Reorder.Item>
-    );
-};
 
 export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     const previewRef = useRef<HTMLDivElement>(null);
@@ -527,6 +77,17 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
         startHeight: config.boxHeight,
     });
 
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 6,
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        }),
+    );
+
     const { header } = useAppContextValues();
 
     const { isScrolled } = header || {};
@@ -538,16 +99,6 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     const css = useMemo(() => {
         return `box-shadow: ${boxShadow};`;
     }, [boxShadow]);
-
-    const updateConfig = <K extends keyof BoxShadowConfig>(
-        key: K,
-        value: BoxShadowConfig[K],
-    ) => {
-        setConfig((current) => ({
-            ...current,
-            [key]: value,
-        }));
-    };
 
     const updateShadow = (
         id: string,
@@ -620,6 +171,36 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                 ...current,
 
                 shadows: current.shadows.filter((shadow) => shadow.id !== id),
+            };
+        });
+    };
+
+    const handleDragEnd = ({ active, over }: DragEndEvent) => {
+        if (!over) {
+            return;
+        }
+
+        if (active.id === over.id) {
+            return;
+        }
+
+        setConfig((current) => {
+            const oldIndex = current.shadows.findIndex(
+                (shadow) => shadow.id === active.id,
+            );
+
+            const newIndex = current.shadows.findIndex(
+                (shadow) => shadow.id === over.id,
+            );
+
+            if (oldIndex === -1 || newIndex === -1) {
+                return current;
+            }
+
+            return {
+                ...current,
+
+                shadows: arrayMove(current.shadows, oldIndex, newIndex),
             };
         });
     };
@@ -700,20 +281,24 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     const scroll = (isScrolled?.scroll.scrollTop ?? 0) > 380;
 
     return (
-        <div className="col-stretch-4 w-full">
+        <div className="col-stretch-1 lg:row-stretch-4 w-full relative">
             <div
                 ref={previewRef}
                 className="
                     relative
+                    lg:sticky
+                    lg:top-0
                     flex
                     h-[420px]
                     w-full
+                    lg:w-1/3
                     items-center
                     justify-center
                     overflow-hidden
                     rounded-xl
                     shadow-inner
                     shadow-black/10
+                      z-22222
                 "
                 style={{
                     backgroundColor: config.canvasColor,
@@ -725,17 +310,14 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         shrink-0
                         transition-[background-color,box-shadow]
                         duration-200
+                        
                     "
                     style={{
                         width: `${config.boxWidth}px`,
                         height: `${config.boxHeight}px`,
-
                         maxWidth: "calc(100% - 60px)",
-
                         maxHeight: "calc(100% - 60px)",
-
                         backgroundColor: config.boxColor,
-
                         boxShadow,
                     }}
                 >
@@ -830,333 +412,155 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                             hover:bg-fg
                         "
                     />
-                </div>
 
-                <div
-                    className="
-                        absolute
-                        bottom-3
-                        left-3
-                        rounded-[6px]
-                        bg-black/40
-                        px-2
-                        py-1
-                        text-[10px]
-                        text-white
-                        backdrop-blur-sm
-                    "
-                >
-                    {config.boxWidth}
-                    {" × "}
-                    {config.boxHeight}
-                    px
-                </div>
-            </div>
-
-            <motion.div
-                onClick={() =>
-                    document.querySelector<HTMLElement>("#main")?.scrollTo({
-                        top: 0,
-                        behavior: "smooth",
-                    })
-                }
-                animate={{
-                    opacity: scroll ? 1 : 0,
-
-                    x: scroll ? 0 : "100%",
-                }}
-                transition={{
-                    type: "spring",
-
-                    stiffness: scroll ? 100 : 500,
-
-                    damping: scroll ? 8 : 24,
-
-                    mass: 0.4,
-                }}
-                className="
-                    fixed
-                    z-2
-                    flex
-                    size-[100px]
-                    cursor-pointer
-                    items-center
-                    justify-center
-                    overflow-hidden
-                    rounded-xl
-                    shadow-lg
-                    shadow-black/80
-                "
-                style={{
-                    right: "20px",
-                    top: "90px",
-
-                    backgroundColor: config.canvasColor,
-                }}
-            >
-                <div
-                    className="size-[50px]"
-                    style={{
-                        backgroundColor: config.boxColor,
-
-                        boxShadow,
-                    }}
-                />
-            </motion.div>
-
-            <div
-                className="
-                    grid
-                    grid-cols-1
-                    gap-3
-                    sm:grid-cols-2
-                "
-            >
-                <div
-                    className="
-                        row-center-2
-                        rounded-[8px]
-                        bg-fg/5
-                        p-3
-                    "
-                >
-                    <label
-                        htmlFor="box-shadow-canvas-color"
-                        className="text-[12px]"
-                    >
-                        Background color
-                    </label>
-
-                    <input
-                        id="box-shadow-canvas-color"
-                        type="color"
-                        value={normalizeColor(config.canvasColor)}
-                        onChange={(event) =>
-                            updateConfig("canvasColor", event.target.value)
-                        }
+                    <div
                         className="
-                            ml-auto
-                            h-9
-                            w-12
-                            cursor-pointer
-                            rounded-md
-                            border-0
-                            bg-transparent
-                            p-0
-                        "
-                    />
-
-                    <input
-                        type="text"
-                        aria-label="Background color value"
-                        value={config.canvasColor}
-                        onChange={(event) =>
-                            updateConfig("canvasColor", event.target.value)
-                        }
-                        className="
-                            w-28
-                            rounded-[4px]
-                            bg-fg/10
+                            absolute
+                            bottom-3
+                            left-3
+                            rounded-[6px]
+                            bg-black/40
                             px-2
-                            py-1.5
-                            text-[12px]
-                            outline-none
-                            transition-colors
-                            hover:bg-fg/15
-                            focus:bg-fg/15
-                        "
-                    />
-                </div>
+                            py-1
+                            text-[10px]
+                            text-white
+                            backdrop-blur-sm
 
-                <div
-                    className="
-                        row-center-2
-                        rounded-[8px]
-                        bg-fg/5
-                        p-3
-                    "
-                >
-                    <label
-                        htmlFor="box-shadow-box-color"
-                        className="text-[12px]"
+                        "
                     >
-                        Block color
-                    </label>
-
-                    <input
-                        id="box-shadow-box-color"
-                        type="color"
-                        value={normalizeColor(config.boxColor)}
-                        onChange={(event) =>
-                            updateConfig("boxColor", event.target.value)
-                        }
-                        className="
-                            ml-auto
-                            h-9
-                            w-12
-                            cursor-pointer
-                            rounded-md
-                            border-0
-                            bg-transparent
-                            p-0
-                        "
-                    />
-
-                    <input
-                        type="text"
-                        aria-label="Block color value"
-                        value={config.boxColor}
-                        onChange={(event) =>
-                            updateConfig("boxColor", event.target.value)
-                        }
-                        className="
-                            w-28
-                            rounded-[4px]
-                            bg-fg/10
-                            px-2
-                            py-1.5
-                            text-[12px]
-                            outline-none
-                            transition-colors
-                            hover:bg-fg/15
-                            focus:bg-fg/15
-                        "
-                    />
-                </div>
-            </div>
-
-            <div
-                className="
-                    grid
-                    grid-cols-1
-                    gap-3
-                    sm:grid-cols-2
-                "
-            >
-                <div
-                    className="
-                        col-stretch-2
-                        rounded-[8px]
-                        bg-fg/5
-                        p-3
-                    "
-                >
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Width</span>
-
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {config.boxWidth}
-                            px
-                        </span>
+                        {config.boxWidth}
+                        {" × "}
+                        {config.boxHeight}
+                        px
                     </div>
 
-                    <Range
-                        value={config.boxWidth}
-                        min={80}
-                        max={340}
-                        step={1}
-                        onChange={(value) => updateConfig("boxWidth", value)}
-                    />
+                    <motion.div
+                        onClick={() =>
+                            document
+                                .querySelector<HTMLElement>("#main")
+                                ?.scrollTo({
+                                    top: 0,
+                                    behavior: "smooth",
+                                })
+                        }
+                        animate={{
+                            opacity: scroll ? 1 : 0,
 
-                    <NumberInput
-                        value={config.boxWidth}
-                        min={80}
-                        max={340}
-                        ariaLabel="Block width"
-                        onChange={(value) => updateConfig("boxWidth", value)}
-                    />
-                </div>
+                            x: scroll ? 0 : "100%",
+                        }}
+                        transition={{
+                            type: "spring",
 
-                <div
-                    className="
-                        col-stretch-2
-                        rounded-[8px]
-                        bg-fg/5
-                        p-3
-                    "
-                >
-                    <div className="row-center-2">
-                        <span className="text-[12px]">Height</span>
+                            stiffness: scroll ? 100 : 500,
 
-                        <span className="ml-auto text-[10px] text-fg/60">
-                            {config.boxHeight}
-                            px
-                        </span>
-                    </div>
+                            damping: scroll ? 8 : 24,
 
-                    <Range
-                        value={config.boxHeight}
-                        min={80}
-                        max={340}
-                        step={1}
-                        onChange={(value) => updateConfig("boxHeight", value)}
-                    />
+                            mass: 0.4,
+                        }}
+                        className="
+                            fixed
+                          
+                            flex
+                            size-[100px]
+                            cursor-pointer
+                            items-center
+                            justify-center
+                            overflow-hidden
+                            rounded-xl
+                            shadow-lg
+                            shadow-black/80
+                        "
+                        style={{
+                            right: "20px",
+                            top: "90px",
 
-                    <NumberInput
-                        value={config.boxHeight}
-                        min={80}
-                        max={340}
-                        ariaLabel="Block height"
-                        onChange={(value) => updateConfig("boxHeight", value)}
-                    />
-                </div>
-            </div>
+                            backgroundColor: config.canvasColor,
+                        }}
+                    >
+                        <div
+                            className="size-[50px]"
+                            style={{
+                                backgroundColor: config.boxColor,
 
-            <div className="col-stretch-2">
-                <div className="row-center-2">
-                    <span className="text-[12px]">
-                        Shadows ({config.shadows.length})
-                    </span>
-
-                    <GeneralButton
-                        icon={<IconPlus />}
-                        textButton="Add shadow"
-                        variant="soft"
-                        handleAction={addShadow}
-                    />
-                </div>
-
-                <Reorder.Group
-                    axis="y"
-                    values={config.shadows}
-                    onReorder={(shadows) => updateConfig("shadows", shadows)}
-                    className="col-stretch-2"
-                >
-                    {config.shadows.map((shadow, index) => (
-                        <ShadowEditor
-                            key={shadow.id}
-                            shadow={shadow}
-                            index={index}
-                            total={config.shadows.length}
-                            updateShadow={updateShadow}
-                            removeShadow={removeShadow}
-                            duplicateShadow={duplicateShadow}
+                                boxShadow,
+                            }}
                         />
-                    ))}
-                </Reorder.Group>
+                    </motion.div>
+                </div>
             </div>
 
-            <div className="row-center-2 flex-wrap">
-                <GeneralButton
-                    textButton="Copy CSS"
-                    copy={{
-                        copyItem: css,
-                    }}
-                    variant="soft"
-                />
-            </div>
+            <div className="col-center-1 flex-1">
+                <ConfigShadow config={config} setConfig={setConfig} />
 
-            <div
-                className="
-                    rounded-lg
-                    bg-black/20
-                    p-3
-                    transition-colors
-                    duration-200
-                    hover:bg-black/25
-                "
-            >
-                <code className="text-[12px] break-all">{css}</code>
+                <div className="col-stretch-2 w-full">
+                    <div className="row-center-2 p-2 bg-fg/5 rounded-xl justify-between">
+                        <span className="text-[12px]">
+                            Shadows ({config.shadows.length})
+                        </span>
+
+                        <GeneralButton
+                            icon={<IconPlus />}
+                            textButton="Add shadow"
+                            variant="soft"
+                            handleAction={addShadow}
+                        />
+                    </div>
+
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext
+                            items={config.shadows.map((shadow) => shadow.id)}
+                            strategy={rectSortingStrategy}
+                        >
+                            <div
+                                className="
+                                    col-stretch-2
+                                    lg:grid
+                                    lg:grid-cols-2
+                                    lg:gap-2
+                                "
+                            >
+                                {config.shadows.map((shadow, index) => (
+                                    <ShadowEditor
+                                        key={shadow.id}
+                                        shadow={shadow}
+                                        index={index}
+                                        total={config.shadows.length}
+                                        updateShadow={updateShadow}
+                                        removeShadow={removeShadow}
+                                        duplicateShadow={duplicateShadow}
+                                    />
+                                ))}
+                            </div>
+                        </SortableContext>
+                    </DndContext>
+
+                    <div className="col-start-2 w-full p-2 rounded-xl bg-fg/10">
+                        <GeneralButton
+                            textButton="Copy CSS"
+                            copy={{
+                                copyItem: css,
+                            }}
+                            variant="soft"
+                        />
+
+                        <div
+                            className="
+                                p-3
+                                transition-colors
+                                duration-200
+                                hover:bg-black/25
+                                w-full
+                                rounded-xl
+                            "
+                        >
+                            <code className="text-[12px] break-all">{css}</code>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

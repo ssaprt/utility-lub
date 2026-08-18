@@ -3,7 +3,6 @@
 import { AIAgent } from "@/AI/AIAgent";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 import { useAppContextActions } from "@/context/appContext";
-import { IconBoxMultiple } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 import { Categories } from "./Categories";
@@ -13,6 +12,7 @@ import {
     type BoxShadowConfig,
 } from "./box-shadow.type";
 
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { IsGenerator } from "./IsGenerator";
 import type { BoxShadowPreset } from "./presetsGenerator";
 
@@ -38,7 +38,9 @@ export const BoxShadow = () => {
     };
 
     useEffect(() => {
-        setIconHeader(<IconBoxMultiple className="h-8 w-8" />);
+        setIconHeader(
+            <DynamicSvgIcon name="shadow.svg" className="w-8 h-8 fill-fg" />,
+        );
 
         setTitleHeader("Box Shadow Generator");
     }, [setIconHeader, setTitleHeader]);
@@ -50,10 +52,13 @@ export const BoxShadow = () => {
             <TitlePost
                 icon={{
                     component: (
-                        <IconBoxMultiple className="h-8 w-8 fill-none!" />
+                        <DynamicSvgIcon
+                            name="shadow.svg"
+                            className="w-8 h-8 fill-fg"
+                        />
                     ),
 
-                    meta: "box-shadow",
+                    meta: "shadow.svg",
                 }}
                 description="Create and customize CSS box shadows, combine multiple shadow layers, use inset shadows, reorder layers and apply ready-made presets"
                 hideVersion

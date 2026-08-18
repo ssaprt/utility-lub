@@ -191,11 +191,16 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     const scroll = (isScrolled?.scroll.scrollTop ?? 0) > 380;
 
     return (
-        <div className="col-stretch-4 w-full">
+        <div className="col-stretch-4 lg:row-stretch-4 w-full">
             <div
                 className="
-                    min-h-64
-                    w-full
+                relative
+                lg:sticky
+                lg:top-0
+                   w-full
+                   lg:w-1/3
+                   h-auto
+                  max-h-[250px]
                     rounded-xl
                     shadow-lg
                     shadow-black/20
@@ -241,25 +246,28 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                 }}
             />
 
-            <div className="row-center-2 flex-wrap">
-                <div className="row-center-1 bg-fg/10 p-1 rounded-[8px]">
-                    {(["linear", "radial", "conic"] as const).map((type) => (
-                        <GeneralButton
-                            variant="ghost"
-                            key={type}
-                            textButton={type}
-                            handleAction={() =>
-                                updateConfig("gradientType", type)
-                            }
-                            active={gradientType === type}
-                        />
-                    ))}
-                </div>
+            <div className="col-stretch-2 w-full">
+                <div className="row-center-2 flex-wrap">
+                    <div className="row-center-1 bg-fg/10 p-1 rounded-[8px]">
+                        {(["linear", "radial", "conic"] as const).map(
+                            (type) => (
+                                <GeneralButton
+                                    variant="ghost"
+                                    key={type}
+                                    textButton={type}
+                                    handleAction={() =>
+                                        updateConfig("gradientType", type)
+                                    }
+                                    active={gradientType === type}
+                                />
+                            ),
+                        )}
+                    </div>
 
-                <button
-                    type="button"
-                    onClick={() => updateConfig("repeating", !repeating)}
-                    className={`
+                    <button
+                        type="button"
+                        onClick={() => updateConfig("repeating", !repeating)}
+                        className={`
                         rounded-[4px]
                         px-3
                         py-1.5
@@ -273,94 +281,15 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                 : "bg-fg/5 hover:bg-fg/15 hover:shadow-md hover:shadow-black/10"
                         }
                     `}
-                >
-                    Repeating
-                </button>
-            </div>
-
-            {gradientType === "linear" && (
-                <div className="col-stretch-2 rounded-[4px] bg-fg/5 p-3">
-                    <div className="row-center-2">
-                        <span className="text-sm">Angle</span>
-
-                        <span className="ml-auto text-sm text-fg/60">
-                            {angle}°
-                        </span>
-                    </div>
-
-                    <Range
-                        value={angle}
-                        min={0}
-                        max={360}
-                        step={1}
-                        onChange={(value) => updateConfig("angle", value)}
-                    />
+                    >
+                        Repeating
+                    </button>
                 </div>
-            )}
 
-            {gradientType === "radial" && (
-                <div className="col-stretch-3 rounded-[4px] bg-fg/5 p-3">
-                    <div className="row-center-2">
-                        {(["ellipse", "circle"] as const).map((shape) => (
-                            <GeneralButton
-                                variant="soft"
-                                key={shape}
-                                textButton={shape}
-                                handleAction={() =>
-                                    updateConfig("radialShape", shape)
-                                }
-                                active={radialShape === shape}
-                            />
-                        ))}
-                    </div>
-
-                    <div className="col-stretch-1">
+                {gradientType === "linear" && (
+                    <div className="col-stretch-2 rounded-[4px] bg-fg/5 p-3">
                         <div className="row-center-2">
-                            <span className="text-sm">Position X</span>
-
-                            <span className="ml-auto text-sm text-fg/60">
-                                {positionX}%
-                            </span>
-                        </div>
-
-                        <Range
-                            value={positionX}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onChange={(value) =>
-                                updateConfig("positionX", value)
-                            }
-                        />
-                    </div>
-
-                    <div className="col-stretch-1">
-                        <div className="row-center-2">
-                            <span className="text-sm">Position Y</span>
-
-                            <span className="ml-auto text-sm text-fg/60">
-                                {positionY}%
-                            </span>
-                        </div>
-
-                        <Range
-                            value={positionY}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onChange={(value) =>
-                                updateConfig("positionY", value)
-                            }
-                        />
-                    </div>
-                </div>
-            )}
-
-            {gradientType === "conic" && (
-                <div className="col-stretch-3 rounded-lg bg-fg/5 p-3">
-                    <div className="col-stretch-1">
-                        <div className="row-center-2">
-                            <span className="text-sm">Start angle</span>
+                            <span className="text-sm">Angle</span>
 
                             <span className="ml-auto text-sm text-fg/60">
                                 {angle}°
@@ -375,53 +304,134 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                             onChange={(value) => updateConfig("angle", value)}
                         />
                     </div>
+                )}
 
-                    <div className="col-stretch-1">
+                {gradientType === "radial" && (
+                    <div className="col-stretch-3 rounded-[4px] bg-fg/5 p-3">
                         <div className="row-center-2">
-                            <span className="text-sm">Position X</span>
-
-                            <span className="ml-auto text-sm text-fg/60">
-                                {positionX}%
-                            </span>
+                            {(["ellipse", "circle"] as const).map((shape) => (
+                                <GeneralButton
+                                    variant="soft"
+                                    key={shape}
+                                    textButton={shape}
+                                    handleAction={() =>
+                                        updateConfig("radialShape", shape)
+                                    }
+                                    active={radialShape === shape}
+                                />
+                            ))}
                         </div>
 
-                        <Range
-                            value={positionX}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onChange={(value) =>
-                                updateConfig("positionX", value)
-                            }
-                        />
-                    </div>
+                        <div className="col-stretch-1">
+                            <div className="row-center-2">
+                                <span className="text-sm">Position X</span>
 
-                    <div className="col-stretch-1">
-                        <div className="row-center-2">
-                            <span className="text-sm">Position Y</span>
+                                <span className="ml-auto text-sm text-fg/60">
+                                    {positionX}%
+                                </span>
+                            </div>
 
-                            <span className="ml-auto text-sm text-fg/60">
-                                {positionY}%
-                            </span>
+                            <Range
+                                value={positionX}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(value) =>
+                                    updateConfig("positionX", value)
+                                }
+                            />
                         </div>
 
-                        <Range
-                            value={positionY}
-                            min={0}
-                            max={100}
-                            step={1}
-                            onChange={(value) =>
-                                updateConfig("positionY", value)
-                            }
-                        />
-                    </div>
-                </div>
-            )}
+                        <div className="col-stretch-1">
+                            <div className="row-center-2">
+                                <span className="text-sm">Position Y</span>
 
-            <div className="relative px-3 pt-5 pb-3">
-                <div
-                    ref={trackRef}
-                    className="
+                                <span className="ml-auto text-sm text-fg/60">
+                                    {positionY}%
+                                </span>
+                            </div>
+
+                            <Range
+                                value={positionY}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(value) =>
+                                    updateConfig("positionY", value)
+                                }
+                            />
+                        </div>
+                    </div>
+                )}
+
+                {gradientType === "conic" && (
+                    <div className="col-stretch-3 rounded-lg bg-fg/5 p-3">
+                        <div className="col-stretch-1">
+                            <div className="row-center-2">
+                                <span className="text-sm">Start angle</span>
+
+                                <span className="ml-auto text-sm text-fg/60">
+                                    {angle}°
+                                </span>
+                            </div>
+
+                            <Range
+                                value={angle}
+                                min={0}
+                                max={360}
+                                step={1}
+                                onChange={(value) =>
+                                    updateConfig("angle", value)
+                                }
+                            />
+                        </div>
+
+                        <div className="col-stretch-1">
+                            <div className="row-center-2">
+                                <span className="text-sm">Position X</span>
+
+                                <span className="ml-auto text-sm text-fg/60">
+                                    {positionX}%
+                                </span>
+                            </div>
+
+                            <Range
+                                value={positionX}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(value) =>
+                                    updateConfig("positionX", value)
+                                }
+                            />
+                        </div>
+
+                        <div className="col-stretch-1">
+                            <div className="row-center-2">
+                                <span className="text-sm">Position Y</span>
+
+                                <span className="ml-auto text-sm text-fg/60">
+                                    {positionY}%
+                                </span>
+                            </div>
+
+                            <Range
+                                value={positionY}
+                                min={0}
+                                max={100}
+                                step={1}
+                                onChange={(value) =>
+                                    updateConfig("positionY", value)
+                                }
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <div className="relative px-3 pt-5 pb-3">
+                    <div
+                        ref={trackRef}
+                        className="
                         relative
                         h-5
                         w-full
@@ -429,21 +439,21 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         shadow-inner
                         shadow-black/20
                     "
-                    style={{
-                        background: trackGradient,
-                    }}
-                >
-                    {stops.map((stop) => (
-                        <button
-                            key={stop.id}
-                            type="button"
-                            onPointerDown={(event) =>
-                                handlePointerDown(event, stop.id)
-                            }
-                            onPointerMove={(event) =>
-                                handlePointerMove(event, stop.id)
-                            }
-                            className="
+                        style={{
+                            background: trackGradient,
+                        }}
+                    >
+                        {stops.map((stop) => (
+                            <button
+                                key={stop.id}
+                                type="button"
+                                onPointerDown={(event) =>
+                                    handlePointerDown(event, stop.id)
+                                }
+                                onPointerMove={(event) =>
+                                    handlePointerMove(event, stop.id)
+                                }
+                                className="
                                 absolute
                                 top-1/2
                                 h-7
@@ -465,25 +475,25 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                 active:scale-110
                                 active:cursor-grabbing
                             "
-                            style={{
-                                left: `${stop.offset}%`,
-                                backgroundColor: /^#[0-9a-fA-F]{6}$/.test(
-                                    stop.color,
-                                )
-                                    ? stop.color
-                                    : "#000000",
-                            }}
-                            aria-label={`Gradient stop ${stop.offset}%`}
-                        />
-                    ))}
+                                style={{
+                                    left: `${stop.offset}%`,
+                                    backgroundColor: /^#[0-9a-fA-F]{6}$/.test(
+                                        stop.color,
+                                    )
+                                        ? stop.color
+                                        : "#000000",
+                                }}
+                                aria-label={`Gradient stop ${stop.offset}%`}
+                            />
+                        ))}
+                    </div>
                 </div>
-            </div>
 
-            <div className="col-stretch-2">
-                {sortedStops.map((stop) => (
-                    <div
-                        key={stop.id}
-                        className="
+                <div className="col-stretch-2">
+                    {sortedStops.map((stop) => (
+                        <div
+                            key={stop.id}
+                            className="
                             grid
                             grid-cols-1
                             gap-2
@@ -493,20 +503,20 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                             sm:grid-cols-[44px_110px_1fr_80px_auto]
                             sm:items-center
                         "
-                    >
-                        <input
-                            type="color"
-                            value={
-                                /^#[0-9a-fA-F]{6}$/.test(stop.color)
-                                    ? stop.color
-                                    : "#000000"
-                            }
-                            onChange={(event) =>
-                                updateStop(stop.id, {
-                                    color: event.target.value,
-                                })
-                            }
-                            className="
+                        >
+                            <input
+                                type="color"
+                                value={
+                                    /^#[0-9a-fA-F]{6}$/.test(stop.color)
+                                        ? stop.color
+                                        : "#000000"
+                                }
+                                onChange={(event) =>
+                                    updateStop(stop.id, {
+                                        color: event.target.value,
+                                    })
+                                }
+                                className="
                                 h-9
                                 w-11
                                 cursor-pointer
@@ -516,15 +526,15 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                 bg-transparent
                                 p-0
                             "
-                        />
+                            />
 
-                        <input
-                            type="text"
-                            value={stop.color}
-                            onChange={(event) =>
-                                handleHexChange(stop.id, event.target.value)
-                            }
-                            className="
+                            <input
+                                type="text"
+                                value={stop.color}
+                                onChange={(event) =>
+                                    handleHexChange(stop.id, event.target.value)
+                                }
+                                className="
                                 min-w-0
                                 rounded-[4px]
                                 bg-fg/10
@@ -537,35 +547,35 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                 hover:bg-fg/15
                                 focus:bg-fg/15
                             "
-                        />
+                            />
 
-                        <Range
-                            value={stop.offset}
-                            min={0}
-                            max={100}
-                            onChange={(value) =>
-                                updateStop(stop.id, {
-                                    offset: value,
-                                })
-                            }
-                        />
-
-                        <div className="row-center-1">
-                            <input
-                                type="number"
+                            <Range
+                                value={stop.offset}
                                 min={0}
                                 max={100}
-                                value={stop.offset}
-                                onChange={(event) =>
+                                onChange={(value) =>
                                     updateStop(stop.id, {
-                                        offset: clamp(
-                                            Number(event.target.value),
-                                            0,
-                                            100,
-                                        ),
+                                        offset: value,
                                     })
                                 }
-                                className="
+                            />
+
+                            <div className="row-center-1">
+                                <input
+                                    type="number"
+                                    min={0}
+                                    max={100}
+                                    value={stop.offset}
+                                    onChange={(event) =>
+                                        updateStop(stop.id, {
+                                            offset: clamp(
+                                                Number(event.target.value),
+                                                0,
+                                                100,
+                                            ),
+                                        })
+                                    }
+                                    className="
                                     w-14
                                     rounded-[4px]
                                     bg-fg/10
@@ -579,39 +589,39 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                     hover:bg-fg/15
                                     focus:bg-fg/15
                                 "
+                                />
+
+                                <span className="text-sm text-fg/60">%</span>
+                            </div>
+
+                            <GeneralButton
+                                textButton="Delete"
+                                variant="minimal"
+                                active={stops.length <= 2}
+                                handleAction={() => removeStop(stop.id)}
                             />
-
-                            <span className="text-sm text-fg/60">%</span>
                         </div>
+                    ))}
+                </div>
 
-                        <GeneralButton
-                            textButton="Delete"
-                            variant="minimal"
-                            active={stops.length <= 2}
-                            handleAction={() => removeStop(stop.id)}
-                        />
-                    </div>
-                ))}
-            </div>
+                <div className="row-center-2 flex-wrap">
+                    <GeneralButton
+                        textButton="Add color"
+                        handleAction={addStop}
+                        variant="soft"
+                    />
 
-            <div className="row-center-2 flex-wrap">
-                <GeneralButton
-                    textButton="Add color"
-                    handleAction={addStop}
-                    variant="soft"
-                />
+                    <GeneralButton
+                        textButton="Copy CSS"
+                        copy={{
+                            copyItem: gradient,
+                        }}
+                        variant="soft"
+                    />
+                </div>
 
-                <GeneralButton
-                    textButton="Copy CSS"
-                    copy={{
-                        copyItem: gradient,
-                    }}
-                    variant="soft"
-                />
-            </div>
-
-            <div
-                className="
+                <div
+                    className="
                     rounded-lg
                     bg-black/20
                     p-3
@@ -619,10 +629,11 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                     duration-200
                     hover:bg-black/25
                 "
-            >
-                <code className="text-sm break-all">
-                    background: {gradient};
-                </code>
+                >
+                    <code className="text-sm break-all">
+                        background: {gradient};
+                    </code>
+                </div>
             </div>
         </div>
     );
