@@ -25,7 +25,7 @@ export const Editor = ({ selectFromConfig }: EditorProps) => {
 
     const { delayLoad } = useDelayAfterLoad({
         isLoading,
-        delay: 300,
+        delay: 1000,
     });
 
     const isValidation =
@@ -124,30 +124,33 @@ export const Editor = ({ selectFromConfig }: EditorProps) => {
                 </div>
             )}
 
-            <GeneralButton
-                variant="glass"
-                disabled={delayLoad || !value.trim()}
-                icon={
-                    <motion.div
-                        animate={{
-                            opacity: delayLoad ? 1 : 0,
-                            width: delayLoad ? "14px" : 0,
-                            height: delayLoad ? "14px" : 0,
-                            marginRight: delayLoad ? 0 : "-10px",
-                        }}
-                        transition={{
-                            duration: 0.5,
-                            opacity: {
-                                duration: 0.2,
-                            },
-                        }}
-                    >
-                        <IconLoader2 className="w-full aspect-square animate-spin" />
-                    </motion.div>
-                }
-                textButton={selectFromConfig.actionButtonText}
-                handleAction={handleConvert}
-            />
+            <div className="row-center-2">
+                <GeneralButton
+                    className="rounded-[4px]!"
+                    variant="aurora"
+                    disabled={delayLoad || !value.trim()}
+                    icon={
+                        <motion.div
+                            animate={{
+                                opacity: delayLoad ? 1 : 0,
+                                width: delayLoad ? "14px" : 0,
+                                height: delayLoad ? "14px" : 0,
+                                marginRight: delayLoad ? 0 : "-10px",
+                            }}
+                            transition={{
+                                duration: 0.5,
+                                opacity: {
+                                    duration: 0.2,
+                                },
+                            }}
+                        >
+                            <IconLoader2 className="w-full aspect-square animate-spin" />
+                        </motion.div>
+                    }
+                    textButton={selectFromConfig.actionButtonText}
+                    handleAction={handleConvert}
+                />
+            </div>
         </>
     );
 };

@@ -79,7 +79,6 @@ const getAnimationZ = (width: number): AnimationZ => {
 
     return {
         press: Math.max(MIN_PRESS_Z, Math.min(MAX_PRESS_Z, calculatedPress)),
-
         pop: Math.max(MIN_POP_Z, Math.min(MAX_POP_Z, calculatedPop)),
     };
 };
@@ -129,7 +128,6 @@ export const GeneralButton = ({
         if (active === undefined) {
             await controls.start({
                 z: [0, animationZ.press, animationZ.pop, 0],
-
                 transition: {
                     duration: 0.25,
                     times: [0, 0.25, 0.9, 1],
@@ -197,12 +195,15 @@ export const GeneralButton = ({
             key={typeof textButton === "string" ? textButton : undefined}
             className={`
                 row-center-2
+                relative
+                isolate
                 shrink-0
+                overflow-hidden
                 px-2
                 py-1
                 select-none
                 hover:cursor-pointer
-                
+
                 ${variantStyles.base}
 
                 ${active ? variantStyles.active : ""}
@@ -210,6 +211,7 @@ export const GeneralButton = ({
                 ${active ? "pointer-events-none" : ""}
 
                 ${className ?? ""}
+
                 ${disabled ? "cursor-not-allowed! opacity-40!" : ""}
             `}
             initial={false}
@@ -245,13 +247,13 @@ export const GeneralButton = ({
                     className: icon.props.className || "h-4 w-4",
                 })}
 
-            <span className="text-[12px]">{textButton}</span>
+            <span className="relative z-1 text-[12px]">{textButton}</span>
 
             {copy &&
                 (copied ? (
-                    <IconCopyCheckFilled className="h-4 w-4" />
+                    <IconCopyCheckFilled className="relative z-1 h-4 w-4" />
                 ) : (
-                    <IconCopy className="h-4 w-4" />
+                    <IconCopy className="relative z-1 h-4 w-4" />
                 ))}
         </motion.button>
     );

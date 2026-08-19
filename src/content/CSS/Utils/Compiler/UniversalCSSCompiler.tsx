@@ -14,14 +14,6 @@ export const UniversalCSSCompiler = () => {
         <div className="col-stretch-8 w-full h-auto z-2">
             <TitlePost
                 useFn={false}
-                recordings={[
-                    {
-                        version: "1.0.0",
-                        date: "19/08/2026",
-                        title: "Publish",
-                        description: `Initial release ${selectFromConfig.titleLink}`,
-                    },
-                ]}
                 icon={{
                     component: (
                         <DynamicSvgIcon
@@ -31,11 +23,11 @@ export const UniversalCSSCompiler = () => {
                     ),
                     meta: "converter.svg",
                 }}
-                description={selectFromConfig.titleLink}
+                description=""
             >
                 {selectFromConfig.titleLink}
             </TitlePost>
-            <div className="col-start-2 w-full h-auto z-2 bg-fg/5 rounded-xl p-2 shadow-xs shadow-black/40">
+            <div className="col-start-2 w-full h-auto z-2 mb-10">
                 <Editor selectFromConfig={selectFromConfig} />
             </div>
         </div>

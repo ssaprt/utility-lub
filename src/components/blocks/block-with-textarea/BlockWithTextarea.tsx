@@ -59,7 +59,7 @@ export const BlockWithTextarea = ({
     };
 
     return (
-        <div className="col-stretch-2 h-[400px] w-full">
+        <div className="col-stretch-2 h-[400px] w-full bg-fg/5 rounded-md p-2 shadow-xs shadow-black/40">
             <div className="row-center-1 justify-between pl-2">
                 <div className="row-center-2 min-w-0">
                     <span className="text-[12px] text-fg">

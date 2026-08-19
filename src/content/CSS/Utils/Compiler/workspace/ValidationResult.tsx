@@ -3,6 +3,7 @@
 import clsx from "clsx";
 
 import type { StyleLanguage } from "@/services/StylesConverter/styles-converter.api";
+import { IconCheckFilled } from "@tabler/icons-react";
 
 type ValidationResultProps = {
     language: StyleLanguage;
@@ -39,28 +40,26 @@ export const ValidationResult = ({
                     items-center
                     rounded-lg
                     bg-fg/5
-                    px-4
-                    py-3
-                    outline
-                    outline-1
-                    transition-[outline-color,background-color]
+                    px-3
+                    py-1
+                    transition-[background-color]
                     duration-200
                 `,
-                loading && "outline-fg/15",
-                !loading && !error && !success && "outline-transparent",
-                success && "outline-emerald-400/60",
-                error && "outline-red-400/70",
             )}
         >
             <span
                 className={clsx(
-                    "whitespace-pre-wrap text-[12px] transition-colors duration-200",
+                    "whitespace-pre-wrap text-[12px] transition-colors duration-200 row-center-1",
                     loading && "text-fg/40",
                     !loading && !error && !success && "text-fg/40",
-                    success && "text-emerald-400",
-                    error && "text-red-400",
+                    success && "text-fg/60",
+                    error && "text-fg/60",
                 )}
             >
+                <span className="text-[24px]">
+                    {success && <IconCheckFilled />}
+                    {error && "✗"}
+                </span>{" "}
                 {text}
             </span>
         </div>
