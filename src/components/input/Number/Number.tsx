@@ -1,4 +1,4 @@
-import { clamp } from "@/content/CSS/Generator/BoxShadow/box-shadow.utils";
+import { clamp } from "@/content/CSS/CSSResource/Generator/BoxShadow/box-shadow.utils";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 
 interface NumberInputProps {

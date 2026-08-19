@@ -4,9 +4,9 @@ import { useRef } from "react";
 
 import { Hr } from "@/components/hr/Hr/Hr";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
+import { HeaderTitle } from "../../../components/HeaderTitle/HeaderTitle";
 import { Scroll } from "../Scroll";
 import { CSS } from "./CSS/CSS";
-import { HeaderTitle } from "./HeaderTitle/HeaderTitle";
 import styles from "./Menu.module.css";
 import { OpenData } from "./OpenData/OpenData";
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
@@ -57,7 +57,7 @@ export const Menu = () => {
                     ref={contentRef}
                     className={`${styles.content} px-4 lg:px-2`}
                 >
-                    <Scroll />
+                    <Scroll imposition="over" />
 
                     <div
                         className="
@@ -76,6 +76,8 @@ export const Menu = () => {
                         <ReactAndNext />
                         <OpenData />
                         <CSS />
+                        <div className="my-5"></div>
+                        {/* <Author /> */}
                     </div>
                 </div>
             </div>

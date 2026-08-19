@@ -33,6 +33,7 @@ interface GeneralButtonProps {
         copyItem: string;
     };
     handleAction?: () => void;
+    disabled?: boolean;
 }
 
 interface AnimationZ {
@@ -93,6 +94,7 @@ export const GeneralButton = ({
     copy,
     icon,
     handleAction,
+    disabled,
 }: GeneralButtonProps) => {
     const controls = useAnimation();
 
@@ -188,6 +190,7 @@ export const GeneralButton = ({
 
     return (
         <motion.button
+            disabled={disabled}
             aria-pressed={typeof active === "boolean" ? active : undefined}
             ref={buttonRef}
             type={type}
@@ -199,7 +202,7 @@ export const GeneralButton = ({
                 py-1
                 select-none
                 hover:cursor-pointer
-
+                
                 ${variantStyles.base}
 
                 ${active ? variantStyles.active : ""}
@@ -207,6 +210,7 @@ export const GeneralButton = ({
                 ${active ? "pointer-events-none" : ""}
 
                 ${className ?? ""}
+                ${disabled ? "cursor-not-allowed! opacity-40!" : ""}
             `}
             initial={false}
             style={{

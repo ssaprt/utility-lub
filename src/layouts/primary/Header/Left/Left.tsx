@@ -1,6 +1,6 @@
 import { useAppContextValues } from "@/context/appContext";
 import { motion } from "framer-motion";
-import { HeaderTitle } from "../../Menu/HeaderTitle/HeaderTitle";
+import { HeaderTitle } from "../../../../components/HeaderTitle/HeaderTitle";
 import styles from "../Header.module.css";
 import { FadeTitle } from "./FadeTitle";
 

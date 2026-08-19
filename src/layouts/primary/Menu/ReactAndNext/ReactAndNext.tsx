@@ -4,7 +4,7 @@ import {
     IconComponents,
     IconFishHook,
 } from "@tabler/icons-react";
-import { CategoryTitle } from "../CategoryTitle/CategoryTitle";
+import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
 
 export const ReactAndNext = () => {
     return (

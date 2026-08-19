@@ -61,7 +61,7 @@
 @import "./tailwind.css";
 
 .light {
-    --background: rgb(230, 220, 220);
+    --background: rgb(255, 255, 255);
     --foreground: #292929;
 }
 

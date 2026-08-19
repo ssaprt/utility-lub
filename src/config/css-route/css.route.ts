@@ -1,3 +1,4 @@
+import { cssUtilsRoute } from "./css-utils.route";
 import { generatorRoute } from "./generator.route";
 
 export const cssRoute = [
@@ -7,4 +8,5 @@ export const cssRoute = [
         Component: () => null,
     },
     ...generatorRoute,
+    ...cssUtilsRoute,
 ];

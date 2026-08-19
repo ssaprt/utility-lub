@@ -3,12 +3,15 @@ import { ScrollToFuture } from "scroll-to-future";
 export const Scroll = ({
     imposition = "after",
     nativeOnMobile = true,
+    target,
 }: {
     imposition?: "over" | "after";
     nativeOnMobile?: boolean;
+    target?: React.RefObject<HTMLElement | null> | null;
 }) => {
     return (
         <ScrollToFuture
+            target={target ?? null}
             nativeOnMobile={nativeOnMobile}
             scrollBar={{
                 widthTrack: "10px",

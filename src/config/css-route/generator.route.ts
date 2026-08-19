@@ -1,7 +1,7 @@
-import { BoxShadow } from "@/content/CSS/Generator/BoxShadow/BoxShadow";
-import { ClipPathGenerator } from "@/content/CSS/Generator/ClipPatch/ClipPatch";
-import { Gradient } from "@/content/CSS/Generator/Gradient/Gradient";
-import { Pattern } from "@/content/CSS/Generator/Pattern/Pattern";
+import { BoxShadow } from "@/content/CSS/CSSResource/Generator/BoxShadow/BoxShadow";
+import { ClipPathGenerator } from "@/content/CSS/CSSResource/Generator/ClipPatch/ClipPatch";
+import { Gradient } from "@/content/CSS/CSSResource/Generator/Gradient/Gradient";
+import { Pattern } from "@/content/CSS/CSSResource/Generator/Pattern/Pattern";
 
 export const generatorRoute = [
     {

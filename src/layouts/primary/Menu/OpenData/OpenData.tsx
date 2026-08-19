@@ -1,6 +1,6 @@
 import { MenuAccordion } from "@/components/accordions/MenuAccordion/MenuAccordion";
 import { IconDatabase, IconFileTypeSql } from "@tabler/icons-react";
-import { CategoryTitle } from "../CategoryTitle/CategoryTitle";
+import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
 
 export const OpenData = () => {
     return (

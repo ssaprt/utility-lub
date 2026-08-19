@@ -1,27 +1,35 @@
-import { useFocusAtEnd } from "@/hooks/useFocusAtEnd";
+"use client";
+
+import { Scroll } from "@/layouts/primary/Scroll";
 import clsx from "clsx";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-    type ClipboardEvent,
-    type FocusEvent,
-    type FormEvent,
+    type ChangeEvent,
     type HTMLAttributes,
     type ReactNode,
-    useEffect,
     useRef,
     useState,
 } from "react";
-import { ScrollToFuture } from "scroll-to-future";
-import styles from "./TextAreaWithScrollBar.module.css";
+
+import { Loader } from "../animationIcons/Loader/Loader";
+import styles from "./TextAreaWithScrollBar.module.scss";
 
 interface Props extends Omit<
     HTMLAttributes<HTMLDivElement>,
-    "children" | "onInput"
+    "children" | "onChange"
 > {
     children?: ReactNode;
     name: string;
     placeholder?: string;
     emoji?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
     backValue: (value: string) => void;
+    dataLoadingMode?: {
+        loading: boolean;
+        error: boolean;
+        success?: boolean;
+    };
 }
 
 const getTextValue = (value: ReactNode): string => {
@@ -40,78 +48,36 @@ export const TextAreaWithScrollBar = ({
     emoji = false,
     className,
     style,
+    dataLoadingMode,
+    disabled = false,
+    readOnly = false,
     ...props
 }: Props) => {
-    const focusAtEnd = useFocusAtEnd();
-    const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLTextAreaElement>(null);
+
     const containerRef = useRef<HTMLDivElement>(null);
-    const savedRange = useRef<Range | null>(null);
 
-    const [value, setValue] = useState(() => getTextValue(children));
+    const [internalValue, setInternalValue] = useState(() =>
+        getTextValue(children),
+    );
 
-    const viewPlaceholder = value.replace(/\n/g, "").trim().length === 0;
+    const hasExternalValue = children !== undefined;
 
-    useEffect(() => {
-        const nextValue = getTextValue(children);
-        //eslint-disable-next-line
-        setValue(nextValue);
+    const externalValue = getTextValue(children);
 
-        if (ref.current && ref.current.innerText !== nextValue) {
-            ref.current.innerText = nextValue;
-        }
-    }, [children]);
+    const value = hasExternalValue ? externalValue : internalValue;
 
-    useEffect(() => {
-        const form = containerRef.current?.closest("form");
+    const loading = dataLoadingMode?.loading === true;
 
-        if (!form) {
-            return;
-        }
+    const error = !loading && dataLoadingMode?.error === true;
 
-        const handleReset = () => {
-            setValue("");
+    const success = !loading && !error && dataLoadingMode?.success === true;
 
-            if (ref.current) {
-                ref.current.innerText = "";
-            }
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+        const text = event.currentTarget.value;
 
-            backValue("");
-        };
-
-        form.addEventListener("reset", handleReset);
-
-        return () => {
-            form.removeEventListener("reset", handleReset);
-        };
-    }, [backValue]);
-
-    const onFocus = (event: FocusEvent<HTMLDivElement>) => {
-        focusAtEnd(event.currentTarget);
-    };
-
-    const handleBlur = () => {
-        const selection = window.getSelection();
-
-        if (selection?.rangeCount) {
-            savedRange.current = selection.getRangeAt(0).cloneRange();
-        }
-    };
-
-    const handleChange = (event: FormEvent<HTMLDivElement>) => {
-        const text = event.currentTarget.innerText
-            .replace(/\n{2,}/g, "\n")
-            .trimEnd();
-
-        setValue(text);
+        setInternalValue(text);
         backValue(text);
-    };
-
-    const handlePaste = (event: ClipboardEvent<HTMLDivElement>) => {
-        event.preventDefault();
-
-        const text = event.clipboardData.getData("text/plain");
-
-        document.execCommand("insertText", false, text);
     };
 
     return (
@@ -121,37 +87,97 @@ export const TextAreaWithScrollBar = ({
                 styles.textareaOverlay,
                 className,
                 `
-                border
-                        border-fg/10
-                        bg-fg/10
-                        shadow-[inset_0px_0px_5px_0px]
-                        shadow-app/30`,
+                    border
+                    border-fg/10
+                    shadow-[inset_0px_0px_5px_0px]
+                    shadow-black/55
+                    rounded-lg
+                    outline
+                    outline-1
+                    transition-[outline-color,background-color]
+                    duration-200
+                `,
+                disabled ? "bg-fg/20 cursor-not-allowed" : "bg-fg/5",
+                loading && "outline-fg/15",
+                !loading && !error && !success && "outline-transparent",
+                error && "outline-red-400/70",
+                success && "outline-emerald-400/60",
             )}
             style={style}
             {...props}
         >
-            <input type="hidden" name={name} value={value} />
+            <AnimatePresence>
+                {loading && (
+                    <motion.div
+                        initial={{
+                            opacity: 0,
+                        }}
+                        animate={{
+                            opacity: 1,
+                        }}
+                        exit={{
+                            opacity: 0,
+                        }}
+                        transition={{
+                            duration: 0.15,
+                        }}
+                        className="
+                            absolute
+                            left-0
+                            top-0
+                            z-2
+                            h-full
+                            w-full
+                            cursor-wait
+                            rounded-[4px]
+                            bg-app/60
+                            backdrop-blur-[1px]
+                        "
+                    >
+                        <Loader mode="wave" visible />
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            {placeholder && viewPlaceholder && (
-                <span className={styles.placeholder}>{placeholder}</span>
-            )}
-
-            <div
+            <textarea
+                disabled={disabled}
+                readOnly={readOnly}
                 ref={ref}
-                onFocus={onFocus}
-                onBlur={handleBlur}
+                name={name}
+                value={value}
+                placeholder={placeholder}
+                onChange={handleChange}
+                aria-invalid={error}
+                aria-readonly={readOnly}
                 className={clsx(
                     styles.textarea,
                     emoji && styles.emoji,
-                    "text-[16px] lg:text-xs",
+                    `
+                        text-[16px]
+                        lg:text-xs
+                        focus:outline-fg/40!
+                        focus-visible:outline-fg/40!
+                    `,
+                    disabled && "cursor-not-allowed",
+                    readOnly && "cursor-default",
+                    error &&
+                        `
+                            placeholder:text-red-400!
+                            focus:outline-red-400/70!
+                            focus-visible:outline-red-400/70!
+                        `,
+                    success &&
+                        `
+                            placeholder:text-emerald-400!
+                            focus:outline-emerald-400/60!
+                            focus-visible:outline-emerald-400/60!
+                        `,
                 )}
-                contentEditable
-                suppressContentEditableWarning
-                onInput={handleChange}
-                onPaste={handlePaste}
-            >
-                <ScrollToFuture />
-            </div>
+            />
+
+            <Scroll target={ref} />
         </div>
     );
 };
+
+TextAreaWithScrollBar.displayName = "TextAreaWithScrollBar";

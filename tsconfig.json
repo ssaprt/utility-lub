@@ -71,7 +71,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-, "src/components/scrollbar/ScrollAxixstsx"  ],
+, "src/components/scrollbar/ScrollAxixstsx"],
   "exclude": [
     "node_modules"
   ]
