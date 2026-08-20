@@ -57,7 +57,7 @@ export const Menu = () => {
                     ref={contentRef}
                     className={`${styles.content} px-4 lg:px-2`}
                 >
-                    <Scroll imposition="over" />
+                    <Scroll scrollWidth="6px" imposition="over" />
 
                     <div
                         className="

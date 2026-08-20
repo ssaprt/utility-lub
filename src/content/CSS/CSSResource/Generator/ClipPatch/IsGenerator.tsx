@@ -273,7 +273,7 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
 
     return (
         <div className="col-start-1 lg:row-stretch-4 w-full">
-            <div className="col-start-2 p-3 h-fit bg-fg/10 rounded-xl relative lg:sticky lg:top-0">
+            <div className="col-start-2 p-3 h-fit bg-fg/10 rounded-xl relative lg:sticky lg:top-0 w-full">
                 <div className="row-center-1 w-full p-2">
                     <input
                         ref={fileRef}
@@ -318,7 +318,8 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         ref={editorRef}
                         className="
                         relative
-                        size-[80vw]
+                        w-full
+                        aspect-square
                         lg:size-[450px]
                         shrink-0
                         overflow-visible

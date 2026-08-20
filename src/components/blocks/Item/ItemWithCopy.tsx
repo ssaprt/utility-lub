@@ -96,7 +96,7 @@ export const ItemWithCopy = ({
         <motion.div
             whileHover={{
                 scale: 1.02,
-                boxShadow: "0 4px 12px var(--shadow-color)",
+                boxShadow: "0 4px 6px 2px rgba(0,0,0,.4)",
             }}
             whileTap={{
                 scale: 0.98,
@@ -116,15 +116,13 @@ export const ItemWithCopy = ({
                 w-full
                 overflow-visible
                 rounded-[12px]
-                border-1
-                border-fg
+                
+                shadow-[0_2px_4px_2px]
+                shadow-black/30
                 col-stretch-0
 
                 hover:cursor-pointer
-
-                hover:[&>div:first-of-type:before]:bg-fg/100
-                hover:[&>div:first-of-type>span]:text-app
-                hover:[&>div:first-of-type>svg]:text-app
+          
             "
         >
             <div

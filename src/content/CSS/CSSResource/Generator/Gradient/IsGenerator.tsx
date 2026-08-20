@@ -200,6 +200,7 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                    w-full
                    lg:w-1/3
                    h-auto
+                   aspect-square
                   max-h-[250px]
                     rounded-xl
                     shadow-lg

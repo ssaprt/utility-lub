@@ -96,9 +96,9 @@ export const AIAgent = () => {
     if (!menu.visibleAgent) return null;
 
     return (
-        <div data-ai-ignore="true" className="flex flex-col gap-3">
+        <div data-ai-ignore="true" className={`flex flex-col gap-3`}>
             <div
-                className="row-end-1 relative flex-nowrap"
+                className={`row-end-1 relative flex-nowrap h-fit`}
                 onFocusCapture={() => {
                     setExpanded(true);
                 }}
@@ -121,15 +121,13 @@ export const AIAgent = () => {
                     placeholder="Just tell me what result you want to achieve, and I will help you..."
                     className={`
                         rounded-md!
-
+                        ${expanded ? "min-h-[200px]! h-[200px]!" : "min-h-0! h-[60px]!"}
                         transition-[min-height]
                         duration-300
                         ease-in-out
-
+                  
                         [&>span]:top-[0px]!
-                        [&>span]:transform-none!
-
-                        ${expanded ? "min-h-[200px]!" : "min-h-0!"}
+                        [&>span]:transform-none!                        
                     `}
                 >
                     {prompt}
@@ -157,6 +155,7 @@ export const AIAgent = () => {
                         void run();
                     }}
                     className="
+                    
                     z-3
         absolute
         right-3

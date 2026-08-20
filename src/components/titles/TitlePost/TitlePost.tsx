@@ -77,7 +77,7 @@ export const TitlePost = ({
                         rounded-[40px]
                         pr-[var(--space-2)]
                         shadow-[0_0_2px_1px]
-                        shadow-fg/45
+                        shadow-black/15
                         px-[var(--space-3)]
                         py-[var(--space-2)]
                     "

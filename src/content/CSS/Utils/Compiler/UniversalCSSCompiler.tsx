@@ -2,6 +2,7 @@
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TitlePost } from "@/components/titles/TitlePost/TitlePost";
 
+import { AIAgent } from "@/AI/AIAgent";
 import { useCompiler } from "./hooks/useCompiler";
 import { Editor } from "./workspace/Editor";
 
@@ -27,6 +28,7 @@ export const UniversalCSSCompiler = () => {
             >
                 {selectFromConfig.titleLink}
             </TitlePost>
+            <AIAgent />
             <div className="col-start-2 w-full h-auto z-2 mb-10">
                 <Editor selectFromConfig={selectFromConfig} />
             </div>

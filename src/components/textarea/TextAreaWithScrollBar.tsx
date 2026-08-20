@@ -92,16 +92,13 @@ export const TextAreaWithScrollBar = ({
                     shadow-[inset_0px_0px_5px_0px]
                     shadow-black/55
                     rounded-lg
-                    outline
-                    outline-1
+                
                     transition-[outline-color,background-color]
                     duration-200
                 `,
                 disabled ? "bg-fg/20 cursor-not-allowed" : "bg-fg/5",
                 loading && "outline-fg/15",
                 !loading && !error && !success && "outline-transparent",
-                error && "outline-red-400/70",
-                success && "outline-emerald-400/60",
             )}
             style={style}
             {...props}
@@ -163,14 +160,10 @@ export const TextAreaWithScrollBar = ({
                     error &&
                         `
                             placeholder:text-red-400!
-                            focus:outline-red-400/70!
-                            focus-visible:outline-red-400/70!
                         `,
                     success &&
                         `
                             placeholder:text-emerald-400!
-                            focus:outline-emerald-400/60!
-                            focus-visible:outline-emerald-400/60!
                         `,
                 )}
             />

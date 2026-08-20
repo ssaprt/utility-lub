@@ -1,4 +1,5 @@
 import { cssCompilerRoute } from "./css-compiler.route";
+import { stylesRoute } from "./css-styles.route";
 
 export const cssUtilsRoute = [
     {
@@ -7,4 +8,5 @@ export const cssUtilsRoute = [
         Component: () => null,
     },
     ...cssCompilerRoute,
+    ...stylesRoute,
 ];

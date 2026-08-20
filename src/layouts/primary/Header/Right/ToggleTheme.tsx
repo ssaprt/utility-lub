@@ -444,9 +444,9 @@ export const ToggleTheme = () => {
                             </label>
 
                             <GeneralButton
-                                variant="solid"
+                                variant="embossed"
                                 className="
-                                    text-app!
+                                    text-fg!
                                     w-auto!
                                     ml-auto!
                                     shrink-0!

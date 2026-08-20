@@ -1,6 +1,5 @@
 import { IconSend } from "@tabler/icons-react";
 import { useState } from "react";
-import { Loader } from "../animationIcons/Loader/Loader";
 import { TitleWithItemsBlock } from "../blocks/TitleWithItemsBlock/TitleWithItemsBlock";
 import { GeneralButton } from "../button/GeneralButton/GeneralButton";
 import ContactForm from "../contactForm/ContactForm";
@@ -15,8 +14,6 @@ export const FeedBack = ({ subject }: { subject: string }) => {
     return (
         <div className="my-2 mt-10 mt-auto">
             <TitleWithItemsBlock title="Feedback Form">
-                <Loader visible={true} mode="wave" />
-
                 <div className="flex flex-row justify-between items-center select-none w-full relative">
                     <span className="text-sm">Send your feedback to us</span>
                     <GeneralButton

@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import { BodyAccordion } from "./BodyAccordion";
 import { HeadAccordion } from "./HeadAccordion";
+import { LineToArrow } from "./LineToArrow";
 import styles from "./MenuAccordion.module.scss";
 
 export type MenuLinkItem = {
@@ -179,7 +180,7 @@ const Accordion = ({ node, pathname, level }: AccordionProps) => {
                                             {item.icon}
                                         </span>
                                     )}
-
+                                    <LineToArrow active={isActive} />
                                     <span>{item.title}</span>
                                 </AppLink>
                             </div>
