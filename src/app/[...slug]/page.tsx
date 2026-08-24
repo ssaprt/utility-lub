@@ -1,8 +1,8 @@
+import { routes } from "@/config/routes";
 import { CSSPseudoSelectorGenerator } from "@/layouts/primary/Menu/References/CSSPseudoSelectorGenerator";
+import cssData from "@webref/css/css.json";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
-import { routes } from "@/config/routes";
 
 interface RoutePageProps {
     params: Promise<{
@@ -10,12 +10,17 @@ interface RoutePageProps {
     }>;
 }
 
-const decodeSegment = (value: string) => {
-    try {
-        return decodeURIComponent(value);
-    } catch {
-        return value;
-    }
+const legacyPseudoElements = new Set([
+    ":before",
+    ":after",
+    ":first-letter",
+    ":first-line",
+]);
+
+const getSelectorType = (name: string) => {
+    return name.startsWith("::") || legacyPseudoElements.has(name)
+        ? "pseudo-element"
+        : "pseudo-class";
 };
 
 const findStaticRoute = (slug: string[]) => {
@@ -39,18 +44,37 @@ const getCssSelectorRoute = (slug: string[]) => {
         return null;
     }
 
-    const name = decodeSegment(slug[2]);
-
     return {
-        title: name,
-        name,
+        name: decodeURIComponent(slug[2]),
     };
 };
 
-export function generateStaticParams() {
-    return routes.map((route) => ({
+export async function generateStaticParams() {
+    const staticRoutes = routes.map((route) => ({
         slug: [...route.path],
     }));
+
+    const { selectors } = cssData;
+
+    const cssSelectors = selectors.filter((selector) =>
+        selector.name.startsWith(":"),
+    );
+
+    const selectorRoutes = cssSelectors.map((selector) => {
+        const type = getSelectorType(selector.name);
+
+        return {
+            slug: [
+                "references",
+                type === "pseudo-class"
+                    ? "css-pseudo-classes"
+                    : "css-pseudo-elements",
+                selector.name,
+            ],
+        };
+    });
+
+    return [...staticRoutes, ...selectorRoutes];
 }
 
 export async function generateMetadata({
@@ -70,12 +94,12 @@ export async function generateMetadata({
 
     if (selectorRoute) {
         return {
-            title: selectorRoute.title,
+            title: selectorRoute.name,
         };
     }
 
     return {
-        title: "Страница не найдена",
+        title: "Page not found",
     };
 }
 
