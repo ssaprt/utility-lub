@@ -1,23 +1,9 @@
-import { CSSPseudoSelectorGenerator } from "@/layouts/primary/Menu/References/CSSPseudoSelectorGenerator";
-import { getCssPseudoElements } from "@/services/CSSSelector/css-reference.fetch";
-import { CSSPseudoClassesList } from "./CSSPseudoClassesList";
-
-const pseudoElements = await getCssPseudoElements();
-const names = pseudoElements?.items.map((item) => item.name);
-const routes =
-    names.map((route) => {
-        const slug = encodeURIComponent(route);
-        return {
-            title: route,
-            path: ["references", "css-pseudo-elements", slug],
-            Component: () => <CSSPseudoSelectorGenerator name={route} />,
-        };
-    }) || [];
+import { CSSPseudoElementsList } from "./CSSPseudoElementsList";
 
 export const cssPseudoElementsRoute = [
     {
         title: "CSS Pseudo Elements",
         path: ["references", "css-pseudo-elements"],
-        Component: CSSPseudoClassesList,
+        Component: CSSPseudoElementsList,
     },
 ];
