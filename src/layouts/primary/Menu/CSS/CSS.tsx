@@ -2,7 +2,7 @@ import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
 import { CSSGenerator } from "./CSSResours/CSSGenerator";
 import { CSSCompiler } from "./CSSUtils/CSSCompiler";
-import { CSSStyles } from "./CSSUtils/CSSStyles";
+import { CSSViewer } from "./CSSUtils/CSSViewer";
 
 export const CSS = () => {
     return (
@@ -30,7 +30,7 @@ export const CSS = () => {
                 CSS Utils
             </CategoryTitle>
             <CSSCompiler />
-            <CSSStyles />
+            <CSSViewer />
         </>
     );
 };

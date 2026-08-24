@@ -134,8 +134,8 @@ export const ItemWithCopy = ({
                     justify-between
                     overflow-hidden
                     rounded-[10px_10px_0_0]
-                    px-[6px]
-                    py-[4px]
+                    px-[8px]
+                    py-[6px]
 
                     before:absolute
                     before:top-0

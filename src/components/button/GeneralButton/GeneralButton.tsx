@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCopy, IconCopyCheckFilled } from "@tabler/icons-react";
+import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { motion, useAnimation } from "framer-motion";
 import {
     cloneElement,
@@ -62,7 +62,6 @@ const getZForPixelChange = (
     }
 
     const targetSize = Math.max(1, size + pixels * 2);
-
     const scale = targetSize / size;
 
     return perspective * (1 - 1 / scale);
@@ -128,9 +127,21 @@ export const GeneralButton = ({
         if (active === undefined) {
             await controls.start({
                 z: [0, animationZ.press, animationZ.pop, 0],
+                scale: copy ? [1, 0.96, 1.035, 0.99, 1] : 1,
                 transition: {
-                    duration: 0.25,
-                    times: [0, 0.25, 0.9, 1],
+                    z: {
+                        duration: 0.25,
+                        times: [0, 0.25, 0.9, 1],
+                    },
+                    scale: copy
+                        ? {
+                              duration: 0.38,
+                              times: [0, 0.18, 0.48, 0.75, 1],
+                              ease: [0.22, 1, 0.36, 1],
+                          }
+                        : {
+                              duration: 0,
+                          },
                 },
             });
         }
@@ -249,12 +260,59 @@ export const GeneralButton = ({
 
             <span className="relative z-1 text-[12px]">{textButton}</span>
 
-            {copy &&
-                (copied ? (
-                    <IconCopyCheckFilled className="relative z-1 h-4 w-4" />
-                ) : (
-                    <IconCopy className="relative z-1 h-4 w-4" />
-                ))}
+            {copy && (
+                <span className="relative z-1 size-4 shrink-0">
+                    <motion.span
+                        className="absolute inset-0"
+                        initial={false}
+                        animate={{
+                            opacity: copied ? 0 : 1,
+                            scale: copied ? 0.7 : 1,
+                        }}
+                        transition={{
+                            duration: 0.14,
+                            ease: [0.4, 0, 0.2, 1],
+                        }}
+                    >
+                        <IconCopy className="size-4" />
+                    </motion.span>
+
+                    <motion.span
+                        className="absolute inset-0"
+                        initial={false}
+                        animate={
+                            copied
+                                ? {
+                                      opacity: 1,
+                                      scale: [0.65, 1.18, 1],
+                                  }
+                                : {
+                                      opacity: 0,
+                                      scale: 0.7,
+                                  }
+                        }
+                        transition={
+                            copied
+                                ? {
+                                      opacity: {
+                                          duration: 0.1,
+                                      },
+                                      scale: {
+                                          duration: 0.28,
+                                          times: [0, 0.65, 1],
+                                          ease: [0.22, 1, 0.36, 1],
+                                      },
+                                  }
+                                : {
+                                      duration: 0.14,
+                                      ease: [0.4, 0, 0.2, 1],
+                                  }
+                        }
+                    >
+                        <IconCheck className="size-4" />
+                    </motion.span>
+                </span>
+            )}
         </motion.button>
     );
 };

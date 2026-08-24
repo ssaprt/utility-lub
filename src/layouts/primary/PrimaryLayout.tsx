@@ -22,7 +22,16 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <AppContextProvider>
-            <TooltipProvider defaultRenderPosition="left">
+            <TooltipProvider
+                defaultRenderPosition="top"
+                customTheme={{
+                    body: {
+                        background: "var(--foreground)",
+                        filter: "none",
+                        className: "text-app!",
+                    },
+                }}
+            >
                 <MountLoader />
                 <Menu data-pagefind-ignore />
 

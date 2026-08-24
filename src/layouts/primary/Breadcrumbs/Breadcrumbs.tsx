@@ -63,7 +63,7 @@ export const Breadcrumbs = () => {
                             text-fg/70
                         "
                     >
-                        {segment}
+                        {decodeURIComponent(segment)}
                     </span>
                 </div>
             );

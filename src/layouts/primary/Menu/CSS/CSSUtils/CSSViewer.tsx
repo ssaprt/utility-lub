@@ -1,22 +1,22 @@
 import { MenuAccordion } from "@/components/accordions/MenuAccordion/MenuAccordion";
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 
-export const CSSStyles = () => {
+export const CSSViewer = () => {
     return (
         <MenuAccordion
-            id="CSS Styles"
+            id="CSS Viewer"
             icon={
                 <DynamicSvgIcon
-                    name="style.svg"
+                    name="viewer.svg"
                     className="h-[20px] w-[20px] fill-fg"
                 />
             }
-            title="CSS Styles"
+            title="CSS Viewer"
             items={[
                 {
                     type: "link",
-                    title: "CSS Cursor Style",
-                    href: `/css/utils/styles/cursor`,
+                    title: "CSS Cursor Viewer",
+                    href: `/css/utils/viewer/cursor`,
                 },
             ]}
         />

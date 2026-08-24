@@ -28,6 +28,7 @@ type TitlePostProps = {
     packageName?: string;
     useFn?: boolean;
     hideVersion?: boolean;
+    className?: string;
 };
 
 export const TitlePost = ({
@@ -38,6 +39,7 @@ export const TitlePost = ({
     packageName,
     useFn = true,
     hideVersion = false,
+    className,
 }: TitlePostProps) => {
     const { data, isLoading, isFetching, isError, refetch } =
         useGetNPMPackageVersionsQuery(
@@ -64,7 +66,7 @@ export const TitlePost = ({
 
     return (
         <>
-            <div className="flex flex-col gap-2">
+            <div className={`flex flex-col gap-2 ${className}`}>
                 <div
                     className="
                         relative

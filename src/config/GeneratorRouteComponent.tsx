@@ -41,7 +41,7 @@ export const GeneratorRouteComponent = () => {
     }, [setTitleHeader, setIconHeader, pathname]);
 
     return (
-        <div className="col-start-2">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2">
             {nextRoutes.map((route) => (
                 <PageLink
                     key={route.title}

@@ -10,6 +10,7 @@ import { CSS } from "./CSS/CSS";
 import styles from "./Menu.module.css";
 import { OpenData } from "./OpenData/OpenData";
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
+import { References } from "./References/References";
 
 export const Menu = () => {
     const contentRef = useRef<HTMLDivElement>(null);
@@ -76,6 +77,7 @@ export const Menu = () => {
                         <ReactAndNext />
                         <OpenData />
                         <CSS />
+                        <References />
                         <div className="my-5"></div>
                         {/* <Author /> */}
                     </div>

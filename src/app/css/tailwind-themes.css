@@ -1,0 +1,5 @@
+@custom-variant light (&:where(.light, .light *));
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant midnight (&:where(.midnight, .midnight *));
+@custom-variant tree (&:where(.tree, .tree *));
+@custom-variant primary (&:where(.primary, .primary *));
