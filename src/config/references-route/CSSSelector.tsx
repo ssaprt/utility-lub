@@ -10,18 +10,14 @@ export const useCSSSelector = () => {
         isLoading: pseudoElementsLoading,
         isFetching: pseudoElementsFetching,
         isError: pseudoElementsError,
-    } = useGetCssPseudoElementsQuery({
-        includeExamples: true,
-    });
+    } = useGetCssPseudoElementsQuery();
 
     const {
         data: pseudoClasses,
         isLoading: pseudoClassesLoading,
         isFetching: pseudoClassesFetching,
         isError: pseudoClassesError,
-    } = useGetCssPseudoClassesQuery({
-        includeExamples: true,
-    });
+    } = useGetCssPseudoClassesQuery();
 
     const routePseudoClasses = useMemo(() => {
         return pseudoClasses?.items.map((item) => item.name);

@@ -19,5 +19,4 @@ export const cssPseudoElementsRoute = [
         path: ["references", "css-pseudo-elements"],
         Component: () => null,
     },
-    ...routes,
 ];

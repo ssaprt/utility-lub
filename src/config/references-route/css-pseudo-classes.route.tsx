@@ -21,5 +21,4 @@ export const cssPseudoClassesRoute = [
         path: ["references", "css-pseudo-classes"],
         Component: () => null,
     },
-    ...routes,
 ];
