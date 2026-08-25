@@ -1,7 +1,7 @@
 "use client";
 import { AIAvailability } from "@/AI/getAvalibility";
 import { FeedBack } from "@/components/feed-back/FeedBack";
-import { PendingLoader } from "@/components/loader/PendingLoader";
+import { MainOverlay } from "@/components/loader/MainOverlay";
 import { GeneratorRouteComponent } from "@/config/GeneratorRouteComponent";
 import {
     useAppContextActions,
@@ -34,11 +34,11 @@ export const Main = ({
             className={clsx(styles.main, pending && styles.pending)}
             id="main"
         >
-            <PendingLoader />
+            <MainOverlay />
 
             <Breadcrumbs />
             <GeneratorRouteComponent />
-            <Scroll />
+            <Scroll imposition="over" />
             {children}
             <Breadcrumbs />
             <div className="my-5"></div>

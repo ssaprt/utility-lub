@@ -17,6 +17,20 @@ const escapeXml = (value: string) => {
         .replaceAll(">", "&gt;");
 };
 
+const hexToRgb = (hex: string) => {
+    const value = hex.replace("#", "");
+
+    if (!/^[0-9a-fA-F]{6}$/.test(value)) {
+        return hex;
+    }
+
+    const red = parseInt(value.slice(0, 2), 16);
+    const green = parseInt(value.slice(2, 4), 16);
+    const blue = parseInt(value.slice(4, 6), 16);
+
+    return `rgb(${red},${green},${blue})`;
+};
+
 const createStarPoints = (
     cx: number,
     cy: number,
@@ -43,8 +57,8 @@ const createPatternSvg = (config: PatternConfig) => {
     const quarter = size / 4;
     const thickness = clamp(config.thickness, 0.5, Math.max(0.5, size / 2));
     const opacity = clamp(config.opacity, 0, 100) / 100;
-    const primary = escapeXml(config.patternColor);
-    const secondary = escapeXml(config.secondaryColor);
+    const primary = hexToRgb(config.patternColor);
+    const secondary = hexToRgb(config.secondaryColor);
     const scaleX = Math.max(0.05, config.scaleX / 100);
     const scaleY = Math.max(0.05, config.scaleY / 100);
     const angle = config.angle;
@@ -259,7 +273,9 @@ const createPatternSvg = (config: PatternConfig) => {
 };
 
 const svgToDataUrl = (svg: string) => {
-    return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    const normalized = svg.replace(/\s+/g, " ").trim().replaceAll('"', "'");
+
+    return `data:image/svg+xml,${normalized}`;
 };
 
 export const defaultPatternConfig: PatternConfig = {

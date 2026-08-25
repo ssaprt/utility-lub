@@ -1,12 +1,10 @@
-//TODO imports =============================================================
 "use client";
 
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { detectedScrollMain } from "@/utils/scrolled-main";
-
 import {
     createContext,
-    RefObject,
+    useCallback,
     useContext,
     useEffect,
     useLayoutEffect,
@@ -15,11 +13,19 @@ import {
     useState,
     type Dispatch,
     type ReactNode,
+    type RefObject,
     type SetStateAction,
 } from "react";
-//TODO imports =============================================================
 
-//? types ===============================================================
+export type AppRequestStatus = "loading" | "error";
+
+export type AppRequestState = {
+    tag: string;
+    status: AppRequestStatus;
+    message?: string;
+    onRetry?: () => void;
+};
+
 interface AppContextActionsType {
     header: {
         setIconHeader: Dispatch<SetStateAction<ReactNode>>;
@@ -34,11 +40,15 @@ interface AppContextActionsType {
         setNoneAnimationMenu: Dispatch<SetStateAction<boolean>>;
         setVisibleAgent: Dispatch<SetStateAction<boolean>>;
     };
+    addLoadData: ({ tag }: { tag: string }) => void;
+    removeLoadData: ({ tag }: { tag: string }) => void;
+    setRequestState: (request: AppRequestState) => void;
+    removeRequestState: ({ tag }: { tag: string }) => void;
 }
 
 type AppContextType = {
     header?: {
-        iconHeader?: React.ReactNode;
+        iconHeader?: ReactNode;
         titleHeader?: string;
         hrefHeader?: string;
         boxForAnimations?: HTMLDivElement | null;
@@ -66,24 +76,23 @@ type AppContextType = {
         pending: boolean;
         visibleAgent: boolean;
     };
+    loadingAnyData: boolean;
+    requestError: AppRequestState | null;
 };
 
 const AppContextValues = createContext<AppContextType | null>(null);
 const AppContextActions = createContext<AppContextActionsType | null>(null);
-//? types ===============================================================
 
-//! provider ==========================================================================
-export const AppContextProvider = ({
-    children,
-}: {
-    children: React.ReactNode;
-}) => {
-    //* header context =============================================
+export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const [iconHeader, setIconHeader] = useState<ReactNode>(null);
     const [titleHeader, setTitleHeader] = useState("");
     const [hrefHeader, setHrefHeader] = useState("");
+    const [loadData, setLoadData] = useState<string[]>([]);
+    const [requestStates, setRequestStates] = useState<AppRequestState[]>([]);
+
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);
+
     const [isScrolled, setIsScrolled] = useState<{
         main: HTMLElement | null;
         scroll: {
@@ -113,22 +122,73 @@ export const AppContextProvider = ({
             height: 0,
         },
     });
-    const themePopupRef = useRef<HTMLDialogElement>(null);
-    //* header context =============================================
 
-    //* menu context =============================================
+    const themePopupRef = useRef<HTMLDialogElement>(null);
+
     const [openMenu, setOpenMenu] = useState(false);
     const [widthMenu, setWidthMenu] = useState(0);
     const [noneAnimationMenu, setNoneAnimationMenu] = useState(false);
     const [visibleAgent, setVisibleAgent] = useState(false);
-    //* menu context =============================================
 
-    //*general context =============================================
     const isDesktop = useBreakpoint("lg");
     const [pending, setPending] = useState(false);
-    //*general context =============================================
 
-    //* context ====================================================
+    const addLoadData = useCallback(({ tag }: { tag: string }) => {
+        setLoadData((current) => {
+            if (current.includes(tag)) {
+                return current;
+            }
+
+            return [...current, tag];
+        });
+    }, []);
+
+    const removeLoadData = useCallback(({ tag }: { tag: string }) => {
+        setLoadData((current) => current.filter((item) => item !== tag));
+    }, []);
+
+    const setRequestState = useCallback((request: AppRequestState) => {
+        setRequestStates((current) => {
+            const existing = current.find((item) => item.tag === request.tag);
+
+            if (
+                existing?.status === request.status &&
+                existing?.message === request.message &&
+                existing?.onRetry === request.onRetry
+            ) {
+                return current;
+            }
+
+            return [
+                ...current.filter((item) => item.tag !== request.tag),
+                request,
+            ];
+        });
+    }, []);
+
+    const removeRequestState = useCallback(({ tag }: { tag: string }) => {
+        setRequestStates((current) => {
+            const exists = current.some((item) => item.tag === tag);
+
+            if (!exists) {
+                return current;
+            }
+
+            return current.filter((item) => item.tag !== tag);
+        });
+    }, []);
+
+    const requestLoading = requestStates.some(
+        (request) => request.status === "loading",
+    );
+
+    const loadingAnyData = loadData.length > 0 || requestLoading;
+
+    const requestError =
+        [...requestStates]
+            .reverse()
+            .find((request) => request.status === "error") ?? null;
+
     const values = useMemo<AppContextType>(
         () => ({
             header: {
@@ -146,6 +206,8 @@ export const AppContextProvider = ({
                 pending,
                 visibleAgent,
             },
+            loadingAnyData,
+            requestError,
         }),
         [
             iconHeader,
@@ -158,11 +220,11 @@ export const AppContextProvider = ({
             noneAnimationMenu,
             pending,
             visibleAgent,
+            loadingAnyData,
+            requestError,
         ],
     );
-    //* context ====================================================
 
-    //* actions ====================================================
     const actions = useMemo<AppContextActionsType>(
         () => ({
             header: {
@@ -178,10 +240,13 @@ export const AppContextProvider = ({
                 setPending,
                 setVisibleAgent,
             },
+            addLoadData,
+            removeLoadData,
+            setRequestState,
+            removeRequestState,
         }),
-        [],
+        [addLoadData, removeLoadData, setRequestState, removeRequestState],
     );
-    //* actions ====================================================
 
     useEffect(() => {
         const media = window.matchMedia("(min-width: 1024px)");
@@ -229,14 +294,14 @@ export const AppContextProvider = ({
         </AppContextValues.Provider>
     );
 };
-//! provider ==========================================================================
 
-//! hooks ========================================================================
 export const useAppContextValues = (): AppContextType => {
     const context = useContext(AppContextValues);
 
     if (context === null) {
-        throw new Error("useAppContext must be used within AppContextProvider");
+        throw new Error(
+            "useAppContextValues must be used within AppContextProvider",
+        );
     }
 
     return context;
@@ -253,4 +318,3 @@ export const useAppContextActions = (): AppContextActionsType => {
 
     return context;
 };
-//! hooks ========================================================================

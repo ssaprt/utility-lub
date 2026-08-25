@@ -67,7 +67,7 @@ export default async function RootLayout({
                 antialiased
             `}
         >
-            <body className="selection:bg-fg/80 selection:text-app">
+            <body className="selection:bg-fg/80 selection:text-app pattern-bg">
                 <AppThemeProvider>
                     <StoreProvider>
                         <PrimaryLayout>{children}</PrimaryLayout>

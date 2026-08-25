@@ -2,7 +2,7 @@ import {
     useGetCssPseudoClassesQuery,
     useGetCssPseudoElementsQuery,
 } from "@/services/CSSSelector/css-selector.api";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 export const useCSSSelector = () => {
     const {
@@ -10,6 +10,7 @@ export const useCSSSelector = () => {
         isLoading: pseudoElementsLoading,
         isFetching: pseudoElementsFetching,
         isError: pseudoElementsError,
+        refetch: refetchPseudoElements,
     } = useGetCssPseudoElementsQuery();
 
     const {
@@ -17,45 +18,50 @@ export const useCSSSelector = () => {
         isLoading: pseudoClassesLoading,
         isFetching: pseudoClassesFetching,
         isError: pseudoClassesError,
+        refetch: refetchPseudoClasses,
     } = useGetCssPseudoClassesQuery();
 
-    const routePseudoClasses = useMemo(() => {
-        return pseudoClasses?.items.map((item) => item.name);
-    }, [pseudoClasses]);
+    const routePseudoClasses = useMemo(
+        () => pseudoClasses?.items.map((item) => item.name) ?? [],
+        [pseudoClasses],
+    );
 
-    const routePseudoElements = useMemo(() => {
-        return pseudoElements?.items.map((item) => item.name);
-    }, [pseudoElements]);
+    const routePseudoElements = useMemo(
+        () => pseudoElements?.items.map((item) => item.name) ?? [],
+        [pseudoElements],
+    );
 
-    const dataPseudoClasses = useMemo(
-        () => ({
+    const isLoading = pseudoElementsLoading || pseudoClassesLoading;
+
+    const isFetching = pseudoElementsFetching || pseudoClassesFetching;
+
+    const isError = pseudoElementsError || pseudoClassesError;
+
+    const refetch = useCallback(() => {
+        if (pseudoElementsError) {
+            void refetchPseudoElements();
+        }
+
+        if (pseudoClassesError) {
+            void refetchPseudoClasses();
+        }
+    }, [
+        pseudoElementsError,
+        pseudoClassesError,
+        refetchPseudoElements,
+        refetchPseudoClasses,
+    ]);
+
+    return {
+        dataPseudoClasses: {
             names: routePseudoClasses,
-            loading: pseudoClassesLoading,
-            isFetching: pseudoClassesFetching,
-            isError: pseudoClassesError,
-        }),
-        [
-            routePseudoClasses,
-            pseudoClassesLoading,
-            pseudoClassesFetching,
-            pseudoClassesError,
-        ],
-    );
-
-    const dataPseudoElements = useMemo(
-        () => ({
+        },
+        dataPseudoElements: {
             names: routePseudoElements,
-            loading: pseudoElementsLoading,
-            isFetching: pseudoElementsFetching,
-            isError: pseudoElementsError,
-        }),
-        [
-            routePseudoElements,
-            pseudoElementsLoading,
-            pseudoElementsFetching,
-            pseudoElementsError,
-        ],
-    );
-
-    return { dataPseudoClasses, dataPseudoElements };
+        },
+        isLoading,
+        isFetching,
+        isError,
+        refetch,
+    };
 };

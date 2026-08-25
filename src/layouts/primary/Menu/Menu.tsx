@@ -3,10 +3,12 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 
 import { Hr } from "@/components/hr/Hr/Hr";
+import { useCSSSelector } from "@/config/references-route/CSSSelector";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { HeaderTitle } from "../../../components/HeaderTitle/HeaderTitle";
 import { Scroll } from "../Scroll";
 import { CSS } from "./CSS/CSS";
+import { CSSUtils } from "./CSS/CSSUtils/CSSUtils";
 import styles from "./Menu.module.css";
 import { OpenData } from "./OpenData/OpenData";
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
@@ -17,6 +19,7 @@ export const Menu = () => {
     const { menu } = useAppContextValues();
     const { noneAnimationMenu, openMenu } = menu;
     const isDesktop = useBreakpoint("lg");
+    const { dataPseudoClasses, dataPseudoElements } = useCSSSelector();
 
     return (
         <div
@@ -58,7 +61,7 @@ export const Menu = () => {
                     ref={contentRef}
                     className={`${styles.content} px-4 lg:px-2`}
                 >
-                    <Scroll scrollWidth="6px" imposition="over" />
+                    <Scroll scrollWidth="1px" imposition="over" />
 
                     <div
                         className="
@@ -69,14 +72,13 @@ export const Menu = () => {
                             flex-1
                             flex-col
                             gap-1
-                            pr-0
-                            lg:pr-3
                         "
                     >
                         <div className="mt-2"></div>
                         <ReactAndNext />
                         <OpenData />
                         <CSS />
+                        <CSSUtils />
                         <References />
                         <div className="my-5"></div>
                         {/* <Author /> */}

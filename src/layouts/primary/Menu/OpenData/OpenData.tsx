@@ -4,7 +4,7 @@ import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitl
 
 export const OpenData = () => {
     return (
-        <>
+        <div className="relative px-2 py-1 rounded-lg bg-fg/10">
             <CategoryTitle
                 icon={<IconDatabase className="w-[20px] h-[20px] stroke-app" />}
             >
@@ -23,6 +23,6 @@ export const OpenData = () => {
                     },
                 ]}
             />
-        </>
+        </div>
     );
 };

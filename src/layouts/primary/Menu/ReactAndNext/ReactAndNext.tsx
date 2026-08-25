@@ -8,7 +8,7 @@ import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitl
 
 export const ReactAndNext = () => {
     return (
-        <>
+        <div className="relative px-2 py-1 rounded-lg bg-fg/10">
             <CategoryTitle
                 icon={
                     <IconBrandReactNative className="w-[20px] h-[20px] stroke-app" />
@@ -62,6 +62,6 @@ export const ReactAndNext = () => {
                     },
                 ]}
             />
-        </>
+        </div>
     );
 };

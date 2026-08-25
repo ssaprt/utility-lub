@@ -22,19 +22,20 @@ export const PendingLoader = () => {
     const markerRef = useRef<HTMLSpanElement>(null);
     const overlayRef = useRef<HTMLDivElement>(null);
     const cycleStartedAtRef = useRef(0);
-    const pendingReadyRef = useRef(false);
 
     const [mounted, setMounted] = useState(false);
     const [phase, setPhase] = useState<LoaderPhase>("idle");
 
     const isDesktop = useBreakpoint("lg");
 
-    const { menu } = useAppContextValues();
+    const { menu, loadingAnyData } = useAppContextValues();
     const { openMenu, pending } = menu;
 
     const { menu: menuActions } = useAppContextActions();
 
     const { setOpenMenu } = menuActions;
+
+    const isPending = pending || loadingAnyData === true;
 
     useEffect(() => {
         // eslint-disable-next-line
@@ -42,26 +43,21 @@ export const PendingLoader = () => {
     }, []);
 
     useEffect(() => {
-        if (!pending) {
-            pendingReadyRef.current = true;
-            return;
-        }
-
-        if (!pendingReadyRef.current || phase !== "idle") {
+        if (!isPending || phase === "active") {
             return;
         }
 
         cycleStartedAtRef.current = performance.now();
-
+        //eslint-disable-next-line
         setPhase("active");
 
         if (!isDesktop && openMenu) {
             setOpenMenu(false);
         }
-    }, [pending, phase, openMenu, isDesktop, setOpenMenu]);
+    }, [isPending, phase, openMenu, isDesktop, setOpenMenu]);
 
     useEffect(() => {
-        if (pending || phase !== "active") {
+        if (isPending || phase !== "active") {
             return;
         }
 
@@ -79,7 +75,7 @@ export const PendingLoader = () => {
         return () => {
             window.clearTimeout(timeoutId);
         };
-    }, [pending, phase]);
+    }, [isPending, phase]);
 
     useLayoutEffect(() => {
         if (!mounted || phase === "idle") {
@@ -87,7 +83,6 @@ export const PendingLoader = () => {
         }
 
         const parent = markerRef.current?.parentElement;
-
         const overlay = overlayRef.current;
 
         if (!parent || !overlay) {
@@ -115,7 +110,6 @@ export const PendingLoader = () => {
     }, [mounted, phase]);
 
     const overlayVisible = phase === "active" || phase === "loaderOut";
-
     const loaderVisible = phase === "active";
 
     return (

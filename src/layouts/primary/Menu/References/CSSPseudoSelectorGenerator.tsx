@@ -1,7 +1,8 @@
 "use client";
-import { Loader } from "@/components/animationIcons/Loader/Loader";
+
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { useAppContextActions } from "@/context/appContext";
+import { useAppRequestState } from "@/hooks/useAppRequestState";
 import { useGetCssSelectorQuery } from "@/services/CSSSelector/css-selector.api";
 import { useEffect } from "react";
 import { BrowserSupport } from "./BrowserSupport/BrowserSupport";
@@ -11,13 +12,24 @@ import { Header } from "./Header/Header";
 import { TopHide } from "./TopHide";
 
 export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
-    const { data, isLoading, isFetching, isError, error } =
+    const { data, isLoading, isFetching, isError, refetch } =
         useGetCssSelectorQuery({
             name,
         });
 
     const { header } = useAppContextActions();
-    const { setIconHeader, setTitleHeader } = header || {};
+
+    const { setIconHeader, setTitleHeader } = header;
+
+    useAppRequestState({
+        tag: `css-selector:${name}`,
+        isLoading,
+        isFetching,
+        isError,
+        hasData: Boolean(data),
+        errorMessage: "Sorry. Failed to load data",
+        onRetry: refetch,
+    });
 
     useEffect(() => {
         setIconHeader(
@@ -30,21 +42,26 @@ export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
                 className="w-8 h-8 fill-fg"
             />,
         );
+
         setTitleHeader(data?.name || "");
     }, [setIconHeader, setTitleHeader, data?.name, data?.type]);
 
-    console.log(data);
+    if (!data) {
+        return null;
+    }
 
-    if (isLoading) return <Loader mode="wave" visible />;
     return (
         <div className="col-start-2">
             <TopHide name={name} />
+
             <Header name={name} />
-            {data?.example?.html && (
+
+            {data.example?.html && (
                 <Provider>
                     <ExampleSelector name={name} />
                 </Provider>
             )}
+
             <BrowserSupport name={name} />
         </div>
     );
