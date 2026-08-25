@@ -50,6 +50,7 @@ export const DataLoader = ({
                                 void onRetry();
                             }}
                             textButton="Try again"
+                            variant="embossed"
                         />
                     )}
                 </div>

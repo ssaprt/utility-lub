@@ -8,18 +8,24 @@ type BoundaryOffset = BoundaryType | BoundaryType2;
 type HeightTrackType = BoundaryType | `${number}%` | `${number}dvh` | `${number}dsvh` | `${number}vh`;
 type ScrollBarMode = "horizontal" | "vertical" | "both";
 type PositionMode = "before" | "after";
-type Superimposition = "over" | "after";
+type PaddingReservationMode = "scrollbar-only" | "include-target-padding";
 type HideNativeScrollbarMode = false | "fine-pointer" | "always";
-interface ScrollToFutureScrollBar {
+interface ScrollToFutureScrollBarBase {
     className?: string;
     mode?: ScrollBarMode;
     hideNativeScrollbar?: HideNativeScrollbarMode;
     positionMode?: PositionMode;
-    superimposition?: Superimposition;
     boundaryOffset?: BoundaryOffset;
     widthTrack?: PxValue;
     heightTrack?: HeightTrackType;
 }
+type ScrollToFutureScrollBar = (ScrollToFutureScrollBarBase & {
+    superimposition?: "over";
+    paddingReservationMode?: never;
+}) | (ScrollToFutureScrollBarBase & {
+    superimposition: "after";
+    paddingReservationMode: PaddingReservationMode;
+});
 
 interface ScrollToFutureThumb {
     className?: string;
@@ -58,10 +64,9 @@ interface ScrollToFutureInterface {
     selectTheme?: PresetsThemeType;
     optionsTheme?: ScrollToFutureThemeProps;
     nativeOnMobile?: boolean;
-    overlayHide?: boolean;
 }
 type ScrollToFutureConfig = Omit<ScrollToFutureInterface, "target">;
 
-declare const ScrollToFuture: ({ target, scrollBar, thumb, selectTheme, optionsTheme, nativeOnMobile, overlayHide, }: ScrollToFutureInterface) => react.JSX.Element | null;
+declare const ScrollToFuture: ({ target, scrollBar, thumb, selectTheme, optionsTheme, nativeOnMobile, }: ScrollToFutureInterface) => react.JSX.Element | null;
 
 export { ScrollToFuture, type ScrollToFutureConfig };

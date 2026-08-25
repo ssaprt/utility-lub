@@ -160,12 +160,13 @@ var trackPositionToScroll = (trackPos, trackLength, thumbSize, metrics) => {
   const ratio = clamp(trackPos / maxThumbTravel, 0, 1);
   return ratio * maxScroll;
 };
-var computeReservedSpace = (boundaryOffset, trackThicknessPx, superimposition) => {
+var computeReservedSpace = (boundaryOffset, trackThicknessPx, superimposition, positionMode) => {
   if (superimposition !== "after") {
     return 0;
   }
   const { start, end } = parseBoundaryOffset(boundaryOffset);
-  return start + trackThicknessPx + end;
+  const offset = positionMode === "before" ? start : end;
+  return trackThicknessPx + offset;
 };
 var isPageScrollTarget = (el) => typeof document !== "undefined" && (el === document.body || el === document.documentElement || el === document.scrollingElement);
 
@@ -861,23 +862,28 @@ var getPaddingRegistry = (element) => {
   paddingRegistries.set(element, registry);
   return registry;
 };
-var applyPaddingRegistry = (element, registry) => {
-  const reserved = {
-    left: 0,
-    right: 0,
-    top: 0,
-    bottom: 0
-  };
-  for (const reservation of registry.reservations.values()) {
-    reserved.left = Math.max(reserved.left, reservation.left);
-    reserved.right = Math.max(reserved.right, reservation.right);
-    reserved.top = Math.max(reserved.top, reservation.top);
-    reserved.bottom = Math.max(reserved.bottom, reservation.bottom);
+var resolvePaddingSide = (registry, side) => {
+  const reservations = Array.from(registry.reservations.values()).filter(
+    (reservation) => reservation.values[side] > 0
+  );
+  if (reservations.length === 0) {
+    return registry.base[side];
   }
-  element.style.paddingLeft = `${registry.base.left + reserved.left}px`;
-  element.style.paddingRight = `${registry.base.right + reserved.right}px`;
-  element.style.paddingTop = `${registry.base.top + reserved.top}px`;
-  element.style.paddingBottom = `${registry.base.bottom + reserved.bottom}px`;
+  return Math.max(
+    ...reservations.map((reservation) => {
+      const reserved = reservation.values[side];
+      if (reservation.mode === "include-target-padding") {
+        return registry.base[side] + reserved;
+      }
+      return reserved;
+    })
+  );
+};
+var applyPaddingRegistry = (element, registry) => {
+  element.style.paddingLeft = `${resolvePaddingSide(registry, "left")}px`;
+  element.style.paddingRight = `${resolvePaddingSide(registry, "right")}px`;
+  element.style.paddingTop = `${resolvePaddingSide(registry, "top")}px`;
+  element.style.paddingBottom = `${resolvePaddingSide(registry, "bottom")}px`;
 };
 var restoreInlinePadding = (element, registry) => {
   element.style.paddingLeft = registry.inline.left;
@@ -885,9 +891,12 @@ var restoreInlinePadding = (element, registry) => {
   element.style.paddingTop = registry.inline.top;
   element.style.paddingBottom = registry.inline.bottom;
 };
-var setPaddingReservation = (element, id, reservation) => {
+var setPaddingReservation = (element, id, values, mode) => {
   const registry = getPaddingRegistry(element);
-  registry.reservations.set(id, reservation);
+  registry.reservations.set(id, {
+    values,
+    mode
+  });
   applyPaddingRegistry(element, registry);
 };
 var removePaddingReservation = (element, id) => {
@@ -921,12 +930,16 @@ var useFuture = ({
   const reservationIdRef = (0, import_react4.useRef)(/* @__PURE__ */ Symbol("scroll-to-future-reservation"));
   const virtualKeyboardOpen = useVirtualKeyboardOpen(mounted);
   (0, import_react4.useEffect)(() => {
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
     let rafId = null;
     let stopped = false;
     const getPageTarget = () => document.scrollingElement instanceof HTMLElement ? document.scrollingElement : document.documentElement;
     const resolveTarget = () => {
-      if (stopped) return;
+      if (stopped) {
+        return;
+      }
       const explicitTarget = target?.current ?? null;
       const parentTarget = anchorRef.current?.parentElement ?? null;
       const nextTarget = explicitTarget ?? parentTarget ?? getPageTarget();
@@ -948,19 +961,29 @@ var useFuture = ({
   }, [mounted, target, anchorRef, targetRef, setFindedTarget]);
   (0, import_react4.useEffect)(() => {
     const element = findedTarget ?? targetRef.current;
-    if (!element) return;
-    const trackThickness = parsePxValue(config.scrollBar?.widthTrack) ?? DEFAULT_TRACK_THICKNESS;
+    if (!element) {
+      return;
+    }
     const reservationMode = virtualKeyboardOpen ? "over" : superimposition;
+    if (reservationMode !== "after") {
+      return;
+    }
+    const trackThickness = parsePxValue(config.scrollBar?.widthTrack) ?? DEFAULT_TRACK_THICKNESS;
     const reservedY = showY ? computeReservedSpace(
       config.scrollBar?.boundaryOffset,
       trackThickness,
-      reservationMode
+      reservationMode,
+      positionMode
     ) : 0;
     const reservedX = showX ? computeReservedSpace(
       config.scrollBar?.boundaryOffset,
       trackThickness,
-      reservationMode
+      reservationMode,
+      positionMode
     ) : 0;
+    if (reservedY <= 0 && reservedX <= 0) {
+      return;
+    }
     const reservation = {
       left: 0,
       right: 0,
@@ -981,8 +1004,14 @@ var useFuture = ({
         reservation.bottom = reservedX;
       }
     }
+    const paddingReservationMode = config.scrollBar?.paddingReservationMode ?? "include-target-padding";
     const reservationId = reservationIdRef.current;
-    setPaddingReservation(element, reservationId, reservation);
+    setPaddingReservation(
+      element,
+      reservationId,
+      reservation,
+      paddingReservationMode
+    );
     return () => {
       removePaddingReservation(element, reservationId);
     };
@@ -992,12 +1021,16 @@ var useFuture = ({
     showY,
     positionMode,
     superimposition,
+    virtualKeyboardOpen,
     config.scrollBar?.boundaryOffset,
     config.scrollBar?.widthTrack,
-    virtualKeyboardOpen
+    config.scrollBar?.paddingReservationMode,
+    targetRef
   ]);
   (0, import_react4.useEffect)(() => {
-    if (!findedTarget) return;
+    if (!findedTarget) {
+      return;
+    }
     const mode = config.scrollBar?.hideNativeScrollbar ?? false;
     if (mode === false || !coversAllScrollableAxes) {
       return;
@@ -1903,6 +1936,7 @@ var defaultConfig = {
     positionMode: "after",
     superimposition: "after",
     boundaryOffset: "4px",
+    paddingReservationMode: "include-target-padding",
     heightTrack: "98%",
     hideNativeScrollbar: "always"
   },
@@ -1912,8 +1946,7 @@ var defaultConfig = {
   },
   nativeOnMobile: true,
   selectTheme: "primary",
-  optionsTheme: {},
-  overlayHide: false
+  optionsTheme: {}
 };
 
 // src/utils/merge.ts
@@ -2015,8 +2048,7 @@ var ScrollToFuture = ({
   thumb = {},
   selectTheme = "primary",
   optionsTheme = {},
-  nativeOnMobile = true,
-  overlayHide = false
+  nativeOnMobile = true
 }) => {
   const anchorRef = (0, import_react7.useRef)(null);
   const targetRef = (0, import_react7.useRef)(null);

@@ -5,11 +5,19 @@ import { useAppContextActions } from "@/context/appContext";
 import { useAppRequestState } from "@/hooks/useAppRequestState";
 import { useGetCssSelectorQuery } from "@/services/CSSSelector/css-selector.api";
 import { useEffect } from "react";
+import { Links } from "./Bottom/Links";
+import { Status } from "./Bottom/Status";
 import { BrowserSupport } from "./BrowserSupport/BrowserSupport";
 import { ExampleSelector } from "./Example/ExampleSelector";
 import { Provider } from "./Example/providers/CodeFieldProvider";
 import { Header } from "./Header/Header";
-import { TopHide } from "./TopHide";
+
+const legacyPseudoElements = new Set([
+    ":before",
+    ":after",
+    ":first-letter",
+    ":first-line",
+]);
 
 export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
     const { data, isLoading, isFetching, isError, refetch } =
@@ -20,6 +28,15 @@ export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
     const { header } = useAppContextActions();
 
     const { setIconHeader, setTitleHeader } = header;
+
+    const isPseudoElement =
+        name.startsWith("::") || legacyPseudoElements.has(name);
+
+    const iconMeta = isPseudoElement ? "dots-double.svg" : "dots.svg";
+
+    const descriptionMeta = isPseudoElement
+        ? `CSS pseudo element ${name}`
+        : `CSS pseudo class ${name}`;
 
     useAppRequestState({
         tag: `css-selector:${name}`,
@@ -46,23 +63,29 @@ export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
         setTitleHeader(data?.name || "");
     }, [setIconHeader, setTitleHeader, data?.name, data?.type]);
 
-    if (!data) {
-        return null;
-    }
-
     return (
-        <div className="col-start-2">
-            <TopHide name={name} />
+        <>
+            <div className="sr-only" data-pagefind-body>
+                <span data-pagefind-meta="icon">{iconMeta}</span>
 
-            <Header name={name} />
+                <span data-pagefind-meta="description">{descriptionMeta}</span>
 
-            {data.example?.html && (
-                <Provider>
-                    <ExampleSelector name={name} />
-                </Provider>
+                <h3 data-pagefind-meta="title">{name}</h3>
+            </div>
+
+            {data && (
+                <div className="col-start-2">
+                    <Header name={name} />
+                    {data.example?.html && (
+                        <Provider>
+                            <ExampleSelector name={name} />
+                        </Provider>
+                    )}
+                    <BrowserSupport name={name} />
+                    <Status name={name} />
+                    <Links name={name} />
+                </div>
             )}
-
-            <BrowserSupport name={name} />
-        </div>
+        </>
     );
 };

@@ -3,7 +3,7 @@ import { Loader } from "@/components/animationIcons/Loader/Loader";
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { CategoryTitle } from "@/components/CategoryTitle/CategoryTitle";
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { useCSSSelector } from "@/config/references-route/CSSSelector";
+import { useCSSSelector } from "@/hooks/useCSSSelector";
 
 export const References = () => {
     const {

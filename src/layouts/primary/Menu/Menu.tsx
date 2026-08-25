@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 
 import { Hr } from "@/components/hr/Hr/Hr";
-import { useCSSSelector } from "@/config/references-route/CSSSelector";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { HeaderTitle } from "../../../components/HeaderTitle/HeaderTitle";
 import { Scroll } from "../Scroll";
@@ -19,7 +18,6 @@ export const Menu = () => {
     const { menu } = useAppContextValues();
     const { noneAnimationMenu, openMenu } = menu;
     const isDesktop = useBreakpoint("lg");
-    const { dataPseudoClasses, dataPseudoElements } = useCSSSelector();
 
     return (
         <div
@@ -61,7 +59,38 @@ export const Menu = () => {
                     ref={contentRef}
                     className={`${styles.content} px-4 lg:px-2`}
                 >
-                    <Scroll scrollWidth="1px" imposition="over" />
+                    <Scroll
+                        boundaryOffset="2px 1px"
+                        thumb={{
+                            inactive: {
+                                className: "bg-fg/20! rounded-md!",
+                            },
+
+                            hover: {
+                                className: "bg-fg/30! rounded-md!",
+                            },
+
+                            active: {
+                                className: "bg-fg/40! rounded-md!",
+                            },
+                        }}
+                        scrollBar={{
+                            inactive: {
+                                className: "bg-fg/0!",
+                            },
+                            hover: {
+                                className: "bg-fg/0!",
+                            },
+                            active: {
+                                className: "bg-fg/0!",
+                            },
+                        }}
+                        scrollWidth="6px"
+
+                        imposition="after"
+                        positionMode="after"
+                        paddingReservationMode="scrollbar-only"
+                    />
 
                     <div
                         className="

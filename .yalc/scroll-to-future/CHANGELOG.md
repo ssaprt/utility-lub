@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.22] - 2026-08-25
+
+### Fixed bugs
+
+- The calculation of the space allocated by the parent has been modified.
+
+## [1.0.21] - 2026-08-11
+
+### Fixed bugs
+
+- Fixed indentation behavior when used on Safari
+
 ## [1.0.20] - 2026-08-11
 
 ### Fixed bugs

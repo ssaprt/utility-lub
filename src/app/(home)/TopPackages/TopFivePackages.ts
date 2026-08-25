@@ -1,4 +1,4 @@
-import type { NpmPackagesStats } from "../NPMApi";
+import type { NpmPackageSortField, NpmPackagesStats } from "./npm.types";
 
 const formatReleaseDate = (value: string, now = new Date()): string => {
     const date = new Date(value);
@@ -38,35 +38,38 @@ const formatReleaseDate = (value: string, now = new Date()): string => {
     }).format(date);
 };
 
-type SortField = "created" | "modified" | "monthlyDownloads";
+const isDateField = (
+    field: NpmPackageSortField,
+): field is "created" | "modified" =>
+    field === "created" || field === "modified";
 
-export const latestOrModifiedFive = (
+export const topFivePackages = (
     data: NpmPackagesStats | undefined,
-    fieldSort: SortField = "monthlyDownloads",
+    fieldSort: NpmPackageSortField,
 ): NpmPackagesStats | null => {
     if (!data) return null;
 
     const packages = data.packages
         .filter((item) => {
-            if (fieldSort === "monthlyDownloads") {
-                return Number.isFinite(item.monthlyDownloads);
+            if (isDateField(fieldSort)) {
+                return !Number.isNaN(new Date(item.time[fieldSort]).getTime());
             }
 
-            return !Number.isNaN(new Date(item.time[fieldSort]).getTime());
+            return item[fieldSort] > 0;
         })
         .toSorted((a, b) => {
-            if (fieldSort === "monthlyDownloads") {
-                return b.monthlyDownloads - a.monthlyDownloads;
+            if (isDateField(fieldSort)) {
+                return (
+                    new Date(b.time[fieldSort]).getTime() -
+                    new Date(a.time[fieldSort]).getTime()
+                );
             }
 
-            return (
-                new Date(b.time[fieldSort]).getTime() -
-                new Date(a.time[fieldSort]).getTime()
-            );
+            return b[fieldSort] - a[fieldSort];
         })
         .slice(0, 5)
         .map((item) => {
-            if (fieldSort === "monthlyDownloads") {
+            if (!isDateField(fieldSort)) {
                 return item;
             }
 

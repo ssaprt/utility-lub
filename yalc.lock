@@ -1,14 +1,14 @@
 {
   "version": "v1",
   "packages": {
-    "scroll-to-future": {
-      "signature": "bd8e689c014a5a2fd71b52a86f18504b",
-      "file": true,
-      "replaced": "^1.0.18"
-    },
     "@ssaprt/tooltip": {
       "signature": "fcdc26fbbe8454971855e7b00d205dad",
       "file": true
+    },
+    "scroll-to-future": {
+      "signature": "e6c2dc85bea3da0f808f80b4dc2e6038",
+      "file": true,
+      "replaced": "^1.0.18"
     }
   }
 }

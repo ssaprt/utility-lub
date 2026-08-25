@@ -7,19 +7,17 @@ export const HeaderTitle = () => {
     const isDesktop = useBreakpoint("lg");
 
     return isDesktop ? (
-        <div className="flex flex-col items-center w-full gap-1 shrink-0">
+        <div className="col-stretch-0 w-full shrink-0">
             <AppLink
                 href="/"
-                className="flex 
-            flex-row 
-            justify-between 
-            items-center 
+                className="row-center-1
             gap-4 
             shrink-0
-            pt-[16px] 
-            pb-[6px]
-            cursor-pointer
-            mb-[4px]"
+            w-full!
+            pl-4
+            py-[15px]
+            hover:bg-fg/10
+            cursor-pointer"
                 style={{
                     flex: "0 0 auto",
                     width: "max-content",

@@ -1,5 +1,5 @@
 import { routes } from "@/config/routes";
-import { CSSPseudoSelectorGenerator } from "@/layouts/primary/Menu/References/CSSPseudoSelectorGenerator";
+import { CSSPseudoSelectorGenerator } from "@/content/References/CSSSelector/CSSPseudoSelectorGenerator";
 import cssData from "@webref/css/css.json";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";

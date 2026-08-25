@@ -5,6 +5,7 @@ export const Header = ({ name }: { name: string }) => {
     const { data } = useGetCssSelectorQuery({
         name,
     });
+
     return (
         <div className="default-block-0">
             <div

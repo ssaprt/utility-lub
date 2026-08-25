@@ -1,4 +1,4 @@
-import { CSSPseudoClassesList } from "./CSSPseudoClassesList";
+import { CSSPseudoClassesList } from "../../content/References/CSSSelector/CSSPseudoClassesList";
 
 export const cssPseudoClassesRoute = [
     {

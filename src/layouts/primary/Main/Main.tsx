@@ -38,7 +38,11 @@ export const Main = ({
 
             <Breadcrumbs />
             <GeneratorRouteComponent />
-            <Scroll imposition="over" />
+            <Scroll
+                paddingReservationMode="scrollbar-only"
+                boundaryOffset="8px 2px"
+                imposition="over"
+            />
             {children}
             <Breadcrumbs />
             <div className="my-5"></div>

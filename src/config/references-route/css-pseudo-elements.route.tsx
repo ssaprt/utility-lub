@@ -1,4 +1,4 @@
-import { CSSPseudoElementsList } from "./CSSPseudoElementsList";
+import { CSSPseudoElementsList } from "../../content/References/CSSSelector/CSSPseudoElementsList";
 
 export const cssPseudoElementsRoute = [
     {

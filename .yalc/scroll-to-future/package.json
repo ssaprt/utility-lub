@@ -1,6 +1,6 @@
 {
     "name": "scroll-to-future",
-    "version": "1.0.20",
+    "version": "1.0.21",
     "description": "",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -44,5 +44,6 @@
     "peerDependencies": {
         "react": ">=18"
     },
-    "yalcSig": "bd8e689c014a5a2fd71b52a86f18504b"
+    "dependencies": {},
+    "yalcSig": "e6c2dc85bea3da0f808f80b4dc2e6038"
 }

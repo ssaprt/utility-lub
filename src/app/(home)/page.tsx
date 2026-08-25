@@ -1,9 +1,8 @@
 "use client";
 import { useAppContextActions } from "@/context/appContext";
 import { useEffect } from "react";
+import { TopPackages } from "./TopPackages/TopPackages";
 
-import { LastReleasesOrNModifed } from "./NewReleases/LastReleasesOrNModifed";
-import { WeeklyPopularLibrary } from "./WeeklyPopularLibrary/WeeklyPopularLibrary";
 export default function Home() {
     const { header } = useAppContextActions();
     const { setTitleHeader, setIconHeader } = header || {};
@@ -15,22 +14,22 @@ export default function Home() {
 
     return (
         <div className="col-stretch-6">
-            {/* <Author /> */}
-            {/* <TitleWithItemsBlock title="Hi! Welcome to Utility Lab">
-                <span className="text-fg text-lg">
-                    If you need relaxing radio stations...
-                </span>
-            </TitleWithItemsBlock> */}
-            <WeeklyPopularLibrary />
-            <LastReleasesOrNModifed
-                fieldSort="created"
-                title="Last Releases"
-                icon="releases.svg"
+            <TopPackages
+                fieldSort="monthlyDownloads"
+                title="Weekly popular tools"
+                icon="npm/popular.svg"
             />
-            <LastReleasesOrNModifed
+
+            <TopPackages
+                fieldSort="created"
+                title="Latest releases"
+                icon="npm/last-releases.svg"
+            />
+
+            <TopPackages
                 fieldSort="modified"
-                title="Last Updates"
-                icon="modifed.svg"
+                title="Recently modified"
+                icon="npm/recently.svg"
             />
         </div>
     );

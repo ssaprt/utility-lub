@@ -28,7 +28,7 @@ export const Code = ({
     }, [code, language]);
 
     return (
-        <div className="relative w-full min-w-0 overflow-auto! rounded-[4px]! bg-fg/5 h-full">
+        <div className="relative w-full min-w-0 overflow-auto! rounded-md! bg-fg/5 h-full max-h-[400px]">
             <SyntaxHighlighter
                 language={language}
                 style={syntaxTheme}
@@ -59,7 +59,12 @@ export const Code = ({
                 {formattedCode}
             </SyntaxHighlighter>
 
-            <Scroll imposition="over" />
+            <Scroll
+                heightTrack="90%"
+                scrollWidth="6px"
+                boundaryOffset="0px 6px"
+                imposition="over"
+            />
         </div>
     );
 };

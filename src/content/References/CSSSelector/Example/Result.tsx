@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const iframeBaseCSS = `
     :root {
-        --foreground: #111111;
-        --background: #ffffff;
+        --foreground: transparent;
+        --background: transparent;
     }
 
     *,
@@ -20,7 +20,7 @@ const iframeBaseCSS = `
         width: 100%;
         min-height: 100%;
         color: var(--foreground);
-        background: var(--background);
+        background: transparent;
     }
 
     body {
@@ -172,10 +172,10 @@ export const Result = ({ name }: { name: string }) => {
         const styles = getComputedStyle(iframe);
 
         const foreground =
-            styles.getPropertyValue("--foreground").trim() || "#111111";
+            styles.getPropertyValue("--foreground").trim() || "transparent";
 
         const background =
-            styles.getPropertyValue("--background").trim() || "#ffffff";
+            styles.getPropertyValue("--background").trim() || "transparent";
 
         iframe.contentWindow?.postMessage(
             {
@@ -312,7 +312,7 @@ export const Result = ({ name }: { name: string }) => {
             allow="fullscreen; picture-in-picture"
             referrerPolicy="no-referrer"
             onLoad={syncTheme}
-            className="w-full h-full min-h-[300px] border-0 rounded-[4px]! bg-transparent"
+            className="w-full h-full min-h-[300px] border-0 rounded-[4px]! bg-transparent!"
         />
     );
 };
