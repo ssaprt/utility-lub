@@ -34,9 +34,10 @@ export const CSSPseudoSelectorGenerator = ({ name }: { name: string }) => {
 
     const iconMeta = isPseudoElement ? "dots-double.svg" : "dots.svg";
 
-    const descriptionMeta = isPseudoElement
-        ? `CSS pseudo element ${name}`
-        : `CSS pseudo class ${name}`;
+    const descriptionMeta =
+        (isPseudoElement
+            ? `CSS pseudo element ${name} `
+            : `CSS pseudo class ${name} `) + data?.description;
 
     useAppRequestState({
         tag: `css-selector:${name}`,
