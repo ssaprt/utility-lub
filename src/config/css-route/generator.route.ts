@@ -1,3 +1,4 @@
+import { Border } from "@/content/CSS/CSSResource/Generator/BorderGenerator/Border";
 import { BoxShadow } from "@/content/CSS/CSSResource/Generator/BoxShadow/BoxShadow";
 import { ClipPathGenerator } from "@/content/CSS/CSSResource/Generator/ClipPatch/ClipPatch";
 import { Gradient } from "@/content/CSS/CSSResource/Generator/Gradient/Gradient";
@@ -28,5 +29,10 @@ export const generatorRoute = [
         title: "CSS Box Shadow Generator",
         path: ["css", "generator", "box-shadow"],
         Component: BoxShadow,
+    },
+    {
+        title: "Border Generator",
+        path: ["css", "generator", "border"],
+        Component: Border,
     },
 ];

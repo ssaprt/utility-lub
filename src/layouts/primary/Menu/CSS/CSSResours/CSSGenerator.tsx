@@ -33,6 +33,11 @@ export const CSSGenerator = () => {
                     href: "/css/generator/box-shadow",
                     title: "Box Shadow Generator",
                 },
+                {
+                    type: "link",
+                    href: "/css/generator/border",
+                    title: "Border Generator",
+                },
             ]}
         />
     );

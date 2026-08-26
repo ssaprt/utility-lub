@@ -4,18 +4,16 @@ import {
     IconComponents,
     IconFishHook,
 } from "@tabler/icons-react";
-import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
+import { CategoryAccordion } from "../CategoryAccordion/CategoryAccordion";
 
 export const ReactAndNext = () => {
     return (
-        <div className="relative px-2 py-1 rounded-lg bg-fg/10">
-            <CategoryTitle
-                icon={
-                    <IconBrandReactNative className="w-[20px] h-[20px] stroke-app" />
-                }
-            >
-                React and NextJS
-            </CategoryTitle>
+        <CategoryAccordion
+            title="React and NextJS"
+            icon={
+                <IconBrandReactNative className="w-[20px] h-[20px] stroke-app" />
+            }
+        >
             <MenuAccordion
                 id="packages"
                 icon={<IconFishHook className="h-[20px] w-[20px]" />}
@@ -62,6 +60,6 @@ export const ReactAndNext = () => {
                     },
                 ]}
             />
-        </div>
+        </CategoryAccordion>
     );
 };

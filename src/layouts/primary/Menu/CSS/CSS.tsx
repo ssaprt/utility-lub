@@ -1,21 +1,10 @@
-import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
+import { CategoryAccordion } from "../CategoryAccordion/CategoryAccordion";
 import { CSSGenerator } from "./CSSResours/CSSGenerator";
 
 export const CSS = () => {
     return (
-        <div className="relative px-2 py-1 rounded-lg bg-fg/10">
-            <CategoryTitle
-                icon={
-                    <DynamicSvgIcon
-                        name="css.svg"
-                        className="w-[20px] h-[20px] fill-app"
-                    />
-                }
-            >
-                CSS Resources
-            </CategoryTitle>
+        <CategoryAccordion title="CSS Resources" icon="css.svg">
             <CSSGenerator />
-        </div>
+        </CategoryAccordion>
     );
 };

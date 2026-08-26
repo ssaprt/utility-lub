@@ -1,16 +1,14 @@
 import { MenuAccordion } from "@/components/accordions/MenuAccordion/MenuAccordion";
 import { IconDatabase, IconFileTypeSql } from "@tabler/icons-react";
-import { CategoryTitle } from "../../../../components/CategoryTitle/CategoryTitle";
+import { CategoryAccordion } from "../CategoryAccordion/CategoryAccordion";
 
 export const OpenData = () => {
     return (
-        <div className="relative px-2 py-1 rounded-lg bg-fg/10">
-            <CategoryTitle
-                icon={<IconDatabase className="w-[20px] h-[20px] stroke-app" />}
-            >
-                Open Data
-            </CategoryTitle>
-
+        <CategoryAccordion
+            title="Open Data"
+            icon={<IconDatabase className="w-[20px] h-[20px] stroke-app" />}
+        >
+            {" "}
             <MenuAccordion
                 id="Tables"
                 icon={<IconFileTypeSql className="h-[20px] w-[20px]" />}
@@ -23,6 +21,6 @@ export const OpenData = () => {
                     },
                 ]}
             />
-        </div>
+        </CategoryAccordion>
     );
 };
