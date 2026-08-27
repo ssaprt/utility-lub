@@ -19,6 +19,8 @@ const LOADER_IN_DURATION = 100;
 const MIN_LOADER_DURATION = 300;
 const OVERLAY_OUT_DURATION = 300;
 
+const LOADER_TAG = "main-overlay";
+
 type OverlayPhase =
     | "idle"
     | "loading"
@@ -31,7 +33,6 @@ type RequestedMode = "idle" | "loading" | "error";
 
 export const MainOverlay = () => {
     const markerRef = useRef<HTMLSpanElement>(null);
-
     const overlayRef = useRef<HTMLDivElement>(null);
 
     const cycleStartedAtRef = useRef(0);
@@ -50,7 +51,11 @@ export const MainOverlay = () => {
 
     const { openMenu, pending } = menu;
 
-    const { menu: menuActions } = useAppContextActions();
+    const {
+        menu: menuActions,
+        startLoader,
+        finishLoader,
+    } = useAppContextActions();
 
     const { setOpenMenu } = menuActions;
 
@@ -58,7 +63,7 @@ export const MainOverlay = () => {
         pending || loadingAnyData ? "loading" : requestError ? "error" : "idle";
 
     useEffect(() => {
-        //eslint-disable-next-line
+        // eslint-disable-next-line
         setMounted(true);
     }, []);
 
@@ -66,7 +71,8 @@ export const MainOverlay = () => {
         if (!requestError) {
             return;
         }
-        //eslint-disable-next-line
+
+        // eslint-disable-next-line
         setDisplayError(requestError);
     }, [requestError]);
 
@@ -78,6 +84,10 @@ export const MainOverlay = () => {
         if (requestedMode === "loading") {
             if (phase !== "loading") {
                 cycleStartedAtRef.current = performance.now();
+
+                startLoader({
+                    tag: LOADER_TAG,
+                });
                 //eslint-disable-next-line
                 setPhase("loading");
             }
@@ -107,6 +117,12 @@ export const MainOverlay = () => {
                 return () => {
                     window.clearTimeout(timeoutId);
                 };
+            }
+
+            if (phase === "idle" || phase === "overlayOut") {
+                startLoader({
+                    tag: LOADER_TAG,
+                });
             }
 
             if (phase !== "loaderOutToError" && phase !== "error") {
@@ -142,7 +158,23 @@ export const MainOverlay = () => {
         if (phase === "loaderOutToError" || phase === "loaderOutToIdle") {
             setPhase("overlayOut");
         }
-    }, [mounted, requestedMode, phase, isDesktop, openMenu, setOpenMenu]);
+    }, [
+        mounted,
+        requestedMode,
+        phase,
+        isDesktop,
+        openMenu,
+        setOpenMenu,
+        startLoader,
+    ]);
+
+    useEffect(() => {
+        return () => {
+            finishLoader({
+                tag: LOADER_TAG,
+            });
+        };
+    }, [finishLoader]);
 
     useLayoutEffect(() => {
         if (!mounted || phase === "idle") {
@@ -203,6 +235,7 @@ export const MainOverlay = () => {
                             duration: overlayVisible
                                 ? 0
                                 : OVERLAY_OUT_DURATION / 1000,
+                            ease: "easeOut",
                         }}
                         onAnimationComplete={() => {
                             if (phase !== "overlayOut") {
@@ -213,11 +246,16 @@ export const MainOverlay = () => {
                                 return;
                             }
 
+                            finishLoader({
+                                tag: LOADER_TAG,
+                            });
+
                             setDisplayError(null);
 
                             setPhase("idle");
                         }}
                         className="
+                            pointer-events-auto
                             fixed
                             z-[9999]
                             flex
@@ -225,7 +263,6 @@ export const MainOverlay = () => {
                             justify-center
                             overflow-hidden
                             bg-app
-                            pointer-events-auto
                             will-change-[opacity]
                         "
                         style={{
@@ -237,7 +274,7 @@ export const MainOverlay = () => {
                     >
                         <Loader
                             visible={loaderVisible}
-                            mode="wave"
+                            mode="implode"
                             onTransitionEnd={() => {
                                 if (phase === "loaderOutToError") {
                                     setPhase("error");
@@ -252,10 +289,17 @@ export const MainOverlay = () => {
                         />
 
                         {errorVisible && displayError && (
-                            <div className="absolute inset-0 col-center-4 justify-center">
+                            <div
+                                className="
+                                        absolute
+                                        inset-0
+                                        col-center-4
+                                        justify-center
+                                    "
+                            >
                                 <DynamicSvgIcon
                                     name="message/server-error.svg"
-                                    className="w-6 h-6 fill-fg"
+                                    className="h-6 w-6 fill-fg"
                                 />
 
                                 <span className="text-xs text-fg/90">
@@ -267,7 +311,7 @@ export const MainOverlay = () => {
                                     <GeneralButton
                                         variant="soft"
                                         icon={
-                                            <IconReload className="w-4 h-4" />
+                                            <IconReload className="h-4 w-4" />
                                         }
                                         textButton="Retry"
                                         handleAction={displayError.onRetry}

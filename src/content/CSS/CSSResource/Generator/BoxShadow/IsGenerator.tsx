@@ -279,6 +279,7 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     };
 
     const scroll = (isScrolled?.scroll.scrollTop ?? 0) > 380;
+    console.log(scroll);
 
     return (
         <div className="col-stretch-1 lg:row-stretch-4 w-full relative">
@@ -445,21 +446,16 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         }
                         animate={{
                             opacity: scroll ? 1 : 0,
-
                             x: scroll ? 0 : "100%",
                         }}
                         transition={{
                             type: "spring",
-
                             stiffness: scroll ? 100 : 500,
-
                             damping: scroll ? 8 : 24,
-
                             mass: 0.4,
                         }}
                         className="
                             fixed
-                          
                             flex
                             size-[100px]
                             cursor-pointer
@@ -473,7 +469,6 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         style={{
                             right: "20px",
                             top: "90px",
-
                             backgroundColor: config.canvasColor,
                         }}
                     >
@@ -481,7 +476,6 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                             className="size-[50px]"
                             style={{
                                 backgroundColor: config.boxColor,
-
                                 boxShadow,
                             }}
                         />

@@ -1,14 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-
 import {
     useAppContextActions,
     useAppContextValues,
 } from "@/context/appContext";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
+import { motion } from "framer-motion";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Loader } from "../animationIcons/Loader/Loader";
 
 const OVERLAY_IN_DURATION = 100;
@@ -16,22 +15,32 @@ const LOADER_IN_DURATION = 100;
 const MIN_LOADER_DURATION = 300;
 const OVERLAY_OUT_DURATION = 300;
 
+const LOADER_TAG = "pending-loader";
+
 type LoaderPhase = "idle" | "active" | "loaderOut" | "overlayOut";
 
 export const PendingLoader = () => {
     const markerRef = useRef<HTMLSpanElement>(null);
+
     const overlayRef = useRef<HTMLDivElement>(null);
+
     const cycleStartedAtRef = useRef(0);
 
     const [mounted, setMounted] = useState(false);
+
     const [phase, setPhase] = useState<LoaderPhase>("idle");
 
     const isDesktop = useBreakpoint("lg");
 
     const { menu, loadingAnyData } = useAppContextValues();
+
     const { openMenu, pending } = menu;
 
-    const { menu: menuActions } = useAppContextActions();
+    const {
+        menu: menuActions,
+        startLoader,
+        finishLoader,
+    } = useAppContextActions();
 
     const { setOpenMenu } = menuActions;
 
@@ -48,13 +57,17 @@ export const PendingLoader = () => {
         }
 
         cycleStartedAtRef.current = performance.now();
+
+        startLoader({
+            tag: LOADER_TAG,
+        });
         //eslint-disable-next-line
         setPhase("active");
 
         if (!isDesktop && openMenu) {
             setOpenMenu(false);
         }
-    }, [isPending, phase, openMenu, isDesktop, setOpenMenu]);
+    }, [isPending, phase, openMenu, isDesktop, setOpenMenu, startLoader]);
 
     useEffect(() => {
         if (isPending || phase !== "active") {
@@ -77,12 +90,21 @@ export const PendingLoader = () => {
         };
     }, [isPending, phase]);
 
+    useEffect(() => {
+        return () => {
+            finishLoader({
+                tag: LOADER_TAG,
+            });
+        };
+    }, [finishLoader]);
+
     useLayoutEffect(() => {
         if (!mounted || phase === "idle") {
             return;
         }
 
         const parent = markerRef.current?.parentElement;
+
         const overlay = overlayRef.current;
 
         if (!parent || !overlay) {
@@ -95,8 +117,11 @@ export const PendingLoader = () => {
             const rect = parent.getBoundingClientRect();
 
             overlay.style.top = `${rect.top}px`;
+
             overlay.style.left = `${rect.left}px`;
+
             overlay.style.width = `${rect.width}px`;
+
             overlay.style.height = `${rect.height}px`;
 
             animationFrameId = window.requestAnimationFrame(updatePosition);
@@ -110,6 +135,7 @@ export const PendingLoader = () => {
     }, [mounted, phase]);
 
     const overlayVisible = phase === "active" || phase === "loaderOut";
+
     const loaderVisible = phase === "active";
 
     return (
@@ -126,14 +152,24 @@ export const PendingLoader = () => {
                             opacity: overlayVisible ? 1 : 0,
                         }}
                         transition={{
-                            duration: overlayVisible
-                                ? 0
-                                : OVERLAY_OUT_DURATION / 1000,
+                            opacity: {
+                                duration: overlayVisible
+                                    ? 0
+                                    : OVERLAY_OUT_DURATION / 1000,
+
+                                ease: "easeOut",
+                            },
                         }}
                         onAnimationComplete={() => {
-                            if (phase === "overlayOut" && !overlayVisible) {
-                                setPhase("idle");
+                            if (phase !== "overlayOut" || overlayVisible) {
+                                return;
                             }
+
+                            finishLoader({
+                                tag: LOADER_TAG,
+                            });
+
+                            setPhase("idle");
                         }}
                         className="
                             pointer-events-none
@@ -157,9 +193,11 @@ export const PendingLoader = () => {
                             visible={loaderVisible}
                             mode="wave"
                             onTransitionEnd={() => {
-                                if (phase === "loaderOut") {
-                                    setPhase("overlayOut");
+                                if (phase !== "loaderOut") {
+                                    return;
                                 }
+
+                                setPhase("overlayOut");
                             }}
                         />
                     </motion.div>,

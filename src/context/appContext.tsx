@@ -33,6 +33,7 @@ interface AppContextActionsType {
         setHrefHeader: Dispatch<SetStateAction<string>>;
         setBoxForAnimations: Dispatch<SetStateAction<HTMLDivElement | null>>;
     };
+
     menu: {
         setOpenMenu: Dispatch<SetStateAction<boolean>>;
         setWidthMenu: Dispatch<SetStateAction<number>>;
@@ -40,10 +41,15 @@ interface AppContextActionsType {
         setNoneAnimationMenu: Dispatch<SetStateAction<boolean>>;
         setVisibleAgent: Dispatch<SetStateAction<boolean>>;
     };
+
     addLoadData: ({ tag }: { tag: string }) => void;
     removeLoadData: ({ tag }: { tag: string }) => void;
+
     setRequestState: (request: AppRequestState) => void;
     removeRequestState: ({ tag }: { tag: string }) => void;
+
+    startLoader: ({ tag }: { tag: string }) => void;
+    finishLoader: ({ tag }: { tag: string }) => void;
 }
 
 type AppContextType = {
@@ -53,22 +59,27 @@ type AppContextType = {
         hrefHeader?: string;
         boxForAnimations?: HTMLDivElement | null;
         themePopupRef?: RefObject<HTMLDialogElement | null>;
+
         isScrolled: {
             main: HTMLElement | null;
+
             scroll: {
                 scrollTop: number;
                 scrolled: boolean;
             };
+
             position: {
                 x: number;
                 y: number;
             };
+
             sizes: {
                 width: number;
                 height: number;
             };
         };
     };
+
     menu: {
         openMenu: boolean;
         widthMenu: number;
@@ -76,8 +87,12 @@ type AppContextType = {
         pending: boolean;
         visibleAgent: boolean;
     };
+
     loadingAnyData: boolean;
     requestError: AppRequestState | null;
+
+    animationsReady: boolean;
+    activeLoaders: string[];
 };
 
 const AppContextValues = createContext<AppContextType | null>(null);
@@ -89,6 +104,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const [hrefHeader, setHrefHeader] = useState("");
     const [loadData, setLoadData] = useState<string[]>([]);
     const [requestStates, setRequestStates] = useState<AppRequestState[]>([]);
+    const [activeLoaders, setActiveLoaders] = useState<string[]>([]);
 
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);
@@ -178,6 +194,28 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
         });
     }, []);
 
+    const startLoader = useCallback(({ tag }: { tag: string }) => {
+        setActiveLoaders((current) => {
+            if (current.includes(tag)) {
+                return current;
+            }
+
+            return [...current, tag];
+        });
+    }, []);
+
+    const finishLoader = useCallback(({ tag }: { tag: string }) => {
+        setActiveLoaders((current) => {
+            if (!current.includes(tag)) {
+                return current;
+            }
+
+            return current.filter((item) => item !== tag);
+        });
+    }, []);
+
+    const animationsReady = activeLoaders.length === 0;
+
     const requestLoading = requestStates.some(
         (request) => request.status === "loading",
     );
@@ -199,6 +237,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
                 isScrolled,
                 themePopupRef,
             },
+
             menu: {
                 openMenu,
                 widthMenu,
@@ -206,8 +245,12 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
                 pending,
                 visibleAgent,
             },
+
             loadingAnyData,
             requestError,
+
+            animationsReady,
+            activeLoaders,
         }),
         [
             iconHeader,
@@ -215,13 +258,18 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
             hrefHeader,
             boxForAnimations,
             isScrolled,
+
             openMenu,
             widthMenu,
             noneAnimationMenu,
             pending,
             visibleAgent,
+
             loadingAnyData,
             requestError,
+
+            animationsReady,
+            activeLoaders,
         ],
     );
 
@@ -233,6 +281,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
                 setHrefHeader,
                 setBoxForAnimations,
             },
+
             menu: {
                 setOpenMenu,
                 setWidthMenu,
@@ -240,12 +289,24 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
                 setPending,
                 setVisibleAgent,
             },
+
+            addLoadData,
+            removeLoadData,
+
+            setRequestState,
+            removeRequestState,
+
+            startLoader,
+            finishLoader,
+        }),
+        [
             addLoadData,
             removeLoadData,
             setRequestState,
             removeRequestState,
-        }),
-        [addLoadData, removeLoadData, setRequestState, removeRequestState],
+            startLoader,
+            finishLoader,
+        ],
     );
 
     useEffect(() => {

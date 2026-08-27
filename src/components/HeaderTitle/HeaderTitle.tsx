@@ -2,12 +2,19 @@ import { Hr } from "@/components/hr/Hr/Hr";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import LogoIcon from "@/icons/mana.svg";
+import { useState } from "react";
+import { Loader } from "../animationIcons/Loader/Loader";
 
 export const HeaderTitle = () => {
     const isDesktop = useBreakpoint("lg");
+    const [vis, setVis] = useState(false);
 
     return isDesktop ? (
-        <div className="col-stretch-0 w-full shrink-0">
+        <div
+            onMouseEnter={() => setVis(true)}
+            onMouseLeave={() => setVis(false)}
+            className="col-stretch-0 w-full shrink-0"
+        >
             <AppLink
                 href="/"
                 className="row-center-1
@@ -27,6 +34,13 @@ export const HeaderTitle = () => {
                 <LogoIcon className="w-[30px] h-[30px] fill-fg" />
                 <h4 className="!tracking-[1.25px] text-fg">Utility Lab</h4>
             </AppLink>
+            {vis && (
+                <div
+                    className={`overflow-visible pointer-events-none absolute w-[30px] h-[20px] left-4 top-0`}
+                >
+                    <Loader mode="rise" visible />
+                </div>
+            )}
             <Hr mode="horizontal" size={1} />
         </div>
     ) : (

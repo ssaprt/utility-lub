@@ -19,18 +19,23 @@
     box-sizing: border-box;
 }
 
-.pending {
-    overflow-y: hidden;
-}
-
-.main > * {
+.main .anim {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-
+    opacity: 0;
+    top: 15px;
     flex-shrink: 0;
-
+    position: relative;
     box-sizing: border-box;
+}
+
+.animations-ready .anim {
+    transition:
+        opacity 0.6s ease,
+        top 0.3s ease;
+    opacity: 1;
+    top: 0;
 }
 
 .main pre,

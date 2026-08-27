@@ -87,7 +87,7 @@ export const Menu = () => {
                         }}
                         scrollWidth="6px"
 
-                        imposition="after"
+                        imposition="over"
                         positionMode="after"
                         paddingReservationMode="scrollbar-only"
                     />

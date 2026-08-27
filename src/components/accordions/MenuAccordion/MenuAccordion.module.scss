@@ -85,9 +85,9 @@
     opacity: 0;
 
     transition:
-        grid-template-rows 0.35s ease,
-        opacity 0.25s ease,
-        visibility 0s linear 0.35s;
+        grid-template-rows 0.6s ease,
+        opacity 0.55s ease,
+        visibility 0s linear 0.6s, grid-template-rows 0.6s ease, min-height 0.6s ease, height 0.6s ease, width 0.65s ease;
 }
 
 .bodyInner {
@@ -110,9 +110,9 @@
     opacity: 1;
 
     transition:
-        grid-template-rows 0.35s ease,
-        opacity 0.25s ease,
-        visibility 0s linear 0s;
+        grid-template-rows 0.55s ease,
+        opacity 0.6s ease,
+        visibility 0s linear 0s, height 0.6s ease;
 }
 
 .accordion.open > .head .chevron {

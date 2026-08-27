@@ -1,7 +1,9 @@
 import { Border } from "@/content/CSS/CSSResource/Generator/BorderGenerator/Border";
 import { BoxShadow } from "@/content/CSS/CSSResource/Generator/BoxShadow/BoxShadow";
 import { ClipPathGenerator } from "@/content/CSS/CSSResource/Generator/ClipPatch/ClipPatch";
+import { Flex } from "@/content/CSS/CSSResource/Generator/Flex/Flex";
 import { Gradient } from "@/content/CSS/CSSResource/Generator/Gradient/Gradient";
+import { Grid } from "@/content/CSS/CSSResource/Generator/Grid/Grid";
 import { Pattern } from "@/content/CSS/CSSResource/Generator/Pattern/Pattern";
 
 export const generatorRoute = [
@@ -34,5 +36,15 @@ export const generatorRoute = [
         title: "Border Generator",
         path: ["css", "generator", "border"],
         Component: Border,
+    },
+    {
+        title: "CSS Flex Box Generator",
+        path: ["css", "generator", "flex"],
+        Component: Flex,
+    },
+    {
+        title: "CSS Grid Generator",
+        path: ["css", "generator", "grid"],
+        Component: Grid,
     },
 ];

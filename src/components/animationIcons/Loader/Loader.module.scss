@@ -6,7 +6,7 @@
     height: 100%;
 
     overflow: hidden;
-     
+
     color: var(--foreground);
 
     contain: layout paint;
@@ -27,6 +27,8 @@
 
 .hidden {
     opacity: 0;
+
+    pointer-events: none;
 }
 
 .spark {
@@ -38,7 +40,7 @@
     display: block;
 
     width: var(--spark-size);
-    height: calc(var(--spark-size) * 1.15);
+    height: var(--spark-height);
 
     background-color: currentColor;
 
@@ -56,18 +58,28 @@
     opacity: 0;
 
     backface-visibility: hidden;
-    will-change: transform, opacity;
 
-    animation-duration: var(--spark-duration);
-    animation-delay: var(--spark-delay);
-    animation-iteration-count: infinite;
+    will-change:
+        transform,
+        opacity;
+
+    animation-duration:
+        var(--spark-duration);
+
+    animation-delay:
+        var(--spark-delay);
+
+    animation-iteration-count:
+        infinite;
 }
 
-/* Падение сверху вниз */
+/* FALL */
 
 .fall {
     .spark {
-        top: calc(var(--spark-size) * -2);
+        top: calc(
+            var(--spark-size) * -2
+        );
 
         animation-name: spark-fall;
         animation-timing-function: linear;
@@ -79,14 +91,23 @@
         opacity: 0;
 
         transform:
-            translate3d(-50%, -10dvh, 0)
-            rotate(var(--spark-rotation))
-            scale(var(--spark-scale));
+            translate3d(
+                -50%,
+                -10dvh,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale)
+            );
     }
 
     12%,
     82% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
     }
 
     100% {
@@ -94,20 +115,28 @@
 
         transform:
             translate3d(
-                calc(-50% + var(--spark-drift-x)),
+                calc(
+                    -50% +
+                    var(--spark-drift-x)
+                ),
                 115dvh,
                 0
             )
             rotate(540deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-/* Поднимаются снизу вверх */
+/* RISE */
 
 .rise {
     .spark {
-        top: calc(100% + var(--spark-size));
+        top: calc(
+            100% +
+            var(--spark-size)
+        );
 
         animation-name: spark-rise;
         animation-timing-function: linear;
@@ -119,14 +148,23 @@
         opacity: 0;
 
         transform:
-            translate3d(-50%, 10dvh, 0)
-            rotate(var(--spark-rotation))
-            scale(var(--spark-scale));
+            translate3d(
+                -50%,
+                10dvh,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale)
+            );
     }
 
     12%,
     82% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
     }
 
     100% {
@@ -134,67 +172,104 @@
 
         transform:
             translate3d(
-                calc(-50% + var(--spark-drift-x)),
+                calc(
+                    -50% +
+                    var(--spark-drift-x)
+                ),
                 -115dvh,
                 0
             )
             rotate(-540deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-/* Парение в пространстве */
+/* SPACE */
 
 .space {
     .spark {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
 
-        animation-name: spark-space;
-        animation-timing-function: ease-in-out;
-        animation-direction: alternate;
+        animation-name:
+            spark-space;
+
+        animation-timing-function:
+            ease-in-out;
+
+        animation-direction:
+            alternate;
     }
 }
 
 @keyframes spark-space {
     0% {
-        opacity: calc(var(--spark-opacity) * 0.4);
+        opacity:
+            var(--spark-opacity-soft);
 
         transform:
             translate3d(
-                calc(-50% - var(--spark-drift-x)),
-                calc(-50% - var(--spark-drift-y)),
+                calc(
+                    -50% -
+                    var(--spark-drift-x)
+                ),
+                calc(
+                    -50% -
+                    var(--spark-drift-y)
+                ),
                 0
             )
-            rotate(var(--spark-rotation))
-            scale(0.65);
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
     }
 
     50% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
     }
 
     100% {
-        opacity: calc(var(--spark-opacity) * 0.7);
+        opacity:
+            var(--spark-opacity-mid);
 
         transform:
             translate3d(
-                calc(-50% + var(--spark-drift-x)),
-                calc(-50% + var(--spark-drift-y)),
+                calc(
+                    -50% +
+                    var(--spark-drift-x)
+                ),
+                calc(
+                    -50% +
+                    var(--spark-drift-y)
+                ),
                 0
             )
             rotate(180deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-/* Полёт по диагонали */
+/* DIAGONAL */
 
 .diagonal {
     .spark {
-        left: calc(var(--spark-size) * -4);
+        left: calc(
+            var(--spark-size) * -4
+        );
 
-        animation-name: spark-diagonal;
-        animation-timing-function: linear;
+        animation-name:
+            spark-diagonal;
+
+        animation-timing-function:
+            linear;
     }
 }
 
@@ -203,32 +278,50 @@
         opacity: 0;
 
         transform:
-            translate3d(-10vw, 20vh, 0)
-            rotate(var(--spark-rotation))
-            scale(var(--spark-scale));
+            translate3d(
+                -10vw,
+                20vh,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale)
+            );
     }
 
     12%,
     82% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
     }
 
     100% {
         opacity: 0;
 
         transform:
-            translate3d(115vw, -40vh, 0)
+            translate3d(
+                115vw,
+                -40vh,
+                0
+            )
             rotate(720deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-/* Мерцание на месте */
+/* TWINKLE */
 
 .twinkle {
     .spark {
-        animation-name: spark-twinkle;
-        animation-timing-function: ease-in-out;
+        animation-name:
+            spark-twinkle;
+
+        animation-timing-function:
+            ease-in-out;
     }
 }
 
@@ -238,29 +331,47 @@
         opacity: 0.1;
 
         transform:
-            translate3d(-50%, -50%, 0)
-            rotate(var(--spark-rotation))
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
             scale(0.25);
     }
 
     50% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
 
         transform:
-            translate3d(-50%, -50%, 0)
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
             rotate(45deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-/* Движение волной слева направо */
+/* WAVE */
 
 .wave {
     .spark {
-        left: calc(var(--spark-size) * -4);
+        left: calc(
+            var(--spark-size) * -4
+        );
 
-        animation-name: spark-wave;
-        animation-timing-function: linear;
+        animation-name:
+            spark-wave;
+
+        animation-timing-function:
+            linear;
     }
 }
 
@@ -269,14 +380,23 @@
         opacity: 0;
 
         transform:
-            translate3d(-10vw, 0, 0)
-            rotate(var(--spark-rotation))
-            scale(var(--spark-scale));
+            translate3d(
+                -10vw,
+                0,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale)
+            );
     }
 
     15%,
     85% {
-        opacity: var(--spark-opacity);
+        opacity:
+            var(--spark-opacity);
     }
 
     25% {
@@ -287,18 +407,25 @@
                 0
             )
             rotate(180deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 
     50% {
         transform:
             translate3d(
                 55vw,
-                calc(0px - var(--spark-drift-y)),
+                calc(
+                    0px -
+                    var(--spark-drift-y)
+                ),
                 0
             )
             rotate(360deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 
     75% {
@@ -309,7 +436,9 @@
                 0
             )
             rotate(540deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 
     100% {
@@ -318,17 +447,1140 @@
         transform:
             translate3d(
                 115vw,
-                calc(0px - var(--spark-drift-y)),
+                calc(
+                    0px -
+                    var(--spark-drift-y)
+                ),
                 0
             )
             rotate(720deg)
-            scale(var(--spark-scale));
+            scale(
+                var(--spark-scale)
+            );
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* BOUNCE */
+
+.bounce {
+    .spark {
+        top: calc(
+            var(--spark-size) * -2
+        );
+
+        animation-name:
+            spark-bounce;
+
+        animation-duration:
+            var(--spark-duration);
+
+        animation-timing-function:
+            linear;
+    }
+}
+
+@keyframes spark-bounce {
+    0% {
+        top: -10%;
+
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                0,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale)
+            );
+
+        animation-timing-function:
+            cubic-bezier(
+                0.55,
+                0.05,
+                0.85,
+                0.5
+            );
+    }
+
+    10% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    55% {
+        top: 70%;
+
+        opacity:
+            var(--spark-opacity);
+    }
+
+    68% {
+        top: calc(
+            100% -
+            var(--spark-size)
+        );
+
+        opacity:
+            var(--spark-opacity);
+
+        transform:
+            translate3d(
+                -50%,
+                0,
+                0
+            )
+            rotate(360deg)
+            scaleX(1.4)
+            scaleY(0.5);
+    }
+
+    72% {
+        top: calc(
+            100% -
+            var(--spark-size)
+        );
+
+        transform:
+            translate3d(
+                -50%,
+                0,
+                0
+            )
+            rotate(390deg)
+            scaleX(1.7)
+            scaleY(0.35);
+
+        animation-timing-function:
+            cubic-bezier(
+                0.05,
+                0.85,
+                0.2,
+                1
+            );
+    }
+
+    100% {
+        top: calc(
+            100% -
+            var(--spark-size)
+        );
+
+        opacity: 0;
+
+        transform:
+            translate3d(
+                var(--spark-bounce-x),
+                var(--spark-bounce-y),
+                0
+            )
+            rotate(900deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* ORBIT */
+
+.orbit {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        opacity:
+            var(--spark-opacity);
+
+        animation-name:
+            spark-orbit;
+
+        animation-duration:
+            var(--spark-duration);
+
+        animation-timing-function:
+            linear;
+    }
+}
+
+@keyframes spark-orbit {
+    0% {
+        opacity:
+            var(--spark-opacity-soft);
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-orbit-angle)
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            rotate(
+                calc(
+                    0deg -
+                    var(--spark-orbit-angle)
+                )
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    25% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    50% {
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                calc(
+                    var(--spark-orbit-angle) +
+                    180deg
+                )
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            rotate(
+                calc(
+                    -180deg -
+                    var(--spark-orbit-angle)
+                )
+            )
+            scale(
+                var(--spark-scale)
+            );
+    }
+
+    75% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity:
+            var(--spark-opacity-soft);
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                calc(
+                    var(--spark-orbit-angle) +
+                    360deg
+                )
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            rotate(
+                calc(
+                    -360deg -
+                    var(--spark-orbit-angle)
+                )
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* SPIRAL */
+
+.spiral {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        animation-name:
+            spark-spiral;
+
+        animation-timing-function:
+            ease-out;
+    }
+}
+
+@keyframes spark-spiral {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-orbit-angle)
+            )
+            translateX(5px)
+            scale(0.1);
+    }
+
+    20% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    70% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                calc(
+                    var(--spark-orbit-angle) +
+                    1080deg
+                )
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            scale(
+                var(--spark-scale)
+            );
+    }
+}
+
+/* VORTEX */
+
+.vortex {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        animation-name:
+            spark-vortex;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.55,
+                0,
+                1,
+                0.45
+            );
+    }
+}
+
+@keyframes spark-vortex {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-orbit-angle)
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            scale(
+                var(--spark-scale)
+            );
+    }
+
+    15% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    75% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                calc(
+                    var(--spark-orbit-angle) +
+                    1440deg
+                )
+            )
+            translateX(0)
+            scale(0);
+    }
+}
+
+/* EXPLODE */
+
+.explode {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        animation-name:
+            spark-explode;
+
+        animation-duration:
+            var(--spark-duration);
+
+        animation-timing-function:
+            cubic-bezier(
+                0.05,
+                0.8,
+                0.2,
+                1
+            );
+    }
+}
+
+@keyframes spark-explode {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(0);
+    }
+
+    8% {
+        opacity:
+            var(--spark-opacity);
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-large)
+            );
+    }
+
+    80% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                var(--spark-explode-x),
+                var(--spark-explode-y),
+                0
+            )
+            rotate(900deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* IMPLODE */
+
+.implode {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        animation-name:
+            spark-implode;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.65,
+                0,
+                0.9,
+                0.35
+            );
+    }
+}
+
+@keyframes spark-implode {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                var(--spark-explode-x),
+                var(--spark-explode-y),
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    15% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    75% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    92% {
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(720deg)
+            scale(
+                var(--spark-scale-large)
+            );
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(900deg)
+            scale(0);
+    }
+}
+
+/* FOUNTAIN */
+
+.fountain {
+    .spark {
+        left: 50%;
+        top: 100%;
+
+        animation-name:
+            spark-fountain;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.2,
+                0.7,
+                0.25,
+                1
+            );
+    }
+}
+
+@keyframes spark-fountain {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                20px,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    10% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    45% {
+        opacity:
+            var(--spark-opacity);
+
+        transform:
+            translate3d(
+                var(--spark-drift-x),
+                -65vh,
+                0
+            )
+            rotate(360deg)
+            scale(
+                var(--spark-scale-large)
+            );
+    }
+
+    70% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                var(--spark-bounce-x),
+                10vh,
+                0
+            )
+            rotate(900deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* RAIN */
+
+.rain {
+    .spark {
+        top: -10%;
+
+        height: calc(
+            var(--spark-height) * 1.5
+        );
+
+        animation-name:
+            spark-rain;
+
+        animation-duration:
+            1.8s;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.45,
+                0,
+                1,
+                0.65
+            );
+    }
+}
+
+@keyframes spark-rain {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -50%,
+                -20vh,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    15% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    80% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                calc(
+                    -50% +
+                    var(--spark-drift-x)
+                ),
+                120vh,
+                0
+            )
+            rotate(360deg)
+            scale(
+                var(--spark-scale)
+            );
+    }
+}
+
+/* ZIGZAG */
+
+.zigzag {
+    .spark {
+        left: -10%;
+
+        animation-name:
+            spark-zigzag;
+
+        animation-timing-function:
+            linear;
+    }
+}
+
+@keyframes spark-zigzag {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -10vw,
+                0,
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            );
+    }
+
+    10% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    20% {
+        transform:
+            translate3d(
+                20vw,
+                var(--spark-zigzag-y),
+                0
+            )
+            rotate(180deg);
+    }
+
+    40% {
+        transform:
+            translate3d(
+                40vw,
+                calc(
+                    0px -
+                    var(--spark-zigzag-y)
+                ),
+                0
+            )
+            rotate(360deg);
+    }
+
+    60% {
+        transform:
+            translate3d(
+                65vw,
+                var(--spark-zigzag-y),
+                0
+            )
+            rotate(540deg);
+    }
+
+    80% {
+        transform:
+            translate3d(
+                90vw,
+                calc(
+                    0px -
+                    var(--spark-zigzag-y)
+                ),
+                0
+            )
+            rotate(720deg);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                120vw,
+                0,
+                0
+            )
+            rotate(900deg);
+    }
+}
+
+/* PULSE */
+
+.pulse {
+    .spark {
+        left: 50%;
+        top: 50%;
+
+        animation-name:
+            spark-pulse;
+
+        animation-timing-function:
+            ease-in-out;
+
+        animation-direction:
+            alternate;
+    }
+}
+
+@keyframes spark-pulse {
+    0% {
+        opacity:
+            var(--spark-opacity-soft);
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-orbit-angle)
+            )
+            translateX(
+                calc(
+                    var(--spark-orbit-radius)
+                )
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    35% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    50% {
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                var(--spark-orbit-angle)
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            scale(
+                var(--spark-scale-large)
+            );
+    }
+
+    65% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    100% {
+        opacity:
+            var(--spark-opacity-soft);
+
+        transform:
+            translate3d(
+                -50%,
+                -50%,
+                0
+            )
+            rotate(
+                calc(
+                    var(--spark-orbit-angle) +
+                    20deg
+                )
+            )
+            translateX(
+                var(--spark-orbit-radius)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* COMET */
+
+.comet {
+    .spark {
+        left: -10%;
+
+        background:
+            transparent;
+
+        clip-path: none;
+
+        animation-name:
+            spark-comet;
+
+        animation-duration:
+            2.4s;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.2,
+                0.6,
+                0.3,
+                1
+            );
+
+        &::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background:
+                currentColor;
+
+            clip-path: polygon(
+                50% 0%,
+                57% 39%,
+                100% 50%,
+                57% 61%,
+                50% 100%,
+                43% 61%,
+                0% 50%,
+                43% 39%
+            );
+        }
+
+        &::after {
+            content: "";
+
+            position: absolute;
+
+            top: 50%;
+            right: 50%;
+
+            width:
+                var(--spark-comet-length);
+
+            height: 2px;
+
+            transform:
+                translateY(-50%);
+
+            transform-origin:
+                right center;
+
+            background:
+                linear-gradient(
+                    to left,
+                    currentColor,
+                    transparent
+                );
+
+            opacity: 0.65;
+
+            filter: blur(0.4px);
+        }
+    }
+}
+
+@keyframes spark-comet {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -15vw,
+                20vh,
+                0
+            )
+            rotate(-25deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    10% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    70% {
+        opacity:
+            var(--spark-opacity);
+
+        transform:
+            translate3d(
+                75vw,
+                -20vh,
+                0
+            )
+            rotate(-25deg)
+            scale(
+                var(--spark-scale)
+            );
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                120vw,
+                -45vh,
+                0
+            )
+            rotate(-25deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+/* CROSSWIND */
+
+.crosswind {
+    .spark {
+        left: -10%;
+
+        animation-name:
+            spark-crosswind;
+
+        animation-duration:
+            3.2s;
+
+        animation-timing-function:
+            cubic-bezier(
+                0.25,
+                0.4,
+                0.45,
+                1
+            );
+    }
+}
+
+@keyframes spark-crosswind {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                -10vw,
+                var(--spark-drift-y),
+                0
+            )
+            rotate(
+                var(--spark-rotation)
+            )
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+
+    12% {
+        opacity:
+            var(--spark-opacity);
+    }
+
+    30% {
+        transform:
+            translate3d(
+                30vw,
+                calc(
+                    0px -
+                    var(--spark-drift-y)
+                ),
+                0
+            )
+            rotate(220deg)
+            scale(
+                var(--spark-scale)
+            );
+    }
+
+    55% {
+        transform:
+            translate3d(
+                60vw,
+                var(--spark-drift-y),
+                0
+            )
+            rotate(500deg)
+            scale(
+                var(--spark-scale-large)
+            );
+    }
+
+    80% {
+        opacity:
+            var(--spark-opacity);
+
+        transform:
+            translate3d(
+                90vw,
+                calc(
+                    0px -
+                    var(--spark-drift-y)
+                ),
+                0
+            )
+            rotate(700deg)
+            scale(
+                var(--spark-scale)
+            );
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate3d(
+                120vw,
+                var(--spark-drift-y),
+                0
+            )
+            rotate(900deg)
+            scale(
+                var(--spark-scale-small)
+            );
+    }
+}
+
+@media (
+    prefers-reduced-motion:
+        reduce
+) {
     .spark {
         animation: none;
+
         opacity: 0;
     }
 }

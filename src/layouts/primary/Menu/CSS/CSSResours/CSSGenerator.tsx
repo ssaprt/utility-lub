@@ -38,6 +38,16 @@ export const CSSGenerator = () => {
                     href: "/css/generator/border",
                     title: "Border Generator",
                 },
+                {
+                    type: "link",
+                    title: "CSS Flex Box Generator",
+                    href: `/css/generator/flex`,
+                },
+                {
+                    type: "link",
+                    title: "CSS Grid Generator",
+                    href: `/css/generator/grid`,
+                },
             ]}
         />
     );
