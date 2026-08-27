@@ -630,12 +630,10 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                                 shrink-0
                             "
                             style={{
-                                width: `100%`,
-
-                                height: `100%`,
+                                width: `${config.containerWidth}px`,
+                                height: `${config.containerHeight}px`,
 
                                 maxWidth: "100%",
-
                                 maxHeight: "100%",
                             }}
                         >

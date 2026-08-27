@@ -1,6 +1,8 @@
+import { AnimatedText } from "@/content/CSS/CSSResource/Generator/AnimatedText/AnimatedText";
 import { Border } from "@/content/CSS/CSSResource/Generator/BorderGenerator/Border";
 import { BoxShadow } from "@/content/CSS/CSSResource/Generator/BoxShadow/BoxShadow";
 import { ClipPathGenerator } from "@/content/CSS/CSSResource/Generator/ClipPatch/ClipPatch";
+import { ImageFilter } from "@/content/CSS/CSSResource/Generator/Filter/ImageFilter";
 import { Flex } from "@/content/CSS/CSSResource/Generator/Flex/Flex";
 import { Gradient } from "@/content/CSS/CSSResource/Generator/Gradient/Gradient";
 import { Grid } from "@/content/CSS/CSSResource/Generator/Grid/Grid";
@@ -46,5 +48,15 @@ export const generatorRoute = [
         title: "CSS Grid Generator",
         path: ["css", "generator", "grid"],
         Component: Grid,
+    },
+    {
+        title: "CSS Image filter Generator",
+        path: ["css", "generator", "filter"],
+        Component: ImageFilter,
+    },
+    {
+        title: "CSS Animated Text Generator",
+        path: ["css", "generator", "animated-text"],
+        Component: AnimatedText,
     },
 ];

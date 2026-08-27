@@ -48,6 +48,16 @@ export const CSSGenerator = () => {
                     title: "CSS Grid Generator",
                     href: `/css/generator/grid`,
                 },
+                {
+                    type: "link",
+                    title: "Image filter Generator",
+                    href: `/css/generator/filter`,
+                },
+                {
+                    type: "link",
+                    title: "Animated Text Generator",
+                    href: `/css/generator/animated-text`,
+                },
             ]}
         />
     );

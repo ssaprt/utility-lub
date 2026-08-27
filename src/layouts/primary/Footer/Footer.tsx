@@ -8,7 +8,7 @@ export const Footer = () => {
             <div className="relative row-center-1 justify-center">
                 <hr className="w-[10px] h-[1px] bg-fg/35! border-none" />
 
-                <AppLink href="/coffee">
+                <AppLink href="/">
                     <GeneralButton
                         textButton="Home"
                         variant="ghost"
