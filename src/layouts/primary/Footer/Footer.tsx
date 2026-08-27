@@ -7,20 +7,15 @@ export const Footer = () => {
         <footer className="relative col-center-4 justify-center mt-10">
             <div className="relative row-center-1 justify-center">
                 <hr className="w-[10px] h-[1px] bg-fg/35! border-none" />
-                <AppLink href="/author">
-                    <GeneralButton textButton="Author" variant="ghost" />
-                </AppLink>
-
-                <hr className="w-[10px] h-[1px] bg-fg/35! border-none" />
 
                 <AppLink href="/coffee">
                     <GeneralButton
-                        textButton="Coffee"
+                        textButton="Home"
                         variant="ghost"
                         icon={
                             <DynamicSvgIcon
-                                name="java.svg"
-                                className="w-[20px] h-[20px] stroke-fg"
+                                name="home.svg"
+                                className="w-[20px] h-[20px] fill-fg"
                             />
                         }
                     />
