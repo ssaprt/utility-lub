@@ -15,14 +15,27 @@ export const Footer = () => {
                         icon={
                             <DynamicSvgIcon
                                 name="home.svg"
-                                className="w-[20px] h-[20px] fill-fg"
+                                className="w-[20px] h-[20px] fill-fg/70"
                             />
                         }
+                        className="text-fg/70"
+                    />
+                </AppLink>
+
+                <hr className="w-[10px] h-[1px] bg-fg/35! border-none" />
+
+                <AppLink href="/author">
+                    <GeneralButton
+                        textButton="Author"
+                        variant="ghost"
+
+                        className="text-fg/70"
                     />
                 </AppLink>
 
                 <hr className="w-[10px] h-[1px] bg-fg/35! border-none" />
             </div>
+            <div className="h-10"></div>
         </footer>
     );
 };

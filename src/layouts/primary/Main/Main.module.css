@@ -1,6 +1,18 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    overflow: hidden;
+}
+
 .main {
     position: relative;
-
     display: flex;
     flex: 1 1 0;
     flex-direction: column;
@@ -10,46 +22,34 @@
     min-width: 0;
     min-height: 0;
 
-    padding: 20px 20px 20px 20px;
-    padding-bottom: 20px;
-
+    padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
-
     box-sizing: border-box;
 }
 
 .main .anim {
+    position: relative;
+    top: 7px;
+
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+
     width: 100%;
     min-width: 0;
+    min-height: 0;
     max-width: 100%;
+
     opacity: 0;
-    top: 7px;
-    flex-shrink: 0;
-    position: relative;
     box-sizing: border-box;
 }
 
 .animations-ready .anim {
+    top: 0;
+    opacity: 1;
+
     transition:
         opacity 0.6s ease,
         top 0.3s ease;
-    opacity: 1;
-    top: 0;
-}
-
-.main pre,
-.main table {
-    max-width: 100%;
-}
-
-.main pre {
-    overflow-x: auto;
-}
-
-.main img,
-.main video,
-.main svg {
-    max-width: 100%;
-    height: auto;
 }

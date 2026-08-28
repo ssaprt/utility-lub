@@ -1,0 +1,62 @@
+.animated-text {
+    width: min(100%, 720px);
+    min-width: 0;
+    user-select: none;
+}
+
+.animated-text svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.animated-text text {
+    transform-box: fill-box;
+    transform-origin: center;
+
+    font-family: inherit;
+    font-weight: 700;
+
+    paint-order: stroke fill;
+    fill: var(--background);
+    stroke: var(--foreground);
+    stroke-width: 5px;
+
+    animation: animated-text-effect 1.8s linear infinite;
+}
+
+.animated-text__code {
+    font-size: 140px;
+    letter-spacing: 4px;
+}
+
+.animated-text__description {
+    font-size: 42px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+@keyframes animated-text-effect {
+    0%,
+    18%,
+    22%,
+    25%,
+    53%,
+    57%,
+    100% {
+        opacity: 1;
+    }
+
+    20%,
+    24%,
+    55% {
+        opacity: 0.15;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animated-text text {
+        animation: none;
+    }
+}

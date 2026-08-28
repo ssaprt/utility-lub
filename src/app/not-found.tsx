@@ -1,13 +1,33 @@
-import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
-
 export default function NotFound() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-center gap-4">
-            <h1 className="text-6xl font-bold">404</h1>
+        <main className="col-center-4 min-h-0 flex-1 justify-center overflow-hidden">
+            <div className="animated-text">
+                <svg
+                    viewBox="0 0 720 260"
+                    role="img"
+                    aria-label="Page not found"
+                >
+                    <text
+                        x="50%"
+                        y="36%"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        className="animated-text__code"
+                    >
+                        404
+                    </text>
 
-            <p>Страница не найдена</p>
-
-            <AppLink href="/">На главную</AppLink>
+                    <text
+                        x="50%"
+                        y="72%"
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        className="animated-text__description"
+                    >
+                        Page not found
+                    </text>
+                </svg>
+            </div>
         </main>
     );
 }
