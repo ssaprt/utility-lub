@@ -1,5 +1,6 @@
 import { useAppContextValues } from "@/context/appContext";
 import { motion } from "framer-motion";
+
 import { HeaderTitle } from "../../../../components/HeaderTitle/HeaderTitle";
 import styles from "../Header.module.css";
 import { FadeTitle } from "./FadeTitle";
@@ -7,8 +8,10 @@ import { MenuButton } from "./MenuButton/MenuButton";
 
 export const Left = () => {
     const { header } = useAppContextValues();
+
     const { isScrolled, titleHeader } = header ?? {};
-    const scrolled = isScrolled?.scroll.scrolled;
+
+    const scrolled = isScrolled?.scroll?.scrolled;
 
     const pageTitleVisible = Boolean(scrolled && titleHeader?.length);
 
@@ -24,6 +27,7 @@ export const Left = () => {
 
             <div
                 className="
+                    pointer-events-none
                     relative
                     min-w-0
                     flex-1
@@ -35,12 +39,14 @@ export const Left = () => {
                     initial={false}
                     animate={{
                         opacity: pageTitleVisible ? 0 : 1,
+
                         x: pageTitleVisible ? 0 : -8,
                     }}
                     transition={{
                         opacity: {
                             duration: 0.14,
                         },
+
                         x: {
                             type: "spring",
                             stiffness: 220,

@@ -78,6 +78,7 @@ const createButtonPaths = ({
 }: ButtonShapeState) => {
     const visibility = clamp(reveal, 0, 1);
     const activity = active ? visibility : 0;
+
     const exitForce = exitStretch ? visibility : 0;
 
     const pointerX = clamp((x - 0.5) * 2, -1, 1);
@@ -168,7 +169,9 @@ export const ActionButtonFloor = () => {
 
     const generatedId = useId().replaceAll(":", "");
 
-    const clipPathId = `action-button-shape-${generatedId}`;
+    const noiseFilterId = `action-button-noise-filter-${generatedId}`;
+
+    const noisePatternId = `action-button-noise-pattern-${generatedId}`;
 
     const { header } = useAppContextValues();
 
@@ -413,10 +416,19 @@ export const ActionButtonFloor = () => {
                 bg-transparent
                 p-0
                 outline-none
+                shadow-none
             "
             style={{
                 left: left - SEAM_X - 0.5,
                 pointerEvents: visible ? "auto" : "none",
+
+                appearance: "none",
+                WebkitAppearance: "none",
+                WebkitTapHighlightColor: "transparent",
+
+                background: "transparent",
+                backgroundColor: "transparent",
+                boxShadow: "none",
             }}
             onClick={handleClick}
             onPointerEnter={(event) => {
@@ -432,32 +444,71 @@ export const ActionButtonFloor = () => {
                 className="
                     absolute
                     inset-0
+                    block
                     size-full
                     cursor-pointer
                     overflow-visible
+                    bg-transparent
                 "
+                style={{
+                    background: "transparent",
+                }}
                 viewBox={`0 0 ${BUTTON_WIDTH} ${BUTTON_HEIGHT}`}
                 preserveAspectRatio="none"
             >
+                <defs>
+                    <filter
+                        id={noiseFilterId}
+                        x="0"
+                        y="0"
+                        width="160"
+                        height="160"
+                        filterUnits="userSpaceOnUse"
+                        colorInterpolationFilters="sRGB"
+                    >
+                        <feTurbulence
+                            type="fractalNoise"
+                            baseFrequency="0.8"
+                            numOctaves="4"
+                            stitchTiles="stitch"
+                            result="noise"
+                        />
+
+                        <feColorMatrix
+                            in="noise"
+                            type="luminanceToAlpha"
+                            result="noiseAlpha"
+                        />
+
+                        <feComposite
+                            in="SourceGraphic"
+                            in2="noiseAlpha"
+                            operator="in"
+                        />
+                    </filter>
+
+                    <pattern
+                        id={noisePatternId}
+                        x="0"
+                        y="0"
+                        width="160"
+                        height="160"
+                        patternUnits="userSpaceOnUse"
+                    >
+                        <rect
+                            x="0"
+                            y="0"
+                            width="160"
+                            height="160"
+                            fill="var(--foreground)"
+                            opacity="0.1"
+                            filter={`url(#${noiseFilterId})`}
+                        />
+                    </pattern>
+                </defs>
+
                 {renderShape && (
                     <>
-                        <defs>
-                            <clipPath
-                                id={clipPathId}
-                                clipPathUnits="userSpaceOnUse"
-                            >
-                                <motion.path
-                                    initial={{
-                                        d: collapsedPaths.fill,
-                                    }}
-                                    animate={{
-                                        d: paths.fill,
-                                    }}
-                                    transition={shapeTransition}
-                                />
-                            </clipPath>
-                        </defs>
-
                         <motion.path
                             className="fill-app"
                             initial={{
@@ -469,24 +520,17 @@ export const ActionButtonFloor = () => {
                             transition={shapeTransition}
                         />
 
-                        <foreignObject
-                            x="0"
-                            y="0"
-                            width={BUTTON_WIDTH}
-                            height={BUTTON_HEIGHT}
-                            clipPath={`url(#${clipPathId})`}
-                            className="pointer-events-none"
-                        >
-                            <div
-                                className="
-                                    pattern-bg
-                                    relative
-                                    z-0
-                                    size-full
-                                    before:z-0!
-                                "
-                            />
-                        </foreignObject>
+                        <motion.path
+                            initial={{
+                                d: collapsedPaths.fill,
+                            }}
+                            animate={{
+                                d: paths.fill,
+                            }}
+                            transition={shapeTransition}
+                            fill={`url(#${noisePatternId})`}
+                            pointerEvents="none"
+                        />
 
                         <motion.path
                             className="
