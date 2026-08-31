@@ -2,28 +2,45 @@ import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { useAppContextActions } from "@/context/appContext";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo } from "react";
+import { createPathSegment } from "../common/compiler-generate-route";
 import { config } from "../common/compiler.config";
+
+const compilerConfigs = Object.values(config).flat();
 
 export const useCompiler = () => {
     const { header } = useAppContextActions();
-    const { setIconHeader, setTitleHeader } = header || {};
+    const { setIconHeader, setTitleHeader } = header;
     const pathname = usePathname();
 
     const segment = useMemo(() => {
         const parts = pathname.split("/").filter(Boolean);
-        return parts.at(-1);
+
+        return parts.at(-1) ?? "";
     }, [pathname]);
 
-    const selectFromConfig = config.find(
-        (item) => item.titleLink.replace(/\s+/g, "-").toLowerCase() === segment,
+    const selectFromConfig = useMemo(
+        () =>
+            compilerConfigs.find(
+                (item) => createPathSegment(item.titleLink) === segment,
+            ),
+        [segment],
     );
 
     useEffect(() => {
-        setIconHeader(
-            <DynamicSvgIcon name="converter.svg" className="w-8 h-8 fill-fg" />,
-        );
-        setTitleHeader(selectFromConfig?.titleLink || "");
-    }, [setIconHeader, setTitleHeader, selectFromConfig?.titleLink]);
+        if (!selectFromConfig) {
+            setIconHeader(null);
+            setTitleHeader("");
+            return;
+        }
 
-    return { selectFromConfig };
+        setIconHeader(
+            <DynamicSvgIcon name="converter.svg" className="h-8 w-8 fill-fg" />,
+        );
+
+        setTitleHeader(selectFromConfig.titleLink);
+    }, [selectFromConfig, setIconHeader, setTitleHeader]);
+
+    return {
+        selectFromConfig,
+    };
 };

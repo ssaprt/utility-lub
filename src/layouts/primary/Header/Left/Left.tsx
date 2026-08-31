@@ -3,30 +3,43 @@ import { motion } from "framer-motion";
 import { HeaderTitle } from "../../../../components/HeaderTitle/HeaderTitle";
 import styles from "../Header.module.css";
 import { FadeTitle } from "./FadeTitle";
-
 import { MenuButton } from "./MenuButton/MenuButton";
 
 export const Left = () => {
-    const { header } = useAppContextValues() ?? {};
+    const { header } = useAppContextValues();
     const { isScrolled, titleHeader } = header ?? {};
-    const { scroll } = isScrolled ?? {};
-    const { scrolled } = scroll || {};
+    const scrolled = isScrolled?.scroll.scrolled;
+
+    const pageTitleVisible = Boolean(scrolled && titleHeader?.length);
 
     return (
-        <div className={styles.left}>
+        <div
+            className={`
+                ${styles.left}
+                min-w-0
+                flex-1
+            `}
+        >
             <MenuButton />
 
-            <div className="block lg:hidden">
+            <div
+                className="
+                    relative
+                    min-w-0
+                    flex-1
+                    self-stretch
+                    overflow-hidden
+                "
+            >
                 <motion.div
                     initial={false}
                     animate={{
-                        opacity: scrolled && titleHeader?.length ? 0 : 1,
-                        x: scrolled && titleHeader?.length ? 0 : -8,
+                        opacity: pageTitleVisible ? 0 : 1,
+                        x: pageTitleVisible ? 0 : -8,
                     }}
                     transition={{
                         opacity: {
-                            duration:
-                                scrolled && titleHeader?.length ? 0.14 : 0.14,
+                            duration: 0.14,
                         },
                         x: {
                             type: "spring",
@@ -34,14 +47,16 @@ export const Left = () => {
                             damping: 14,
                         },
                     }}
-                    className="ml-[60px] mt-1"
+                    className="
+                        ml-[60px]
+                        mt-1
+                        min-w-0
+                        lg:hidden
+                    "
                 >
                     <HeaderTitle />
                 </motion.div>
-                <FadeTitle />
-            </div>
 
-            <div className="hidden lg:block">
                 <FadeTitle />
             </div>
         </div>

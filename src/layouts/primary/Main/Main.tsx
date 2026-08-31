@@ -12,6 +12,7 @@ import React, { useEffect } from "react";
 import { Breadcrumbs } from "../Breadcrumbs/Breadcrumbs";
 import { Footer } from "../Footer/Footer";
 import { Scroll } from "../Scroll";
+import { ActionButtonFloor } from "./ActionsButtonFloor/ActionButtonFloor";
 import styles from "./Main.module.css";
 
 export const Main = ({
@@ -39,6 +40,7 @@ export const Main = ({
             )}
             id="main"
         >
+            <ActionButtonFloor />
             <MainOverlay />
             <div className={styles.anim}>
                 <Breadcrumbs />

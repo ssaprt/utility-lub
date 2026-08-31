@@ -58,6 +58,16 @@ export const CSSGenerator = () => {
                     title: "Animated Text Generator",
                     href: `/css/generator/animated-text`,
                 },
+                {
+                    type: "link",
+                    title: "Border Image Generator",
+                    href: `/css/generator/border-image`,
+                },
+                {
+                    type: "link",
+                    title: "Animation Generator",
+                    href: `/css/generator/animation`,
+                },
             ]}
         />
     );

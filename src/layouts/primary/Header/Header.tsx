@@ -11,7 +11,19 @@ export const Header = () => {
     return (
         <header
             id="main-header"
-            className={`${styles.header} ${isScrolled && styles.scrolled} flex flex-row w-full justify-between px-2 py-2 h-[60px] relative`}
+            className={`
+                ${styles.header}
+                ${isScrolled ? styles.scrolled : ""}
+                relative
+                flex
+                h-[60px]
+                w-full
+                min-w-0
+                flex-row
+                items-center
+                px-2
+                py-2
+            `}
         >
             <Left />
             <Right />

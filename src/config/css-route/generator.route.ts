@@ -1,5 +1,7 @@
 import { AnimatedText } from "@/content/CSS/CSSResource/Generator/AnimatedText/AnimatedText";
+import { Animation } from "@/content/CSS/CSSResource/Generator/AnimationGenerator/Animation";
 import { Border } from "@/content/CSS/CSSResource/Generator/BorderGenerator/Border";
+import { BorderImage } from "@/content/CSS/CSSResource/Generator/BorderImageGenerator/BorderImage";
 import { BoxShadow } from "@/content/CSS/CSSResource/Generator/BoxShadow/BoxShadow";
 import { ClipPathGenerator } from "@/content/CSS/CSSResource/Generator/ClipPatch/ClipPatch";
 import { ImageFilter } from "@/content/CSS/CSSResource/Generator/Filter/ImageFilter";
@@ -58,5 +60,15 @@ export const generatorRoute = [
         title: "CSS Animated Text Generator",
         path: ["css", "generator", "animated-text"],
         Component: AnimatedText,
+    },
+    {
+        title: "CSS Border Image Generator",
+        path: ["css", "generator", "border-image"],
+        Component: BorderImage,
+    },
+    {
+        title: "CSS Animation Generator",
+        path: ["css", "generator", "animation"],
+        Component: Animation,
     },
 ];

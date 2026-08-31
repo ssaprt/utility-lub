@@ -1,6 +1,6 @@
 import { UniversalCSSCompilerTypeApiList } from "../types/compiler.types";
 
-export const config: UniversalCSSCompilerTypeApiList[] = [
+const compilers: UniversalCSSCompilerTypeApiList[] = [
     {
         titleLink: "CSS-SCSS Compiler",
         requestNameFunction: "useCssToScssMutation",
@@ -33,38 +33,8 @@ export const config: UniversalCSSCompilerTypeApiList[] = [
         actionButtonText: "Convert to CSS",
         language: "less",
     },
-    {
-        titleLink: "Minify CSS",
-        requestNameFunction: "useMinifyCssMutation",
-        placeholder:
-            ".wrapper {\n\tcolor: red;\n\tpadding: 16px 24px;\n}\n\n.inner {\n\tcolor: blue;\n\tmargin: 0px;\n}",
-        actionButtonText: "Minify CSS",
-        language: "css",
-    },
-    {
-        titleLink: "Format CSS",
-        requestNameFunction: "useFormatCssMutation",
-        placeholder:
-            ".wrapper{color:red;padding:16px 24px}.inner{color:blue;margin:0}",
-        actionButtonText: "Format CSS",
-        language: "css",
-    },
-    {
-        titleLink: "Format SCSS",
-        requestNameFunction: "useFormatScssMutation",
-        placeholder:
-            "$primary:red;.wrapper{color:$primary;.inner{color:blue;&:hover{color:green}}}",
-        actionButtonText: "Format SCSS",
-        language: "scss",
-    },
-    {
-        titleLink: "Format LESS",
-        requestNameFunction: "useFormatLessMutation",
-        placeholder:
-            "@primary:red;.wrapper{color:@primary;.inner{color:blue;&:hover{color:green}}}",
-        actionButtonText: "Format LESS",
-        language: "less",
-    },
+];
+const converters: UniversalCSSCompilerTypeApiList[] = [
     {
         titleLink: "Convert to Nested SCSS",
         requestNameFunction: "useCssToNestedScssMutation",
@@ -97,30 +67,45 @@ export const config: UniversalCSSCompilerTypeApiList[] = [
         actionButtonText: "Create LESS Variables",
         language: "css",
     },
+];
+
+const formatters: UniversalCSSCompilerTypeApiList[] = [
     {
-        titleLink: "Autoprefix CSS",
-        requestNameFunction: "useAutoprefixMutation",
+        titleLink: "Format CSS",
+        requestNameFunction: "useFormatCssMutation",
         placeholder:
-            ".element {\n\tdisplay: flex;\n\tuser-select: none;\n\tappearance: none;\n\tbackdrop-filter: blur(10px);\n}",
-        actionButtonText: "Add Vendor Prefixes",
+            ".wrapper{color:red;padding:16px 24px}.inner{color:blue;margin:0}",
+        actionButtonText: "Format CSS",
         language: "css",
     },
     {
-        titleLink: "Remove Autoprefix CSS",
-        requestNameFunction: "useRemovePrefixesMutation",
+        titleLink: "Format SCSS",
+        requestNameFunction: "useFormatScssMutation",
         placeholder:
-            ".element {\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\tuser-select: none;\n\t-webkit-appearance: none;\n\tappearance: none;\n}",
-        actionButtonText: "Remove Vendor Prefixes",
-        language: "css",
+            "$primary:red;.wrapper{color:$primary;.inner{color:blue;&:hover{color:green}}}",
+        actionButtonText: "Format SCSS",
+        language: "scss",
     },
     {
-        titleLink: "Optimize CSS",
-        requestNameFunction: "useOptimizeMutation",
+        titleLink: "Format LESS",
+        requestNameFunction: "useFormatLessMutation",
         placeholder:
-            ".button {\n\tcolor: #ffffff;\n\tmargin: 0px 0px 0px 0px;\n\tpadding: 10px 10px 10px 10px;\n\tfont-weight: normal;\n}\n\n.button:hover {\n\tcolor: #ffffff;\n}",
-        actionButtonText: "Optimize CSS",
+            "@primary:red;.wrapper{color:@primary;.inner{color:blue;&:hover{color:green}}}",
+        actionButtonText: "Format LESS",
+        language: "less",
+    },
+];
+const minifiers: UniversalCSSCompilerTypeApiList[] = [
+    {
+        titleLink: "Minify CSS",
+        requestNameFunction: "useMinifyCssMutation",
+        placeholder:
+            ".wrapper {\n\tcolor: red;\n\tpadding: 16px 24px;\n}\n\n.inner {\n\tcolor: blue;\n\tmargin: 0px;\n}",
+        actionButtonText: "Minify CSS",
         language: "css",
     },
+];
+const validators: UniversalCSSCompilerTypeApiList[] = [
     {
         titleLink: "Validate CSS",
         requestNameFunction: "useValidateStylesMutation",
@@ -146,3 +131,42 @@ export const config: UniversalCSSCompilerTypeApiList[] = [
         language: "less",
     },
 ];
+
+const optimizes: UniversalCSSCompilerTypeApiList[] = [
+    {
+        titleLink: "Optimize CSS",
+        requestNameFunction: "useOptimizeMutation",
+        placeholder:
+            ".button {\n\tcolor: #ffffff;\n\tmargin: 0px 0px 0px 0px;\n\tpadding: 10px 10px 10px 10px;\n\tfont-weight: normal;\n}\n\n.button:hover {\n\tcolor: #ffffff;\n}",
+        actionButtonText: "Optimize CSS",
+        language: "css",
+    },
+];
+const autoprefixers: UniversalCSSCompilerTypeApiList[] = [
+    {
+        titleLink: "Autoprefix CSS",
+        requestNameFunction: "useAutoprefixMutation",
+        placeholder:
+            ".element {\n\tdisplay: flex;\n\tuser-select: none;\n\tappearance: none;\n\tbackdrop-filter: blur(10px);\n}",
+        actionButtonText: "Add Vendor Prefixes",
+        language: "css",
+    },
+    {
+        titleLink: "Remove Autoprefix CSS",
+        requestNameFunction: "useRemovePrefixesMutation",
+        placeholder:
+            ".element {\n\t-webkit-user-select: none;\n\t-moz-user-select: none;\n\tuser-select: none;\n\t-webkit-appearance: none;\n\tappearance: none;\n}",
+        actionButtonText: "Remove Vendor Prefixes",
+        language: "css",
+    },
+];
+
+export const config: Record<string, UniversalCSSCompilerTypeApiList[]> = {
+    compilers,
+    converters,
+    minifiers,
+    validators,
+    optimizes,
+    autoprefixers,
+    formatters,
+};

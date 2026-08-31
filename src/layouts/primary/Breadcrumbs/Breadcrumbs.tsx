@@ -18,7 +18,8 @@ export const Breadcrumbs = () => {
     const segments = useMemo(
         () =>
             selectedSegments
-                .flatMap((segment) => segment.split("/"))
+                .flatMap((segment) => decodeURIComponent(segment).split("/"))
+                .map((segment) => segment.replace(/[()]/g, ""))
                 .filter(Boolean),
         [selectedSegments],
     );

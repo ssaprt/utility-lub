@@ -1,14 +1,18 @@
-import { compilerRoute } from "@/content/CSS/Utils/Compiler/common/compiler-generate-route";
+import {
+    compilerGroup,
+    compilerRoute,
+} from "@/content/CSS/Utils/Compiler/common/compiler-generate-route";
 import { UniversalCSSCompiler } from "@/content/CSS/Utils/Compiler/UniversalCSSCompiler";
 
-export const cssCompilerRoute = [
-    {
-        title: "CSS Compiler",
-        path: ["css", "utils", "compiler"],
-        Component: () => null,
-    },
-    ...compilerRoute.map((route) => ({
-        ...route,
-        Component: UniversalCSSCompiler,
-    })),
-];
+const compilerGroupRoute = compilerGroup.map((group) => ({
+    title: group.title,
+    path: ["css", "utils", group.titlePath],
+    Component: () => null,
+}));
+
+const compilerPageRoute = compilerRoute.map((route) => ({
+    ...route,
+    Component: UniversalCSSCompiler,
+}));
+
+export const cssCompilerRoute = [...compilerGroupRoute, ...compilerPageRoute];

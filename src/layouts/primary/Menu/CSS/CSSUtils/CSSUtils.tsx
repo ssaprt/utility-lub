@@ -1,11 +1,11 @@
 import { CategoryAccordion } from "../../CategoryAccordion/CategoryAccordion";
-import { CSSCompiler } from "./CSSCompiler";
+import { CSSMultiAccordion } from "./CSSMultiAccordion";
 import { CSSViewer } from "./CSSViewer";
 
 export const CSSUtils = () => {
     return (
         <CategoryAccordion title="CSS Utils" icon="utils.svg">
-            <CSSCompiler />
+            <CSSMultiAccordion />
             <CSSViewer />
         </CategoryAccordion>
     );

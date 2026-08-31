@@ -1,6 +1,5 @@
 import { IconSend } from "@tabler/icons-react";
 import { useState } from "react";
-import { TitleWithItemsBlock } from "../blocks/TitleWithItemsBlock/TitleWithItemsBlock";
 import { GeneralButton } from "../button/GeneralButton/GeneralButton";
 import ContactForm from "../contactForm/ContactForm";
 import { CustomPopup } from "../CustomPopup/CustomPopup";
@@ -12,17 +11,20 @@ export const FeedBack = ({ subject }: { subject: string }) => {
     const [refPopup, setRefPopup] = useState<HTMLDivElement | null>(null);
 
     return (
-        <div className="my-2 mt-10 mt-auto">
-            <TitleWithItemsBlock title="Feedback Form">
-                <div className="flex flex-row justify-between items-center select-none w-full relative">
-                    <span className="text-sm">Send your feedback to us</span>
-                    <GeneralButton
-                        icon={<IconSend className="w-4 h-4" />}
-                        textButton="Send Feedback"
-                        type="button"
-                        variant="pill"
-                        handleAction={() => setOpen(true)}
-                    />
+        <div className="my-2">
+            <div className="row-center-1">
+                <div className="w-full py-2 px-4 relative flex justify-center">
+                    <div className="row-center-2 py-1 px-2">
+                        <span className="text-sm text-fg/80">Feedback</span>
+                        <GeneralButton
+                            className="py-2 px-4"
+                            icon={<IconSend className="w-4 h-4" />}
+                            textButton="Send a letter"
+                            type="button"
+                            variant="frame"
+                            handleAction={() => setOpen(true)}
+                        />
+                    </div>
                 </div>
 
                 <CustomPopup
@@ -70,7 +72,7 @@ export const FeedBack = ({ subject }: { subject: string }) => {
                         </ContactForm>
                     </div>
                 </CustomPopup>
-            </TitleWithItemsBlock>
+            </div>
         </div>
     );
 };
