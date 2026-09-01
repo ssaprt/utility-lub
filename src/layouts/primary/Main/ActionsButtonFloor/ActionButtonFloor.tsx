@@ -17,8 +17,8 @@ const BUTTON_WIDTH = 54;
 const BUTTON_HEIGHT = 58;
 
 const SEAM_X = 1.25;
-const RELEASE_DISTANCE = 18;
-const RELEASE_STRETCH_DURATION = 120;
+const RELEASE_DISTANCE = 15;
+const RELEASE_STRETCH_DURATION = 22;
 
 const followTransition = {
     type: "spring",
@@ -78,11 +78,9 @@ const createButtonPaths = ({
 }: ButtonShapeState) => {
     const visibility = clamp(reveal, 0, 1);
     const activity = active ? visibility : 0;
-
     const exitForce = exitStretch ? visibility : 0;
 
     const pointerX = clamp((x - 0.5) * 2, -1, 1);
-
     const pointerY = clamp((y - 0.5) * 2, -1, 1);
 
     const horizontalPull =
@@ -90,61 +88,52 @@ const createButtonPaths = ({
 
     const verticalPull = activity * pointerY * 7 + exitForce * pointerY * 3;
 
-    const topPressure = activity * Math.max(0, -pointerY) * 3.5;
-
-    const bottomPressure = activity * Math.max(0, pointerY) * 3.5;
-
-    const outerX = 39 + horizontalPull;
-
-    const outerControlX = outerX + activity * 1.5 + exitForce * 2;
-
-    const shoulderX = 13 + topPressure + horizontalPull * 0.16;
-
-    const shoulderY = 22 + verticalPull * 0.18;
-
-    const tipY = 42 + verticalPull;
-
-    const bottomJoinX = outerX - 15 - bottomPressure * 0.55 + exitForce;
-
-    const startY = 7.5;
+    const startY = 15.5;
     const bottomY = 57.25;
+
+    const centerY = (startY + bottomY) / 2;
+
+    const tipY = clamp(centerY + verticalPull * 0.35, centerY - 4, centerY + 4);
+
+    const upperRadius = tipY - startY;
+    const lowerRadius = bottomY - tipY;
+
+    /*
+     * 27 рассчитано с учётом:
+     * viewBox = 54px
+     * реальная ширина кнопки = 44px
+     *
+     * Поэтому в обычном состоянии выпуклость
+     * визуально получается почти круглой.
+     */
+    const outerX = 27 + horizontalPull;
 
     const morphX = (value: number) => SEAM_X + (value - SEAM_X) * visibility;
 
     const outline = `
-        M ${SEAM_X} ${startY}
+        M
+            ${SEAM_X}
+            ${startY}
 
         C
             ${SEAM_X}
-            ${15 - topPressure * 0.2}
-
-            ${morphX(5 + topPressure)}
-            ${20 - topPressure * 0.12}
-
-            ${morphX(shoulderX)}
-            ${shoulderY}
-
-        C
-            ${morphX(22 + horizontalPull * 0.3)}
-            ${25 + verticalPull * 0.35}
+            ${startY + upperRadius * 0.38}
 
             ${morphX(outerX)}
-            ${30 + verticalPull * 0.7}
+            ${tipY - upperRadius * 0.46}
 
             ${morphX(outerX)}
             ${tipY}
 
         C
-            ${morphX(outerControlX)}
-            ${tipY + 8}
+            ${morphX(outerX)}
+            ${tipY + lowerRadius * 0.46}
 
-            ${morphX(outerX - 4 - bottomPressure * 0.25)}
+            ${SEAM_X}
+            ${bottomY - lowerRadius * 0.38}
+
+            ${SEAM_X}
             ${bottomY}
-
-            ${morphX(bottomJoinX)}
-            ${bottomY}
-
-        H ${SEAM_X}
     `;
 
     return {
@@ -406,10 +395,10 @@ export const ActionButtonFloor = () => {
             className="
                 group
                 fixed
-                bottom-[-1px]
+                bottom-[10px]
                 z-[1001]
-                h-[58px]
-                w-[44px]
+                h-[150px]
+                w-[70px]
                 touch-none
                 appearance-none
                 border-0
@@ -535,11 +524,11 @@ export const ActionButtonFloor = () => {
                         <motion.path
                             className="
                                 fill-none
-                                stroke-black/25
+                                stroke-fg/15
                                 transition-colors
                                 duration-150
-                                group-hover:stroke-black/40
-                                group-focus-visible:stroke-fg/60
+                                group-hover:stroke-fg/15
+                                group-focus-visible:stroke-fg/15
                             "
                             initial={{
                                 d: collapsedPaths.outline,
@@ -562,8 +551,8 @@ export const ActionButtonFloor = () => {
                 className="
                     pointer-events-none
                     absolute
-                    left-[7px]
-                    top-[34px]
+                    left-[8px]
+                    top-[85px]
                     size-[15px]
                 "
                 initial={false}

@@ -82,8 +82,8 @@
 }
 
 .primary {
-    --background: rgb(94, 56, 128);
-    --foreground: oklab(85.361% 0.09572 -0.0231);
+    --background: oklab(21.19% 0.03548 -0.04599);
+    --foreground: #4dfff3;
 }
 
 html {

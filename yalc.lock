@@ -7,7 +7,7 @@
     },
     "scroll-to-future": {
       "signature": "700f394faa9de7af75fec9acda5aab73",
-      "pure": true,
+      "file": true,
       "replaced": "^1.0.18"
     }
   }
