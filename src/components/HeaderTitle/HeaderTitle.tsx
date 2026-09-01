@@ -24,7 +24,8 @@ export const HeaderTitle = () => {
             pl-4
             py-[15px]
             hover:bg-fg/10
-            cursor-pointer"
+            cursor-pointer
+            "
                 style={{
                     flex: "0 0 auto",
                     width: "max-content",

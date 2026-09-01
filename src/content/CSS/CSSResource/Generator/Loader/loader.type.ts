@@ -1,0 +1,10 @@
+export const loaderTypes = ["ring","dual-ring","triple-ring","dots","bouncing-dots","fading-dots","bars","wave-bars","equalizer","orbit","double-orbit","pulse","ripple","hourglass","square-spin","flip-cube","chasing-dots","grid-pulse","typing","progress"] as const;
+export type LoaderType = (typeof loaderTypes)[number];
+export type LoaderPreset = string;
+export interface LoaderConfig { type:LoaderType; size:number; thickness:number; speed:number; count:number; gap:number; color:string; accentColor:string; tertiaryColor:string; surfaceColor:string; }
+export const loaderUsesChildren = (type:LoaderType) => ["dots","bouncing-dots","fading-dots","bars","wave-bars","equalizer","chasing-dots","grid-pulse","typing"].includes(type);
+export const createDefaultLoaderConfig = ():LoaderConfig => ({type:"ring",size:62,thickness:6,speed:.9,count:4,gap:7,color:"#7c5cff",accentColor:"#22d3ee",tertiaryColor:"#f472b6",surfaceColor:"#131318"});
+const palettes = [["#8b5cf6","#22d3ee","#f472b6","#100c24"],["#10b981","#a7f3d0","#fbbf24","#05251b"],["#f59e0b","#fde68a","#fb7185","#291704"],["#bae6fd","#38bdf8","#818cf8","#082f49"],["#fb7185","#fbcfe8","#f97316","#2b0b16"],["#f5f5f5","#737373","#d4d4d4","#0a0a0a"],["#84cc16","#14b8a6","#06b6d4","#071d18"],["#e879f9","#a78bfa","#60a5fa","#21102b"]] as const;
+const families=["cosmic","emerald","solar","frost","rose","mono","lime","aurora"];
+export const loaderPresets=families.flatMap((family)=>loaderTypes.map((type)=>`${family}-${type}`));
+export const loaderPresetConfigs=Object.fromEntries(loaderPresets.map((name,index)=>{const type=loaderTypes[index%loaderTypes.length];const family=Math.floor(index/loaderTypes.length);const p=palettes[family];return [name,{...createDefaultLoaderConfig(),type,size:42+(index%8)*6,thickness:3+(family+index)%7,speed:.48+((family*2+index)%12)*.12,count:type==="grid-pulse"?9:3+(index+family)%6,gap:3+(index*2+family)%9,color:p[0],accentColor:p[1],tertiaryColor:p[2],surfaceColor:p[3]} as LoaderConfig];})) as Record<string,LoaderConfig>;

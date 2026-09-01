@@ -5,6 +5,7 @@ import { NumberInput } from "@/components/input/Number/Number";
 import { Range } from "@/components/input/range/Range";
 import {
     useMemo,
+    useRef,
     useState,
     type Dispatch,
     type PointerEvent,
@@ -19,8 +20,6 @@ import {
     type AnimationFrame,
 } from "./animation.type";
 import { cloneAnimationConfig } from "./animation.utils";
-import { Categories } from "./Categories";
-import type { AnimationPreset } from "./presetsGenerator";
 
 export interface ConfigAnimationProps {
     config: AnimationConfig;
@@ -53,6 +52,24 @@ const timingPresets = [
     "ease-in-out",
     "cubic-bezier(0.22, 1, 0.36, 1)",
 ];
+
+const bezierGraph = {
+    left: 20,
+    right: 280,
+    top: 10,
+    bottom: 170,
+    minY: -2,
+    maxY: 3,
+};
+
+const bezierPointX = (value: number) =>
+    bezierGraph.left + value * (bezierGraph.right - bezierGraph.left);
+
+const bezierPointY = (value: number) =>
+    bezierGraph.bottom -
+    ((value - bezierGraph.minY) /
+        (bezierGraph.maxY - bezierGraph.minY)) *
+        (bezierGraph.bottom - bezierGraph.top);
 
 const FrameRange = ({
     label,
@@ -101,6 +118,7 @@ export const ConfigAnimation = ({
     config,
     setConfig,
 }: ConfigAnimationProps) => {
+    const bezierRef = useRef<SVGSVGElement>(null);
     const sortedFrames = useMemo(
         () => [...config.frames].sort((a, b) => a.offset - b.offset),
         [config.frames],
@@ -175,23 +193,70 @@ export const ConfigAnimation = ({
         }));
     };
 
-    const reset = () => {
-        const next = cloneAnimationConfig(defaultAnimationConfig);
-        setConfig(next);
-        setSelectedId(next.frames[0]?.id ?? "start");
+    const updateBezierFromPointer = (
+        event: PointerEvent<SVGCircleElement>,
+        point: 1 | 2,
+    ) => {
+        const svg = bezierRef.current;
+        const matrix = svg?.getScreenCTM();
+        if (!svg || !matrix) return;
+
+        const cursor = svg.createSVGPoint();
+        cursor.x = event.clientX;
+        cursor.y = event.clientY;
+        const local = cursor.matrixTransform(matrix.inverse());
+        const x = Math.min(
+            1,
+            Math.max(
+                0,
+                (local.x - bezierGraph.left) /
+                    (bezierGraph.right - bezierGraph.left),
+            ),
+        );
+        const y = Math.min(
+            bezierGraph.maxY,
+            Math.max(
+                bezierGraph.minY,
+                bezierGraph.minY +
+                    ((bezierGraph.bottom - local.y) /
+                        (bezierGraph.bottom - bezierGraph.top)) *
+                        (bezierGraph.maxY - bezierGraph.minY),
+            ),
+        );
+
+        setConfig((current) => ({
+            ...current,
+            timingMode: "cubic-bezier",
+            ...(point === 1
+                ? {
+                      bezierX1: Number(x.toFixed(2)),
+                      bezierY1: Number(y.toFixed(2)),
+                  }
+                : {
+                      bezierX2: Number(x.toFixed(2)),
+                      bezierY2: Number(y.toFixed(2)),
+                  }),
+        }));
     };
 
-    const applyPreset = (preset: AnimationPreset) => {
-        const next = cloneAnimationConfig(preset.config);
-        const borderRadius = config.shape === "circle" ? 999 : 12;
+    const handleBezierPointerDown = (
+        event: PointerEvent<SVGCircleElement>,
+        point: 1 | 2,
+    ) => {
+        event.currentTarget.setPointerCapture(event.pointerId);
+        updateBezierFromPointer(event, point);
+    };
 
-        next.previewColor = config.previewColor;
-        next.shape = config.shape;
-        next.frames = next.frames.map((frame) => ({
-            ...frame,
-            borderRadius,
-        }));
+    const handleBezierPointerMove = (
+        event: PointerEvent<SVGCircleElement>,
+        point: 1 | 2,
+    ) => {
+        if (!event.currentTarget.hasPointerCapture(event.pointerId)) return;
+        updateBezierFromPointer(event, point);
+    };
 
+    const reset = () => {
+        const next = cloneAnimationConfig(defaultAnimationConfig);
         setConfig(next);
         setSelectedId(next.frames[0]?.id ?? "start");
     };
@@ -330,23 +395,87 @@ export const ConfigAnimation = ({
                             }
                             variant="ghost"
                             active={config.timingFunction === timing}
-                            handleAction={() =>
-                                updateConfig("timingFunction", timing)
-                            }
+                            handleAction={() => setConfig((current) => ({ ...current, timingFunction: timing, timingMode: "preset" }))}
                         />
                     ))}
                 </div>
                 <input
                     value={config.timingFunction}
-                    onChange={(event) =>
-                        updateConfig("timingFunction", event.target.value)
-                    }
+                    onChange={(event) => setConfig((current) => ({ ...current, timingFunction: event.target.value, timingMode: "preset" }))}
                     className={inputClass}
                     aria-label="Custom timing function"
                 />
+                <div className="row-center-1 flex-wrap rounded-[8px] bg-fg/5 p-1.5">
+                    {(["preset", "cubic-bezier", "steps"] as const).map((mode) => (
+                        <GeneralButton key={mode} textButton={mode} variant="ghost" active={config.timingMode === mode} handleAction={() => updateConfig("timingMode", mode)} />
+                    ))}
+                </div>
+                {config.timingMode === "cubic-bezier" && <>
+                    <div className="h-44 w-full rounded-[8px] bg-fg/5 p-2">
+                    <svg ref={bezierRef} viewBox="0 0 300 180" className="size-full touch-none select-none">
+                        <line x1={bezierGraph.left} y1={bezierPointY(0)} x2={bezierGraph.right} y2={bezierPointY(0)} stroke="currentColor" opacity=".08" />
+                        <line x1={bezierGraph.left} y1={bezierPointY(1)} x2={bezierGraph.right} y2={bezierPointY(1)} stroke="currentColor" opacity=".08" />
+                        <line x1={bezierGraph.left} y1={bezierGraph.top} x2={bezierGraph.left} y2={bezierGraph.bottom} stroke="currentColor" opacity=".08" />
+                        <line x1={bezierGraph.right} y1={bezierGraph.top} x2={bezierGraph.right} y2={bezierGraph.bottom} stroke="currentColor" opacity=".08" />
+                        <line x1={bezierGraph.left} y1={bezierPointY(0)} x2={bezierPointX(config.bezierX1)} y2={bezierPointY(config.bezierY1)} stroke="currentColor" opacity=".35" />
+                        <line x1={bezierGraph.right} y1={bezierPointY(1)} x2={bezierPointX(config.bezierX2)} y2={bezierPointY(config.bezierY2)} stroke="currentColor" opacity=".35" />
+                        <path d={`M${bezierGraph.left} ${bezierPointY(0)} C${bezierPointX(config.bezierX1)} ${bezierPointY(config.bezierY1)}, ${bezierPointX(config.bezierX2)} ${bezierPointY(config.bezierY2)}, ${bezierGraph.right} ${bezierPointY(1)}`} fill="none" stroke="currentColor" strokeWidth="3" />
+                        <circle cx={bezierGraph.left} cy={bezierPointY(0)} r="4" fill="currentColor" opacity=".5" />
+                        <circle cx={bezierGraph.right} cy={bezierPointY(1)} r="4" fill="currentColor" opacity=".5" />
+                        <circle
+                            role="slider"
+                            aria-label="Bezier control point 1"
+                            aria-valuetext={`${config.bezierX1}, ${config.bezierY1}`}
+                            tabIndex={0}
+                            cx={bezierPointX(config.bezierX1)}
+                            cy={bezierPointY(config.bezierY1)}
+                            r="10"
+                            fill="currentColor"
+                            stroke="var(--background)"
+                            strokeWidth="5"
+                            className="cursor-grab active:cursor-grabbing"
+                            onPointerDown={(event) => handleBezierPointerDown(event, 1)}
+                            onPointerMove={(event) => handleBezierPointerMove(event, 1)}
+                        />
+                        <circle
+                            role="slider"
+                            aria-label="Bezier control point 2"
+                            aria-valuetext={`${config.bezierX2}, ${config.bezierY2}`}
+                            tabIndex={0}
+                            cx={bezierPointX(config.bezierX2)}
+                            cy={bezierPointY(config.bezierY2)}
+                            r="10"
+                            fill="currentColor"
+                            stroke="var(--background)"
+                            strokeWidth="5"
+                            className="cursor-grab active:cursor-grabbing"
+                            onPointerDown={(event) => handleBezierPointerDown(event, 2)}
+                            onPointerMove={(event) => handleBezierPointerMove(event, 2)}
+                        />
+                    </svg>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5 lg:grid-cols-4">
+                        <FrameRange label="X1" value={config.bezierX1} min={0} max={1} step={.01} onChange={(value) => updateConfig("bezierX1", value)} />
+                        <FrameRange label="Y1" value={config.bezierY1} min={-2} max={3} step={.01} onChange={(value) => updateConfig("bezierY1", value)} />
+                        <FrameRange label="X2" value={config.bezierX2} min={0} max={1} step={.01} onChange={(value) => updateConfig("bezierX2", value)} />
+                        <FrameRange label="Y2" value={config.bezierY2} min={-2} max={3} step={.01} onChange={(value) => updateConfig("bezierY2", value)} />
+                    </div>
+                </>}
+                {config.timingMode === "steps" && <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                    <FrameRange label="Steps" value={config.stepCount} min={1} max={24} step={1} onChange={(value) => updateConfig("stepCount", value)} />
+                    <label className="col-stretch-1 rounded-[8px] bg-fg/5 p-2"><span className="text-[10px]">Jump term</span><select value={config.stepJump} onChange={(event) => updateConfig("stepJump", event.target.value as AnimationConfig["stepJump"])} className={selectClass}>{["jump-start", "jump-end", "jump-none", "jump-both"].map((value) => <option key={value}>{value}</option>)}</select></label>
+                </div>}
             </div>
 
-            <Categories onSelectPreset={applyPreset} />
+            <div className="col-stretch-2 rounded-md bg-fg/5 p-2">
+                <span className="text-[13px] font-medium! text-fg">Scene & accessibility</span>
+                <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                    <FrameRange label="Origin X" value={config.transformOriginX} min={0} max={100} step={1} unit="%" onChange={(value) => updateConfig("transformOriginX", value)} />
+                    <FrameRange label="Origin Y" value={config.transformOriginY} min={0} max={100} step={1} unit="%" onChange={(value) => updateConfig("transformOriginY", value)} />
+                    <FrameRange label="Perspective" value={config.perspective} min={100} max={2000} step={10} unit="px" onChange={(value) => updateConfig("perspective", value)} />
+                </div>
+                <GeneralButton textButton="Reduced motion fallback" variant="ghost" active={config.reducedMotion} handleAction={() => updateConfig("reducedMotion", !config.reducedMotion)} />
+            </div>
 
             <div className="col-stretch-3 rounded-md bg-fg/5 p-2">
                 <div className="row-center-1 justify-between">
@@ -494,6 +623,7 @@ export const ConfigAnimation = ({
                             updateFrame({ translateY: value })
                         }
                     />
+                    <FrameRange label="Translate Z" value={selectedFrame.translateZ} min={-300} max={300} step={1} unit="px" onChange={(value) => updateFrame({ translateZ: value })} />
                     <FrameRange
                         label="Scale"
                         value={selectedFrame.scale}
@@ -511,6 +641,10 @@ export const ConfigAnimation = ({
                         unit="°"
                         onChange={(value) => updateFrame({ rotate: value })}
                     />
+                    <FrameRange label="Rotate X" value={selectedFrame.rotateX} min={-360} max={360} step={1} unit="°" onChange={(value) => updateFrame({ rotateX: value })} />
+                    <FrameRange label="Rotate Y" value={selectedFrame.rotateY} min={-360} max={360} step={1} unit="°" onChange={(value) => updateFrame({ rotateY: value })} />
+                    <FrameRange label="Scale X" value={selectedFrame.scaleX} min={0} max={3} step={.01} onChange={(value) => updateFrame({ scaleX: value })} />
+                    <FrameRange label="Scale Y" value={selectedFrame.scaleY} min={0} max={3} step={.01} onChange={(value) => updateFrame({ scaleY: value })} />
                     <FrameRange
                         label="Blur"
                         value={selectedFrame.blur}
@@ -549,6 +683,20 @@ export const ConfigAnimation = ({
                             updateFrame({ borderRadius: value })
                         }
                     />
+                    <FrameRange label="Brightness" value={selectedFrame.brightness} min={0} max={3} step={.05} onChange={(value) => updateFrame({ brightness: value })} />
+                    <FrameRange label="Contrast" value={selectedFrame.contrast} min={0} max={3} step={.05} onChange={(value) => updateFrame({ contrast: value })} />
+                    <FrameRange label="Saturate" value={selectedFrame.saturate} min={0} max={4} step={.05} onChange={(value) => updateFrame({ saturate: value })} />
+                    <FrameRange label="Hue rotate" value={selectedFrame.hueRotate} min={-360} max={360} step={1} unit="°" onChange={(value) => updateFrame({ hueRotate: value })} />
+                    <FrameRange label="Grayscale" value={selectedFrame.grayscale} min={0} max={1} step={.01} onChange={(value) => updateFrame({ grayscale: value })} />
+                    <FrameRange label="Shadow X" value={selectedFrame.shadowX} min={-80} max={80} step={1} unit="px" onChange={(value) => updateFrame({ shadowX: value })} />
+                    <FrameRange label="Shadow Y" value={selectedFrame.shadowY} min={-80} max={80} step={1} unit="px" onChange={(value) => updateFrame({ shadowY: value })} />
+                    <FrameRange label="Shadow blur" value={selectedFrame.shadowBlur} min={0} max={100} step={1} unit="px" onChange={(value) => updateFrame({ shadowBlur: value })} />
+                    <FrameRange label="Shadow spread" value={selectedFrame.shadowSpread} min={-50} max={50} step={1} unit="px" onChange={(value) => updateFrame({ shadowSpread: value })} />
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+                    <label className="row-center-1 rounded-[8px] bg-fg/5 p-2"><span className="text-[10px]">Frame color</span><input type="color" value={selectedFrame.backgroundColor} onChange={(event) => updateFrame({ backgroundColor: event.target.value })} className="ml-auto size-7 bg-transparent" /></label>
+                    <label className="row-center-1 rounded-[8px] bg-fg/5 p-2"><span className="text-[10px]">Shadow color</span><input type="color" value={selectedFrame.shadowColor} onChange={(event) => updateFrame({ shadowColor: event.target.value })} className="ml-auto size-7 bg-transparent" /></label>
                 </div>
 
             </div>

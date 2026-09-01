@@ -1,21 +1,21 @@
 "use client";
 
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { TablerIcon } from "@/components/titles/TitlePost/TablerIcon";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
 import { useSearch } from "@/hooks/Search/useSearch";
 import { Scroll } from "@/layouts/primary/Scroll";
+import { useLazyGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi";
+import { type DateValue, formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus, IconSearch, IconX } from "@tabler/icons-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { useLazyGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi";
-import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { Input } from "./Input";
 import styles from "./Search.module.scss";
 import { interactivePlaceholder } from "./search.utils";
 
-const versionDateCache = new Map<string, string>();
+const versionDateCache = new Map<string, DateValue | null>();
 
 export const Search = () => {
     const {
@@ -33,10 +33,15 @@ export const Search = () => {
 
     const mobilePanelRef = useRef<HTMLDivElement>(null);
 
-    const [versionDates, setVersionDates] = useState<Record<string, string>>(
-        {},
-    );
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const placeholderRef = useRef<ReturnType<
+        typeof interactivePlaceholder
+    > | null>(null);
+
+    const [versionDates, setVersionDates] = useState<
+        Record<string, DateValue | null>
+    >({});
 
     const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
@@ -44,10 +49,7 @@ export const Search = () => {
 
     const hasSearchQuery = value.trim().length >= 2;
 
-    const [getPackages, {}] = useLazyGetNPMPackageVersionsQuery();
-
-    //eslint-disable-next-line
-    const placeholderRef = useRef<any>(null);
+    const [getPackages] = useLazyGetNPMPackageVersionsQuery();
 
     useEffect(() => {
         placeholderRef.current = interactivePlaceholder((phrase) => {
@@ -71,6 +73,7 @@ export const Search = () => {
 
     const clearSearch = () => {
         placeholderRef.current?.restart();
+
         setValue("");
         setResults([]);
         setError(null);
@@ -127,13 +130,15 @@ export const Search = () => {
                             packageName,
                         }).unwrap();
 
-                        const date = recordings?.[0]?.date ?? "";
+                        const date = recordings?.[0]?.date ?? null;
 
                         versionDateCache.set(packageName, date);
 
                         return [packageName, date] as const;
                     } catch {
-                        return [packageName, ""] as const;
+                        versionDateCache.set(packageName, null);
+
+                        return [packageName, null] as const;
                     }
                 }),
             );
@@ -153,7 +158,7 @@ export const Search = () => {
         return () => {
             active = false;
         };
-    }, [results]);
+    }, [results, getPackages]);
 
     useEffect(() => {
         if (!isMobileSearchOpen) {
@@ -227,6 +232,7 @@ export const Search = () => {
             }
 
             setIsMobileSearchOpen(false);
+
             setIsOpen(false);
         };
 
@@ -236,6 +242,7 @@ export const Search = () => {
             }
 
             setIsMobileSearchOpen(false);
+
             setIsOpen(false);
         };
 
@@ -308,12 +315,19 @@ export const Search = () => {
 
                                 const date = packageName
                                     ? versionDates[packageName]
-                                    : "";
+                                    : null;
 
                                 return (
                                     <li
                                         key={result.url}
-                                        className={`${styles["search-box__item"]} hover:bg-fg/10!`}
+                                        className={`
+                                                    ${
+                                                        styles[
+                                                            "search-box__item"
+                                                        ]
+                                                    }
+                                                    hover:bg-fg/10!
+                                                `}
                                     >
                                         <AppLink
                                             href={result.url}
@@ -344,20 +358,20 @@ export const Search = () => {
 
                                                     <span
                                                         className={`
-                                                            ${
-                                                                styles[
-                                                                    "search-box__title"
-                                                                ]
-                                                            }
-                                                            text-xs
-                                                        `}
+                                                                    ${
+                                                                        styles[
+                                                                            "search-box__title"
+                                                                        ]
+                                                                    }
+                                                                    text-xs
+                                                                `}
                                                     >
                                                         {result.meta?.title ??
                                                             result.url}
                                                     </span>
                                                 </div>
 
-                                                {date && (
+                                                {date != null && (
                                                     <div className="flex shrink-0 flex-row items-center gap-1">
                                                         <IconCalendarPlus className="h-[14px] w-[14px] stroke-fg" />
 
@@ -399,7 +413,11 @@ export const Search = () => {
                     <Input
                         onFocus={() => {
                             placeholderRef.current?.stop();
-                            if (!inputRef.current) return;
+
+                            if (!inputRef.current) {
+                                return;
+                            }
+
                             inputRef.current.placeholder = "";
                         }}
                         onBlur={() => placeholderRef.current?.restart()}
@@ -574,7 +592,7 @@ export const Search = () => {
                                 bg-app
                                 p-2
                                 shadow-[0_12px_35px]
-                                shadow-[_rgba(0,0,0,0.35)]
+                                shadow-[rgba(0,0,0,0.35)]
                                 dark:shadow-fg/35
                                 backdrop-blur-xl
                             "

@@ -27,7 +27,7 @@ export const Left = () => {
 
             <div
                 className="
-                    pointer-events-none
+                   
                     relative
                     min-w-0
                     flex-1
@@ -58,6 +58,7 @@ export const Left = () => {
                         mt-1
                         min-w-0
                         lg:hidden
+                        pointer-events-all!
                     "
                 >
                     <HeaderTitle />

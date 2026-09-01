@@ -2,6 +2,7 @@
 
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { Range } from "@/components/input/range/Range";
+import { FloatingPreview } from "../_shared/GeneratorUI";
 import {
     useMemo,
     useState,
@@ -15,10 +16,15 @@ import {
 } from "./animation.type";
 import {
     animationConfigToCss,
+    animationFrameAtProgress,
+    animationFrameToStyle,
     animationKeyframesToCss,
+    cloneAnimationConfig,
     sanitizeAnimationName,
 } from "./animation.utils";
 import { ConfigAnimation } from "./ConfigAnimation";
+import { Categories } from "./Categories";
+import type { AnimationPreset } from "./presetsGenerator";
 
 export interface IsGeneratorProps {
     config: AnimationConfig;
@@ -35,26 +41,47 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     const css = useMemo(() => animationConfigToCss(config), [config]);
     const keyframes = useMemo(() => animationKeyframesToCss(config), [config]);
     const animationName = sanitizeAnimationName(config.name);
+    const timingFunction = config.timingMode === "steps"
+        ? `steps(${config.stepCount}, ${config.stepJump})`
+        : config.timingMode === "cubic-bezier"
+          ? `cubic-bezier(${config.bezierX1}, ${config.bezierY1}, ${config.bezierX2}, ${config.bezierY2})`
+          : config.timingFunction;
+
+    const scrubbedFrame = useMemo(
+        () => animationFrameAtProgress(config, scrubber),
+        [config, scrubber],
+    );
 
     const previewStyle = useMemo<CSSProperties>(
-        () => ({
-            backgroundColor: config.previewColor,
-            animationName,
-            animationDuration: `${config.duration}s`,
-            animationDelay: playback === "playing"
-                ? `${config.delay}s`
-                : `${-(scrubber / 100) * config.duration}s`,
-            animationIterationCount: config.iterationCount,
-            animationDirection: config.direction,
-            animationFillMode:
-                playback === "stopped" ? "both" : config.fillMode,
-            animationTimingFunction: config.timingFunction,
-            animationPlayState:
-                playback === "playing" ? "running" : "paused",
-            boxShadow: "0 16px 32px rgb(0 0 0 / 0.25)",
-            overflow: "hidden",
-        }),
-        [animationName, config, playback, scrubber],
+        () => {
+            const common: CSSProperties = {
+                transformOrigin: `${config.transformOriginX}% ${config.transformOriginY}%`,
+                transformStyle: "preserve-3d",
+                overflow: "hidden",
+            };
+
+            if (playback !== "playing") {
+                return {
+                    ...common,
+                    ...animationFrameToStyle(scrubbedFrame),
+                    animationName: "none",
+                };
+            }
+
+            return {
+                ...common,
+                backgroundColor: config.previewColor,
+                animationName,
+                animationDuration: `${config.duration}s`,
+                animationDelay: `${config.delay}s`,
+                animationIterationCount: config.iterationCount,
+                animationDirection: config.direction,
+                animationFillMode: config.fillMode,
+                animationTimingFunction: timingFunction,
+                animationPlayState: "running",
+            };
+        },
+        [animationName, config, playback, scrubbedFrame, timingFunction],
     );
 
     const selectShape = (shape: AnimationConfig["shape"]) => {
@@ -106,6 +133,7 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
     };
 
     return (
+        <div className="col-stretch-4 w-full">
         <div className="relative col-stretch-1 w-full lg:row-stretch-4 lg:items-start">
             <style>{keyframes}</style>
 
@@ -123,7 +151,7 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                     </span>
                 </div>
 
-                <div className="flex min-h-[360px] items-center justify-center overflow-hidden rounded-[8px] bg-fg/5 p-8">
+                <div className="flex h-[280px] items-center justify-center overflow-hidden rounded-[8px] bg-fg/5 p-8" style={{ perspective: config.perspective }}>
                     <div key={previewKey} style={previewStyle}>
                         {renderShape()}
                     </div>
@@ -158,7 +186,10 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                         textButton="Play"
                         variant="ghost"
                         active={playback === "playing"}
-                        handleAction={() => setPlayback("playing")}
+                        handleAction={() => {
+                            setPlayback("playing");
+                            setPreviewKey((current) => current + 1);
+                        }}
                     />
                     <GeneralButton
                         textButton="Pause"
@@ -192,6 +223,16 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                 </div>
             </div>
 
+            <FloatingPreview className="rounded-xl">
+                <div className="flex size-full items-center justify-center bg-fg/5" style={{ perspective: config.perspective }}>
+                    <div className="scale-[0.52]">
+                        <div key={`floating-${previewKey}`} style={previewStyle}>
+                            {renderShape()}
+                        </div>
+                    </div>
+                </div>
+            </FloatingPreview>
+
             <div className="col-center-1 min-w-0 flex-1">
                 <ConfigAnimation config={config} setConfig={setConfig} />
 
@@ -206,6 +247,8 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                     </code>
                 </div>
             </div>
+        </div>
+        <Categories onSelectPreset={(preset: AnimationPreset) => setConfig(cloneAnimationConfig({ ...preset.config, previewColor: config.previewColor, shape: config.shape }))} />
         </div>
     );
 };

@@ -81,7 +81,7 @@ export const TableOfRussianCities = () => {
                 recordings={[
                     {
                         version: "1.0.0",
-                        date: "07/31/2026",
+                        date: "31/07/2026",
                         title: "Publish",
                         description: "Created table",
                     },

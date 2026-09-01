@@ -32,6 +32,15 @@ export const Cursor = () => {
                 }}
                 description=""
                 useFn={false}
+                recordings={[
+                    {
+                        version: "1.0.0",
+                        date: "01/09/2026",
+                        title: "Published",
+                        description:
+                            "Initial release of the CSS Cursor utility, providing a comprehensive set of cursor styles and customization options for web developers.",
+                    },
+                ]}
             >
                 CSS Cursor
             </TitlePost>

@@ -1,5 +1,6 @@
 import {
     createAnimationFrame,
+    defaultAnimationConfig,
     type AnimationConfig,
     type AnimationFrame,
 } from "./animation.type";
@@ -40,6 +41,7 @@ const createPreset = (
     id,
     name,
     config: {
+        ...defaultAnimationConfig,
         name: id,
         targetClass: "animated-element",
         duration: options.duration ?? 1,
@@ -240,6 +242,28 @@ const exits: AnimationPreset[] = [
     ], { duration: 1.1 }),
 ];
 
+const cinematic: AnimationPreset[] = [
+    createPreset("flip-in-x", "Flip in X", [[0, { opacity: 0, rotateX: -90, translateZ: -80 }], [65, { opacity: 1, rotateX: 16 }], [100, { rotateX: 0, translateZ: 0 }]], { duration: 1.1 }),
+    createPreset("flip-in-y", "Flip in Y", [[0, { opacity: 0, rotateY: -90, translateZ: -80 }], [65, { opacity: 1, rotateY: 16 }], [100, { rotateY: 0, translateZ: 0 }]], { duration: 1.1 }),
+    createPreset("door-open", "Door open", [[0, { rotateY: 0 }], [100, { rotateY: -105, translateX: -38 }]], { duration: 1.4 }),
+    createPreset("depth-pop", "Depth pop", [[0, { opacity: 0, translateZ: -300, scale: .45, blur: 14 }], [70, { opacity: 1, translateZ: 30, scale: 1.08, blur: 0 }], [100, { translateZ: 0, scale: 1 }]], { duration: 1.2 }),
+    createPreset("tilt-float", "Tilt float", [[0, { rotateX: -12, rotateY: -18, translateY: 8 }], [50, { rotateX: 12, rotateY: 18, translateY: -16 }], [100, { rotateX: -12, rotateY: -18, translateY: 8 }]], { duration: 3.2, iterationCount: "infinite" }),
+    createPreset("card-turn", "Card turn", [[0, { rotateY: 0, scale: 1 }], [50, { rotateY: 90, scale: .88 }], [100, { rotateY: 180, scale: 1 }]], { duration: 1.6, iterationCount: "infinite", direction: "alternate" }),
+    createPreset("camera-push", "Camera push", [[0, { translateZ: -240, scale: .65, blur: 5, opacity: .4 }], [100, { translateZ: 0, scale: 1, blur: 0, opacity: 1 }]], { duration: 1.8 }),
+    createPreset("fold-away", "Fold away", [[0, { rotateX: 0, opacity: 1 }], [100, { rotateX: 110, translateY: 70, translateZ: -120, opacity: 0 }]], { duration: 1.2 }),
+];
+
+const colorAndFilter: AnimationPreset[] = [
+    createPreset("color-cycle", "Color cycle", [[0, { hueRotate: 0 }], [100, { hueRotate: 360 }]], { duration: 2.8, iterationCount: "infinite", timingFunction: "linear" }),
+    createPreset("focus-in", "Focus in", [[0, { blur: 18, brightness: 1.8, opacity: 0 }], [100, { blur: 0, brightness: 1, opacity: 1 }]], { duration: 1.2 }),
+    createPreset("desaturate", "Desaturate", [[0, { grayscale: 0, saturate: 1 }], [100, { grayscale: 1, saturate: 0 }]], { duration: 1.4, iterationCount: "infinite", direction: "alternate" }),
+    createPreset("flash", "Flash", [[0, { brightness: 1 }], [20, { brightness: 2.8 }], [40, { brightness: 1 }], [60, { brightness: 2.2 }], [100, { brightness: 1 }]], { duration: 1.2, iterationCount: "infinite" }),
+    createPreset("neon-breathe", "Neon breathe", [[0, { shadowBlur: 8, shadowSpread: -3, brightness: .9 }], [50, { shadowBlur: 58, shadowSpread: 6, brightness: 1.35 }], [100, { shadowBlur: 8, shadowSpread: -3, brightness: .9 }]], { duration: 2.2, iterationCount: "infinite" }),
+    createPreset("contrast-punch", "Contrast punch", [[0, { contrast: .4, opacity: .4, scale: .92 }], [65, { contrast: 1.8, opacity: 1, scale: 1.06 }], [100, { contrast: 1, scale: 1 }]], { duration: .9 }),
+    createPreset("soft-glow", "Soft glow", [[0, { blur: 0, shadowBlur: 10 }], [50, { blur: 1, shadowBlur: 48, scale: 1.04 }], [100, { blur: 0, shadowBlur: 10 }]], { duration: 2.6, iterationCount: "infinite" }),
+    createPreset("thermal", "Thermal shift", [[0, { hueRotate: -45, saturate: .7 }], [50, { hueRotate: 95, saturate: 2 }], [100, { hueRotate: 315, saturate: .7 }]], { duration: 3.4, iterationCount: "infinite" }),
+];
+
 export const animationPresetCategories: AnimationPresetCategory[] = [
     {
         id: "entrances",
@@ -261,4 +285,6 @@ export const animationPresetCategories: AnimationPresetCategory[] = [
         name: "Exits",
         presets: exits,
     },
+    { id: "cinematic", name: "3D & cinematic", presets: cinematic },
+    { id: "filters", name: "Color, light & filters", presets: colorAndFilter },
 ];

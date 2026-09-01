@@ -18,7 +18,7 @@ export const Body = () => {
                 >
                     <h3>About the Author</h3>
                     <p className={`text-sm`}>
-                        Hi! My name is Denis. I’m a front-end developer and the
+                        Hi! My name is Denis. I’m a fullstack developer and the
                         creator of this project.
                     </p>
                 </div>

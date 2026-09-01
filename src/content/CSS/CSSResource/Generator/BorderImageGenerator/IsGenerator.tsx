@@ -1,6 +1,7 @@
 "use client";
 
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
+import { FloatingPreview } from "../_shared/GeneratorUI";
 import {
     useMemo,
     useRef,
@@ -200,6 +201,23 @@ export const IsGenerator = ({ config, setConfig }: IsGeneratorProps) => {
                     </div>
                 </div>
             </div>
+
+            <FloatingPreview className="rounded-xl">
+                <div
+                    className="flex size-full items-center justify-center p-2"
+                    style={{ backgroundColor: config.canvasColor }}
+                >
+                    <div
+                        className="grid place-items-center"
+                        style={{
+                            ...previewStyle,
+                            width: "78px",
+                            height: "78px",
+                            maxWidth: "none",
+                        }}
+                    />
+                </div>
+            </FloatingPreview>
 
             <div className="col-center-1 min-w-0 flex-1">
                 <ConfigBorderImage config={config} setConfig={setConfig} />

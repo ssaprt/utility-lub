@@ -7,6 +7,7 @@ import { useGetNPMPackageVersionsQuery } from "@/services/NPM/NPMVersionsApi";
 import { formatRelativeDate } from "@/utils/formatRelativeDate";
 import { IconCalendarPlus } from "@tabler/icons-react";
 import { cloneElement, type ReactElement, type ReactNode } from "react";
+
 import { TablerIcon } from "./TablerIcon";
 
 type IconElement = ReactElement<{
@@ -43,8 +44,12 @@ export const TitlePost = ({
 }: TitlePostProps) => {
     const { data, isLoading, isFetching, isError, refetch } =
         useGetNPMPackageVersionsQuery(
-            { packageName: packageName || "" },
-            { skip: !useFn },
+            {
+                packageName: packageName || "",
+            },
+            {
+                skip: !useFn,
+            },
         );
 
     const iconMeta = typeof icon === "string" ? icon : icon.meta;
@@ -64,9 +69,22 @@ export const TitlePost = ({
             })
         );
 
+    const date = data?.[0]?.date ?? recordings?.[0]?.date;
+
+    const displayDate = formatRelativeDate(date);
+
+    const versionRecordings = recordings ?? data ?? [];
+
     return (
         <>
-            <div className={`flex flex-col gap-2 ${className}`}>
+            <div
+                className={`
+                    flex
+                    flex-col
+                    gap-2
+                    ${className ?? ""}
+                `}
+            >
                 <div
                     className="
                         relative
@@ -111,7 +129,6 @@ export const TitlePost = ({
                     <div
                         className="
                             row-center-1
-                          
                             bg-black/15
                             rounded-[24px]
                             shadow-[0_0_1px_1px_rgba(0,0,0,0.25)]
@@ -119,7 +136,17 @@ export const TitlePost = ({
                             py-[var(--space-1)]
                         "
                     >
-                        <IconCalendarPlus className="w-4 lg:w-6 h-4 lg:h-6 text-fg shrink-0" />
+                        <IconCalendarPlus
+                            className="
+                                w-4
+                                lg:w-6
+                                h-4
+                                lg:h-6
+                                text-fg
+                                shrink-0
+                            "
+                        />
+
                         {packageName && (
                             <span
                                 className="sr-only"
@@ -130,21 +157,14 @@ export const TitlePost = ({
                         )}
 
                         <span className="flex text-xs lg:text-sm w-auto">
-                            {formatRelativeDate(
-                                data?.[0].date ||
-                                    recordings?.[0].date ||
-                                    new Date().toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                    }),
-                            )}
+                            {displayDate}
                         </span>
                     </div>
                 </div>
 
                 <span className="pl-4 w-full text-xs mt-2">{description}</span>
             </div>
+
             {!hideVersion && (
                 <DataLoader
                     isLoading={useFn ? isLoading : undefined}
@@ -153,7 +173,7 @@ export const TitlePost = ({
                     onRetry={useFn ? refetch : undefined}
                     errorText="Failed to load the version notes"
                 >
-                    <Version recordings={recordings || data || []} />
+                    <Version recordings={versionRecordings} />
                 </DataLoader>
             )}
         </>
