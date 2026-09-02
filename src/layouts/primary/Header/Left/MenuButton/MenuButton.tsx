@@ -47,7 +47,8 @@ export const MenuButton = () => {
             absolute 
             ${openMenu ? "-left-[50px]" : "left-[10px]"} 
             top-1/2 -translate-y-1/2
-
+            pointer-events-auto
+            z-2
             lg:top-auto
             lg:translate-y-0
             lg:relative
