@@ -85,7 +85,7 @@ export const Menu = () => {
                     >
                         <Scroll
                             heightTrack={"96%"}
-                            boundaryOffset="2px 1px"
+                            boundaryOffset="0px 6px"
                             thumb={{
                                 inactive: {
                                     className: "rounded-md! bg-fg/20!",
@@ -112,9 +112,9 @@ export const Menu = () => {
                                     className: "bg-fg/0!",
                                 },
                             }}
-                            scrollWidth="6px"
-                            imposition="over"
-                            positionMode="after"
+                            scrollWidth="8px"
+                            imposition="after"
+                            positionMode="before"
                             paddingReservationMode="scrollbar-only"
                         />
 
@@ -136,6 +136,8 @@ export const Menu = () => {
                             <CSS />
                             <CSSUtils />
                             <References />
+
+                            {/* <Radio /> */}
 
                             <div className="my-5" />
                         </div>

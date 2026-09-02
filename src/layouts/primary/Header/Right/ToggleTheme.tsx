@@ -14,11 +14,6 @@ const subscribe = () => {
 
 const themes = [
     {
-        theme: "primary",
-        title: "Primary",
-        svgPath: "mana.svg",
-    },
-    {
         theme: "light",
         title: "Light",
         svgPath: "lights.svg",
@@ -79,8 +74,8 @@ export const ToggleTheme = () => {
     const [open, setOpen] = useState(false);
 
     const [customColors, setCustomColors] = useState<CustomColors>({
-        background: "#8654b3",
-        foreground: "#fbcde6",
+        background: "#000000",
+        foreground: "#ffffff",
     });
 
     const mounted = useSyncExternalStore(
@@ -90,7 +85,7 @@ export const ToggleTheme = () => {
     );
 
     const currentTheme =
-        theme === "custom" ? "custom" : (resolvedTheme ?? theme ?? "primary");
+        theme === "custom" ? "custom" : (resolvedTheme ?? theme ?? "light");
 
     const activeTheme =
         themes.find((item) => item.theme === currentTheme) ?? themes[0];
