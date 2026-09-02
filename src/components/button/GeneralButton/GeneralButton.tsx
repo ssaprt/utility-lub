@@ -1,5 +1,6 @@
 "use client";
 
+import { formatCodeForClipboard } from "@/utils/formatCodeFromClipboard";
 import { IconCheck, IconCopy } from "@tabler/icons-react";
 import { motion, useAnimation } from "framer-motion";
 import {
@@ -31,6 +32,7 @@ interface GeneralButtonProps {
     type?: "button" | "submit" | "reset";
     copy?: {
         copyItem: string;
+        format?: boolean;
     };
     handleAction?: () => void;
     disabled?: boolean;
@@ -111,7 +113,12 @@ export const GeneralButton = ({
 
     const handleClick = async () => {
         if (copy) {
-            await navigator.clipboard.writeText(copy.copyItem);
+            const copyValue =
+                copy.format === false
+                    ? copy.copyItem
+                    : formatCodeForClipboard(copy.copyItem);
+
+            await navigator.clipboard.writeText(copyValue);
 
             setCopied(true);
 

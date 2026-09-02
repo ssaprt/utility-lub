@@ -2,8 +2,11 @@
 
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { TextAreaWithScrollBar } from "@/components/textarea/TextAreaWithScrollBar";
+import { formatCodeForClipboard } from "@/utils/formatCodeFromClipboard";
+
 import clsx from "clsx";
-import { useState } from "react";
+
+import { useMemo, useState } from "react";
 
 type BlockWithTextareaProps = {
     name?: string;
@@ -13,12 +16,16 @@ type BlockWithTextareaProps = {
     copy?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
+    formatResult?: boolean;
+
     dataLoaderMode?: {
         loading: boolean;
         error: boolean;
         success?: boolean;
     };
+
     result?: string | null;
+
     returnValue?: (value: string) => void;
 };
 
@@ -30,6 +37,7 @@ export const BlockWithTextarea = ({
     clear,
     disabled,
     readOnly,
+    formatResult = true,
     dataLoaderMode,
     result,
     returnValue,
@@ -38,7 +46,15 @@ export const BlockWithTextarea = ({
 
     const hasExternalResult = result !== undefined;
 
-    const displayValue = hasExternalResult ? (result ?? "") : value;
+    const rawDisplayValue = hasExternalResult ? (result ?? "") : value;
+
+    const displayValue = useMemo(() => {
+        if (!formatResult || !hasExternalResult) {
+            return rawDisplayValue;
+        }
+
+        return formatCodeForClipboard(rawDisplayValue);
+    }, [formatResult, hasExternalResult, rawDisplayValue]);
 
     const status = dataLoaderMode?.loading
         ? "Loading"
@@ -59,7 +75,18 @@ export const BlockWithTextarea = ({
     };
 
     return (
-        <div className="col-stretch-2 h-[400px] w-full bg-fg/5 rounded-md p-2 shadow-xs shadow-black/40">
+        <div
+            className="
+                col-stretch-2
+                h-[400px]
+                w-full
+                rounded-md
+                bg-fg/5
+                p-2
+                shadow-xs
+                shadow-black/40
+            "
+        >
             <div className="row-center-1 justify-between pl-2">
                 <div className="row-center-2 min-w-0">
                     <span className="text-[12px] text-fg">
@@ -90,6 +117,7 @@ export const BlockWithTextarea = ({
                             disabled={dataLoaderMode?.loading || !displayValue}
                             copy={{
                                 copyItem: displayValue,
+                                format: false,
                             }}
                             textButton="Copy"
                             variant="ghost"

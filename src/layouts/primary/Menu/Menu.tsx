@@ -37,7 +37,7 @@ export const Menu = () => {
             style={{
                 transition: noneAnimationMenu
                     ? "none"
-                    : "width 0.35s ease, margin-left 0.35s ease-out",
+                    : "width .5s ease, margin-left .5s ease",
             }}
         >
             <MenuContour

@@ -33,6 +33,7 @@ export const Left = () => {
                     flex-1
                     self-stretch
                     overflow-hidden
+
                 "
             >
                 <motion.div

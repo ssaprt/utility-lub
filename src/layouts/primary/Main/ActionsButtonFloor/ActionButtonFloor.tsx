@@ -406,6 +406,7 @@ export const ActionButtonFloor = () => {
                 p-0
                 outline-none
                 shadow-none
+                
             "
             style={{
                 left: left - SEAM_X - 0.5,
@@ -551,9 +552,17 @@ export const ActionButtonFloor = () => {
                 className="
                     pointer-events-none
                     absolute
-                    left-[8px]
-                    top-[85px]
-                    size-[15px]
+                    left-[1px]
+                    top-[79px]
+                    size-[28px]
+                    rounded-full
+                    bg-fg/8
+                    border-1
+                    border-fg/12
+                    transition-colors
+                    duration-150
+                    p-[8px]
+                    group-hover:bg-fg/15
                 "
                 initial={false}
                 animate={{

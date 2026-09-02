@@ -1,10 +1,23 @@
 .overlay {
     width: 40px;
     height: 40px;
-    cursor: pointer;
-    border-radius: 50%;
-    transform: rotate(0deg);
+
+    padding: 0;
     overflow: visible;
+
+    appearance: none;
+    border: 0;
+    border-radius: 50%;
+    outline: 0;
+
+    color: inherit;
+    background: transparent;
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transform: rotate(0deg);
+
     transition: var(--none-trans, left 0.32s ease);
 }
 
@@ -12,69 +25,86 @@
     outline: none;
 }
 
+.overlay:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--foreground) 35%, transparent);
+
+    outline-offset: 3px;
+}
+
 .overlay::before {
     content: "";
+
     position: absolute;
-    width: 100%;
-    height: 100%;
     top: 0;
     left: 0;
     z-index: -1;
+
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: none;
+
     transition: var(
         --none-trans,
         border-radius 0.34s ease-out,
         transform 0.34s ease-out,
-        box-shadow 0.5s ease-out
+        box-shadow 0.34s ease-out
     );
 }
 
 @media (hover: hover) and (pointer: fine) {
     .overlay:not(.active):hover:not(:active)::before {
         border-radius: 24px;
-        transition: var(
-            --none-trans,
-            border-radius 0.15s ease,
-            transform 0.15s ease,
-            box-shadow 0.3s ease
-        );
+
         transform: rotate(-45deg);
+
         box-shadow:
-            inset 0 2px 2px 2px
-                color-mix(in oklab, var(--foreground) 10%, transparent),
-            inset 0px 0px 0px 1px
-                color-mix(in oklab, var(--foreground) 25%, transparent);
+            0 8px 18px -10px rgb(0 0 0 / 45%),
+            inset 0 1px 0
+                color-mix(in oklab, var(--foreground) 20%, transparent),
+            inset 0 -2px 4px rgb(0 0 0 / 10%),
+            inset 0 0 0 1px
+                color-mix(in oklab, var(--foreground) 16%, transparent);
     }
 }
 
-.overlay:active::before,
-.active::before {
+.overlay:active::before {
     border-radius: 24px;
-    transition: var(
-        --none-trans,
-        border-radius 0.15s ease,
-        transform 0.15s ease,
-        box-shadow 0.3s ease
-    );
+
     transform: rotate(-45deg);
+
     box-shadow:
-        inset 0 2px 2px 2px
-            color-mix(in oklab, var(--foreground) 10%, transparent),
-        inset 0px 0px 0px 1px
-            color-mix(in oklab, var(--foreground) 25%, transparent);
+        0 3px 9px -6px rgb(0 0 0 / 35%),
+        inset 0 2px 5px rgb(0 0 0 / 14%),
+        inset 0 0 0 1px color-mix(in oklab, var(--foreground) 22%, transparent);
 }
 
 .active::before {
+    border-radius: 24px;
+
     transform: rotate(0deg);
+
+    box-shadow:
+        0 5px 14px -8px rgb(0 0 0 / 40%),
+        inset 0 1px 0 color-mix(in oklab, var(--foreground) 16%, transparent),
+        inset 0 -2px 4px rgb(0 0 0 / 9%),
+        inset 0 0 0 1px color-mix(in oklab, var(--foreground) 20%, transparent);
 }
 
 .svg {
     width: 100%;
     height: 100%;
-    pointer-events: none;
-    overflow: visible;
+
     padding: 8px;
+    overflow: visible;
+
+    pointer-events: none;
+
     transform: rotate(0deg);
     transform-origin: center;
+
     transition: var(
         --none-trans,
         transform 0.34s ease-out,
@@ -85,6 +115,7 @@
 @media (hover: hover) and (pointer: fine) {
     .overlay:hover .svg {
         padding: 12px;
+
         transition: var(--none-trans, transform 0.15s ease, padding 0.15s ease);
     }
 }
@@ -92,22 +123,25 @@
 .overlay:active .svg,
 .active .svg {
     padding: 12px;
+
     transition: var(--none-trans, transform 0.15s ease, padding 0.15s ease);
 }
 
 .svg * {
-    stroke: transparent;
     fill: var(--foreground);
+    stroke: transparent;
+
+    transform-box: fill-box;
+    transform-origin: center;
+
     transition: var(
         --none-trans,
         transform 0.15s ease-out,
         width 0.15s ease-out,
+        height 0.15s ease-out,
         rx 0.15s ease-out,
-        ry 0.15s ease-out,
-        height 0.15s ease-out
+        ry 0.15s ease-out
     );
-    transform-origin: center;
-    transform-box: fill-box;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -121,14 +155,16 @@
 }
 
 .overlay:not(.active):active .svg rect:nth-child(3n + 2) {
-    transform: translateX(-12) translateY(2px);
     width: 32px;
+
+    transform: translateX(-12px) translateY(2px);
 }
 
 .overlay:not(.active):active .svg rect {
+    height: 4px;
+
     rx: 0;
     ry: 0;
-    height: 4px;
 }
 
 .overlay:not(.active):active .svg rect:nth-child(3n + 1),
@@ -137,14 +173,16 @@
 }
 
 .active .svg rect:nth-child(3n + 2) {
-    transform: translateX(-12) translateY(2px);
     width: 32px;
+
+    transform: translateX(-12px) translateY(2px);
 }
 
 .active .svg rect {
+    height: 4px;
+
     rx: 0;
     ry: 0;
-    height: 4px;
 }
 
 .active .svg rect:nth-child(3n + 1),

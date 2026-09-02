@@ -582,6 +582,7 @@ export const MenuContour = ({
                                 opacity-70
                                 transition-opacity
                                 group-hover:opacity-100
+                                
                             "
                         />
                     </motion.span>
