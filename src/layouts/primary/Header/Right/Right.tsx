@@ -1,9 +1,13 @@
 "use client";
 
+import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
+import { useAppContextActions } from "@/context/appContext";
 import { Search } from "../Left/Search/Search";
 import { ToggleTheme } from "./ToggleTheme";
 
 export const Right = () => {
+    const { setViewRadioController } = useAppContextActions();
+
     return (
         <div
             className="
@@ -23,7 +27,7 @@ export const Right = () => {
                 <ToggleTheme />
             </div>
 
-            {/* <div
+            <div
                 className="
                             row-center-0
                             h-8
@@ -32,8 +36,16 @@ export const Right = () => {
                         "
             >
                 <button
+                    onClick={() =>
+                        setViewRadioController((prev) => {
+                            if (prev === "hidden") {
+                                return "large";
+                            }
+                            return prev;
+                        })
+                    }
                     type="button"
-                    aria-label="Open theme settings"
+                    aria-label="Open radio"
 
                     className="
                                 row-center-0
@@ -52,7 +64,6 @@ export const Right = () => {
                                 hover:cursor-pointer
                                 focus-visible:bg-fg/10
                             "
-                    onClick={() => {}}
                 >
                     <DynamicSvgIcon
                         name="fm_radio.svg"
@@ -62,7 +73,7 @@ export const Right = () => {
                                 "
                     />
                 </button>
-            </div> */}
+            </div>
         </div>
     );
 };

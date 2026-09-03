@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
 import { Menu } from "./Menu/Menu";
+import { RadioController } from "./Menu/Radio/RadioController";
 
 export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
     const { resolvedTheme } = useTheme();
@@ -33,6 +34,7 @@ export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
                 }}
             >
                 <MountLoader />
+                <RadioController />
                 <Menu data-pagefind-ignore />
 
                 <div className="hidden h-full shrink-0 lg:block">

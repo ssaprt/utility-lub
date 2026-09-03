@@ -97,15 +97,6 @@ const createButtonPaths = ({
 
     const upperRadius = tipY - startY;
     const lowerRadius = bottomY - tipY;
-
-    /*
-     * 27 рассчитано с учётом:
-     * viewBox = 54px
-     * реальная ширина кнопки = 44px
-     *
-     * Поэтому в обычном состоянии выпуклость
-     * визуально получается почти круглой.
-     */
     const outerX = 27 + horizontalPull;
 
     const morphX = (value: number) => SEAM_X + (value - SEAM_X) * visibility;
@@ -395,7 +386,7 @@ export const ActionButtonFloor = () => {
             className="
                 group
                 fixed
-                bottom-[10px]
+                bottom-[50px]
                 z-[1001]
                 h-[150px]
                 w-[70px]

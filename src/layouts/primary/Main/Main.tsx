@@ -25,7 +25,7 @@ export const Main = ({
     const { menu, animationsReady } = useAppContextValues();
     const pending = menu.pending;
 
-    const { menu: menuActions } = useAppContextActions();
+    const { menu: menuActions, layout } = useAppContextActions();
 
     useEffect(() => {
         menuActions.setVisibleAgent(ai?.available ?? false);
@@ -33,6 +33,7 @@ export const Main = ({
 
     return (
         <main
+            ref={layout?.registerMain}
             className={clsx(
                 styles.main,
                 pending && styles.pending,

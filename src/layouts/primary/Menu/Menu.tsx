@@ -1,7 +1,10 @@
 "use client";
 
 import { Hr } from "@/components/hr/Hr/Hr";
-import { useAppContextValues } from "@/context/appContext";
+import {
+    useAppContextActions,
+    useAppContextValues,
+} from "@/context/appContext";
 import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { motion } from "framer-motion";
 import { useRef } from "react";
@@ -14,6 +17,7 @@ import { CSSUtils } from "./CSS/CSSUtils/CSSUtils";
 import styles from "./Menu.module.css";
 import { MenuContour } from "./MenuCounter";
 import { OpenData } from "./OpenData/OpenData";
+
 import { ReactAndNext } from "./ReactAndNext/ReactAndNext";
 import { References } from "./References/References";
 
@@ -22,7 +26,8 @@ export const Menu = () => {
 
     const contentRef = useRef<HTMLDivElement>(null);
 
-    const { menu } = useAppContextValues();
+    const { menu, viewRadioController } = useAppContextValues();
+    const { layout } = useAppContextActions();
 
     const { noneAnimationMenu, openMenu } = menu;
 
@@ -30,6 +35,7 @@ export const Menu = () => {
 
     return (
         <div
+            ref={layout?.registerMenu}
             className={`
                 ${styles.menu}
                 ${openMenu ? styles.open : ""}
@@ -84,19 +90,19 @@ export const Menu = () => {
                         `}
                     >
                         <Scroll
-                            heightTrack={"96%"}
-                            boundaryOffset="0px 6px"
+                            heightTrack={"94%"}
+                            boundaryOffset="1px 1px"
                             thumb={{
                                 inactive: {
-                                    className: "rounded-md! bg-fg/20!",
-                                },
-
-                                hover: {
                                     className: "rounded-md! bg-fg/30!",
                                 },
 
-                                active: {
+                                hover: {
                                     className: "rounded-md! bg-fg/40!",
+                                },
+
+                                active: {
+                                    className: "rounded-md! bg-fg/50!",
                                 },
                             }}
                             scrollBar={{
@@ -112,10 +118,10 @@ export const Menu = () => {
                                     className: "bg-fg/0!",
                                 },
                             }}
-                            scrollWidth="8px"
-                            imposition="after"
+                            scrollWidth="6px"
+                            imposition="over"
                             positionMode="before"
-                            paddingReservationMode="scrollbar-only"
+                            paddingReservationMode="include-target-padding"
                         />
 
                         <div
@@ -136,10 +142,9 @@ export const Menu = () => {
                             <CSS />
                             <CSSUtils />
                             <References />
-
-                            {/* <Radio /> */}
-
-                            <div className="my-5" />
+                            <div
+                                className={`my-3 ${viewRadioController !== "hidden" && "mb-13"}`}
+                            />
                         </div>
                     </div>
                 </div>
