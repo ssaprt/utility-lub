@@ -176,7 +176,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const [requestStates, setRequestStates] = useState<AppRequestState[]>([]);
     const [activeLoaders, setActiveLoaders] = useState<string[]>([]);
     const [viewRadioController, setViewRadioController] =
-        useState<ViewRadioControllerStatus>("hidden");
+        useState<ViewRadioControllerStatus>("compact");
 
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);

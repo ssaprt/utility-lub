@@ -6,7 +6,6 @@ import { AIAvailability, getAIAvailability } from "@/AI/getAvalibility";
 import { MountLoader } from "@/components/loader/MountLoader";
 import { TooltipProvider } from "@ssaprt/tooltip";
 import "@ssaprt/tooltip/style.css";
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Header } from "./Header/Header";
 import { Main } from "./Main/Main";
@@ -14,7 +13,6 @@ import { Menu } from "./Menu/Menu";
 import { RadioController } from "./Menu/Radio/RadioController";
 
 export const PrimaryLayout = ({ children }: { children: React.ReactNode }) => {
-    const { resolvedTheme } = useTheme();
     const [ai, setAI] = useState<AIAvailability | null>(null);
     useEffect(() => {
         const f = async () => setAI(await getAIAvailability());

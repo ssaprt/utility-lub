@@ -1,9 +1,14 @@
 import { GeneralButton } from "@/components/button/GeneralButton/GeneralButton";
 import { AppLink } from "@/content/react/UI-Components/Pagination/components/link/AppLink";
+import { useAppContextValues } from "@/context/appContext";
 
 export const Footer = () => {
+    const { viewRadioController } = useAppContextValues();
+
     return (
-        <footer className="relative col-center-4 justify-center mt-10">
+        <footer
+            className={`relative col-center-4 justify-center mt-10 ${viewRadioController !== "hidden" ? "pb-13" : "pb-0"}`}
+        >
             <div className="relative row-center-1 justify-center">
                 <hr className="w-[4px] h-[1px] bg-fg/35! border-none" />
 

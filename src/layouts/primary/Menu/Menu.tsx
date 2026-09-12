@@ -143,7 +143,7 @@ export const Menu = () => {
                             <CSSUtils />
                             <References />
                             <div
-                                className={`my-3 ${viewRadioController !== "hidden" && "mb-13"}`}
+                                className={`my-3 ${viewRadioController !== "hidden" && "mb-15"}`}
                             />
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 @import "./tailwind.css";
 @import "./not-found.css";
+@import "./carousel/embla.css";
 
 :root {
     --background: rgba(

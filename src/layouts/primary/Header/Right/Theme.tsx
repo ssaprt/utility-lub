@@ -1,5 +1,5 @@
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
-import { useTheme } from "next-themes";
+import { useTheme } from "@teispace/next-themes";
 
 export const Theme = ({
     handleChange,
