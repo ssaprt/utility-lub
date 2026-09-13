@@ -2,9 +2,13 @@ import {
     useAppContextActions,
     useAppContextValues,
 } from "@/context/appContext";
+
 import { useBreakpoint } from "@/hooks/useBreakPoint";
+
 import { motion } from "framer-motion";
+
 import { ActionsViewAndSize } from "./ActionsViewAndSize/ActionsViewAndSize";
+
 import {
     CLOSE_DURATION,
     COMPACT_HEIGHT,
@@ -13,23 +17,37 @@ import {
     FULL_HEIGHT,
     WIDTH_DURATION,
 } from "./config";
+
 import { ContentPlayer } from "./ContentPlayer/ContentPlayer";
+
 import { useRadioContext } from "./context/RadioContext";
 
 export const Body = () => {
     //* STATES ========================================================================
+
     const {
         layout,
         viewRadioController,
         menu: { openMenu },
     } = useAppContextValues();
+
     const isDesktop = useBreakpoint("lg");
+
     const { setViewRadioController } = useAppContextActions();
+
     const { main, menu } = layout ?? {};
+
     const { transitionMode, setTransitionMode } = useRadioContext();
+
+    const currentView =
+        !isDesktop && viewRadioController === "compact"
+            ? "large"
+            : viewRadioController;
+
     //* STATES ========================================================================
 
     //! HELPERS ========================================================================
+
     const compactWidth = (() => {
         if (!isDesktop) {
             return main?.width ?? 0;
@@ -54,12 +72,11 @@ export const Body = () => {
         return main?.width ?? 0;
     })();
 
-    const width = ["large", "full"].includes(viewRadioController)
+    const width = ["large", "full"].includes(currentView)
         ? expandedWidth
         : compactWidth;
 
-    const height =
-        viewRadioController === "full" ? FULL_HEIGHT : COMPACT_HEIGHT;
+    const height = currentView === "full" ? FULL_HEIGHT : COMPACT_HEIGHT;
 
     const widthTransition = (() => {
         switch (transitionMode) {
@@ -95,7 +112,7 @@ export const Body = () => {
             case "full-compact-height":
                 return {
                     duration: FULL_DURATION,
-                    ease: [0.22, 1, 0.36, 1] as const,
+                    ease: [0.16, 1, 0.3, 1] as const,
                 };
 
             default:
@@ -109,17 +126,31 @@ export const Body = () => {
         switch (transitionMode) {
             case "compact-full-width":
                 setTransitionMode("large-full");
+
                 setViewRadioController("full");
+
                 return;
 
             case "full-compact-height":
+                if (!isDesktop) {
+                    setTransitionMode(null);
+
+                    setViewRadioController("large");
+
+                    return;
+                }
+
                 setTransitionMode("large-compact");
+
                 setViewRadioController("compact");
+
                 return;
 
             case "closing":
                 setTransitionMode(null);
+
                 setViewRadioController("hidden");
+
                 return;
 
             default:
@@ -127,11 +158,12 @@ export const Body = () => {
         }
     };
 
-    if (viewRadioController === "hidden") {
+    if (currentView === "hidden") {
         return null;
     }
 
     const isClosing = transitionMode === "closing";
+
     //! HELPERS ========================================================================
 
     return (
@@ -180,24 +212,25 @@ export const Body = () => {
                       },
             }}
             onAnimationComplete={handleAnimationComplete}
-            className={`
-    row-center-1
-    justify-between
-    fixed
-    bottom-0
-    left-0
-    z-[1002]
-    w-full
-    pattern-bg
-    bg-app
-    border-t-1
-    border-t-fg/25
-    transition-[padding-bottom]
-    duration-300
-    ease-[cubic-bezier(0.16,1,0.3,1)]
-`}
+            className="
+                row-center-1
+                justify-between
+                fixed
+                bottom-0
+                left-0
+                z-[1002]
+                w-full
+                pattern-bg
+                bg-app
+                border-t-1
+                border-t-fg/25
+                transition-[padding-bottom]
+                duration-300
+                ease-[cubic-bezier(0.16,1,0.3,1)]
+            "
         >
             <ContentPlayer />
+
             <ActionsViewAndSize />
         </motion.div>
     );

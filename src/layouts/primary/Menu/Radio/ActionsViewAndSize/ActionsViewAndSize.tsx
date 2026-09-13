@@ -24,8 +24,13 @@ export const ActionsViewAndSize = () => {
     const isDesktop = useBreakpoint("lg");
 
     const handleWidthToggle = () => {
+        if (!isDesktop) {
+            return;
+        }
+
         if (viewRadioController === "compact") {
             toLarge();
+
             return;
         }
 
@@ -35,16 +40,21 @@ export const ActionsViewAndSize = () => {
     };
 
     const toCompact = () => {
-        if (transitionMode === "closing") return;
+        if (transitionMode === "closing" || !isDesktop) {
+            return;
+        }
 
         if (viewRadioController === "large") {
             setTransitionMode("large-compact");
+
             setViewRadioController("compact");
+
             return;
         }
 
         if (viewRadioController === "full") {
             setTransitionMode("full-compact-height");
+
             setViewRadioController("large");
         }
     };
