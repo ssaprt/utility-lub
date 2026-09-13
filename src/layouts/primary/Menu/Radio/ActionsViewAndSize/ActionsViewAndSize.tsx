@@ -47,7 +47,7 @@ export const ActionsViewAndSize = () => {
         if (viewRadioController === "large") {
             setTransitionMode("large-compact");
 
-            setViewRadioController("compact");
+            setViewRadioController(isDesktop ? "compact" : "large");
 
             return;
         }

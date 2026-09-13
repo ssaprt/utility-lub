@@ -142,7 +142,7 @@ export const Body = () => {
 
                 setTransitionMode("large-compact");
 
-                setViewRadioController("compact");
+                setViewRadioController(isDesktop ? "compact" : "large");
 
                 return;
 
