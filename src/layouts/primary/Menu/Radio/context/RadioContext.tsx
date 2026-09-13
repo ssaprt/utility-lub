@@ -4,6 +4,7 @@ import {
     useAppContextActions,
     useAppContextValues,
 } from "@/context/appContext";
+import { getRadioStreamUrl } from "../utils/getRadioStreamUrl";
 
 import { useUserCountryCode } from "@/hooks/useUserCountry";
 
@@ -123,10 +124,6 @@ const getPlaybackError = (error: unknown) => {
     }
 
     return "Failed to play radio stream";
-};
-
-const getStationPlaybackUrl = (station: RadioStation) => {
-    return `/api/radio-stream?url=${encodeURIComponent(station.streamUrl)}`;
 };
 
 //! HELPERS ============================================================================
@@ -338,23 +335,20 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
         return storedCountryCode;
     }, [userCountryCode]);
 
-    const ensureAudioSource = useCallback(
-        (src: string) => {
-            const audio = audioRef.current;
+    const ensureAudioSource = useCallback((src: string) => {
+        const audio = audioRef.current;
 
-            if (!audio) {
-                return null;
-            }
+        if (!audio) {
+            return null;
+        }
 
-            if (audio.getAttribute("src") !== src) {
-                audio.src = src;
-                audio.load();
-            }
+        if (audio.getAttribute("src") !== src) {
+            audio.src = src;
+            audio.load();
+        }
 
-            return audio;
-        },
-        [],
-    );
+        return audio;
+    }, []);
 
     const loadStationMetadata = useCallback(
         async (stationId: string) => {
@@ -395,7 +389,8 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
                               }
                             : null,
                         currentSrc:
-                            prev.currentSrc || getStationPlaybackUrl(data.station),
+                            prev.currentSrc ||
+                            getRadioStreamUrl(data.station.id),
                         isMetadataLoading: false,
                     };
                 });
@@ -437,7 +432,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
 
     const startAudio = useCallback(
         async (station: RadioStation) => {
-            const src = getStationPlaybackUrl(station);
+            const src = getRadioStreamUrl(station.id);
 
             playIntentRef.current = "play";
 
@@ -536,7 +531,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
                 return {
                     ...prev,
                     play: "pause",
-                    currentSrc: getStationPlaybackUrl(station),
+                    currentSrc: getRadioStreamUrl(station.id),
                     station,
                     track: null,
                     source: null,
@@ -571,7 +566,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
             setPlayer((prev) => ({
                 ...prev,
                 play: "pause",
-                currentSrc: getStationPlaybackUrl(station),
+                currentSrc: getRadioStreamUrl(station.id),
                 station,
                 track: null,
                 source,
@@ -815,7 +810,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
             setPlayer((prev) => ({
                 ...prev,
                 play: "pause",
-                currentSrc: getStationPlaybackUrl(parsedStation),
+                currentSrc: getRadioStreamUrl(parsedStation.id),
                 station: parsedStation,
                 track: null,
                 source: null,
@@ -873,7 +868,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
 
         const src =
             player.currentSrc ||
-            (player.station ? getStationPlaybackUrl(player.station) : "");
+            (player.station ? getRadioStreamUrl(player.station.id) : "");
 
         if (!src) {
             playIntentRef.current = "pause";
@@ -1002,6 +997,7 @@ export const RadioProvider = ({ children }: { children: React.ReactNode }) => {
 
             <audio
                 ref={audioRef}
+                crossOrigin="anonymous"
                 preload="none"
                 onLoadStart={() => {
                     if (playIntentRef.current !== "play") {
