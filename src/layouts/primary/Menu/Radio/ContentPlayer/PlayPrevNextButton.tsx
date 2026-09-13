@@ -1,4 +1,5 @@
 import { useAppContextValues } from "@/context/appContext";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import {
     IconPlayerSkipBackFilled,
     IconPlayerSkipForwardFilled,
@@ -9,8 +10,9 @@ export const PlayPrevNextButton = ({ dir }: { dir: "prev" | "next" }) => {
     const { viewRadioController } = useAppContextValues();
 
     const { player, playPreviousStation, playNextStation } = useRadioContext();
+    const isDesktop = useBreakpoint("lg");
 
-    const isCompact = viewRadioController === "compact";
+    const isCompact = isDesktop && viewRadioController === "compact";
 
     const disabled = !player.station || player.isLoading;
 

@@ -2,11 +2,13 @@
 
 import { DynamicSvgIcon } from "@/components/svg/DynamicSVGIcon";
 import { useAppContextActions } from "@/context/appContext";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { Search } from "../Left/Search/Search";
 import { ToggleTheme } from "./ToggleTheme";
 
 export const Right = () => {
     const { setViewRadioController } = useAppContextActions();
+    const isDesktop = useBreakpoint("lg");
 
     return (
         <div
@@ -38,9 +40,14 @@ export const Right = () => {
                 <button
                     onClick={() =>
                         setViewRadioController((prev) => {
-                            if (prev === "hidden") {
+                            if (!isDesktop) {
                                 return "large";
                             }
+
+                            if (prev === "hidden") {
+                                return "compact";
+                            }
+
                             return prev;
                         })
                     }

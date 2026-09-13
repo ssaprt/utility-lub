@@ -5,6 +5,7 @@ import {
 
 import { useRadioContext } from "../context/RadioContext";
 
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { Controls } from "./Controls";
 import { MarqueeText } from "./MarqueeText";
 import { Volume } from "./Volume";
@@ -21,9 +22,9 @@ export const ThePlayer = ({
 
     const { player, toLarge, transitionMode, setTransitionMode } =
         useRadioContext();
+    const isDesktop = useBreakpoint("lg");
 
     const isFull = viewRadioController === "full";
-    const isCompact = viewRadioController === "compact";
 
     const handleFullToggle = () => {
         if (viewRadioController === "full") {
@@ -120,7 +121,7 @@ export const ThePlayer = ({
                 </MarqueeText>
             </div>
 
-            <div className={`shrink-0`}>
+            <div className={`shrink-0 ${!isDesktop && "ml-auto!"}`}>
                 <Volume />
             </div>
         </div>

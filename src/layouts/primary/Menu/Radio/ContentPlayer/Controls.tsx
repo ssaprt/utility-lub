@@ -8,14 +8,15 @@ import { useRadioContext } from "../context/RadioContext";
 
 import { PlayPauseButton } from "./PlayPauseButton";
 
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { PlayPrevNextButton } from "./PlayPrevNextButton";
 
 export const Controls = () => {
     const { player, togglePlay } = useRadioContext();
-
+    const isDesktop = useBreakpoint("lg");
     const { viewRadioController } = useAppContextValues();
 
-    const isCompact = viewRadioController === "compact";
+    const isCompact = isDesktop && viewRadioController === "compact";
 
     const isInitialLoading = player.isLoading && !player.station;
 

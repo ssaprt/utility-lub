@@ -175,8 +175,9 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const [loadData, setLoadData] = useState<string[]>([]);
     const [requestStates, setRequestStates] = useState<AppRequestState[]>([]);
     const [activeLoaders, setActiveLoaders] = useState<string[]>([]);
+    const isDesktop = useBreakpoint("lg");
     const [viewRadioController, setViewRadioController] =
-        useState<ViewRadioControllerStatus>("compact");
+        useState<ViewRadioControllerStatus>(isDesktop ? "compact" : "large");
 
     const [boxForAnimations, setBoxForAnimations] =
         useState<HTMLDivElement | null>(null);
@@ -218,7 +219,6 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const [noneAnimationMenu, setNoneAnimationMenu] = useState(false);
     const [visibleAgent, setVisibleAgent] = useState(false);
 
-    const isDesktop = useBreakpoint("lg");
     const [pending, setPending] = useState(false);
 
     const [mainElement, setMainElement] = useState<HTMLElement | null>(null);

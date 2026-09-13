@@ -4,6 +4,7 @@ import { useAppContextValues } from "@/context/appContext";
 
 import { useEffect, useRef } from "react";
 
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { useRadioContext } from "../context/RadioContext";
 
 const BAR_WIDTH = 4;
@@ -27,19 +28,25 @@ export const Equalizer = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     const { viewRadioController } = useAppContextValues();
+    const isDesktop = useBreakpoint("lg");
+
+    const currentView =
+        !isDesktop && viewRadioController === "compact"
+            ? "large"
+            : viewRadioController;
 
     const { player, getAudioAnalyser } = useRadioContext();
 
     const playerRef = useRef(player);
-    const viewRef = useRef(viewRadioController);
+    const viewRef = useRef(currentView);
 
     useEffect(() => {
         playerRef.current = player;
     }, [player]);
 
     useEffect(() => {
-        viewRef.current = viewRadioController;
-    }, [viewRadioController]);
+        viewRef.current = currentView;
+    }, [currentView]);
 
     useEffect(() => {
         const canvas = canvasRef.current;

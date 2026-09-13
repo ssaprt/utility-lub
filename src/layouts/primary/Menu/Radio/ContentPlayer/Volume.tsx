@@ -1,6 +1,7 @@
 "use client";
 
 import { useAppContextValues } from "@/context/appContext";
+import { useBreakpoint } from "@/hooks/useBreakPoint";
 import { useRadioContext } from "../context/RadioContext";
 import { VolumeIcon } from "./VolumeIcon";
 
@@ -9,6 +10,8 @@ export const Volume = () => {
     const { player, setPlayer } = useRadioContext();
 
     const isCompact = viewRadioController === "compact";
+
+    const isDesktop = useBreakpoint("lg");
 
     return (
         <div
@@ -20,6 +23,7 @@ export const Volume = () => {
                 p-0
                 ${
                     !isCompact &&
+                    isDesktop &&
                     `
                     py-1
                     px-2
@@ -27,6 +31,7 @@ export const Volume = () => {
                     bg-fg/5
                     top-0!`
                 }
+       
                 transition-all
                 duration-300
                 ease-in-out
