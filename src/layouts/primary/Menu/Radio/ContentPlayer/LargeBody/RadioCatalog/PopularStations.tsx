@@ -421,7 +421,6 @@ export const PopularStations = ({
                                     overflow-hidden
                                     py-4
                                     px-2
-                                    bg-blue-500
                                 "
                             >
                                 {Array.from({
